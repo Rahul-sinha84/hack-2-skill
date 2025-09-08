@@ -1,0 +1,27 @@
+@import "./mixins";
+@import "./variables";
+.chat {
+  @include center-grid;
+  height: 100vh;
+
+  &__layout {
+    margin-top: 2rem;
+  }
+  &__container {
+  }
+  &__header {
+  }
+  &__main {
+    text-align: center;
+    &__title {
+      font-size: 2.5rem;
+      font-weight: 500;
+    }
+    &__description {
+      margin-top: 0.25rem;
+      font-size: 1.25rem;
+    }
+  }
+  &__footer {
+  }
+}

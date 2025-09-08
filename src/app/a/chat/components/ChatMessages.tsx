@@ -22,11 +22,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, chatId }) => {
         </div>
       )}
 
-      {messages.length === 0 ? (
-        <div className="text-center text-gray-500 mt-8">
-          <p>No messages yet. Start a conversation!</p>
-        </div>
-      ) : (
+      {messages.length !== 0 ? (
         <div className="space-y-2">
           {messages.map((message) => (
             <div key={message.id} className="p-3 bg-white border rounded-md">
@@ -37,7 +33,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ messages, chatId }) => {
             </div>
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

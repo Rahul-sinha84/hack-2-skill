@@ -1,5 +1,6 @@
 import React from "react";
 import { ChatProvider } from "./context/ChatContext";
+import "@/app/a/chat/styles/_chat.scss";
 
 interface ChatLayoutProps {
   children: React.ReactNode;

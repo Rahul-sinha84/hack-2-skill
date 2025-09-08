@@ -1,0 +1,5 @@
+// set this in parent container with only one child
+@mixin center-grid {
+  display: grid;
+  place-items: center;
+}

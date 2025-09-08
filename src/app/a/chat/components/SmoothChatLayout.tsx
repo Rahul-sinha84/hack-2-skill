@@ -35,13 +35,7 @@ const SmoothChatLayout: React.FC = () => {
   console.log({ messages: currentChatMessages, chatId, pathname });
 
   return (
-    <div className="flex flex-col h-screen max-w-4xl mx-auto bg-gray-50">
-      <header className="bg-white border-b p-4">
-        <h1 className="text-xl font-semibold text-gray-800">
-          {chatId ? `Chat ${chatId}` : "New Chat"}
-        </h1>
-      </header>
-
+    <div className="chat__layout">
       <ChatMessages messages={currentChatMessages} chatId={chatId} />
 
       <div className="bg-white border-t">

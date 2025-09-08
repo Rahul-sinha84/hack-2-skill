@@ -1,0 +1,64 @@
+@import "../../../../app/styles/app";
+@import "../styles/chat";
+
+.chat__input {
+  &__container {
+    display: flex;
+    align-items: center;
+    background-color: #1f2121;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1.5px solid $color-primary-light-shade;
+
+    &:focus-within {
+      border-color: $color-primary-light-shade-2;
+    }
+    .prefix {
+      .attachment-icon {
+        background: none;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        color: $color-text;
+
+        padding: 0.75rem;
+        border-radius: 5rem;
+        width: fit-content;
+        border: 1.5px solid transparent;
+
+        @include center-grid;
+
+        &:hover {
+          background-color: $color-primary-light-shade;
+        }
+
+        &:focus {
+          border: 1.5px solid $color-text;
+        }
+        i {
+          width: 1.25rem;
+          height: 1.25rem;
+          svg {
+            width: 1.25rem;
+            height: 1.25rem;
+          }
+        }
+      }
+    }
+    .main {
+      flex: 1;
+      textarea {
+        padding: 0.5rem 1rem;
+        width: 100%;
+        min-width: 50rem;
+        background-color: transparent;
+        outline: none;
+        border: none;
+        color: $color-text;
+        font-size: 1rem;
+      }
+    }
+    .suffix {
+    }
+  }
+}
