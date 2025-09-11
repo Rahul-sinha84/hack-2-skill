@@ -1,0 +1,246 @@
+@import "../../../../../app/styles/variables";
+@import "../../../../../app/styles/mixins";
+
+.test-category-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  gap: 1rem;
+  padding: 0;
+}
+
+.test-category-card {
+  background-color: $color-primary-light-shade;
+  border: 1px solid $color-primary-light-shade-2;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 30rem;
+  width: 25rem;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: $color-secondary;
+    cursor: pointer;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    @include font-nunito;
+    font-size: 18px;
+    font-weight: 600;
+    color: $color-text;
+    margin: 0;
+    line-height: 1.3;
+    flex: 1;
+    margin-right: 16px;
+  }
+
+  &__count {
+    background-color: $color-primary-light-shade-2;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    .test-category-card:hover & {
+      background-color: $color-secondary;
+      transform: scale(1.1);
+    }
+  }
+
+  &__count-number {
+    @include font-nunito;
+    font-size: 14px;
+    font-weight: 600;
+    color: $color-text;
+    line-height: 1;
+  }
+
+  &__content {
+    flex: 1;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__description {
+    @include font-nunito;
+    font-size: 14px;
+    color: $color-text;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.8;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__footer {
+    flex-shrink: 0;
+  }
+
+  &__progress-text {
+    @include font-nunito;
+    font-size: 13px;
+    color: $color-text;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+
+  &__progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: $color-primary-light-shade-2;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      $color-secondary 0%,
+      lighten($color-secondary, 10%) 100%
+    );
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%
+      );
+      animation: shimmer 2s infinite;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .test-category-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .test-category-card {
+    padding: 20px;
+    min-height: 180px;
+
+    &__title {
+      font-size: 16px;
+    }
+
+    &__count {
+      width: 28px;
+      height: 28px;
+    }
+
+    &__count-number {
+      font-size: 12px;
+    }
+
+    &__description {
+      font-size: 13px;
+      -webkit-line-clamp: 2;
+    }
+
+    &__progress-text {
+      font-size: 12px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .test-category-cards {
+    gap: 1rem;
+  }
+
+  .test-category-card {
+    padding: 16px;
+    min-height: 160px;
+
+    &__header {
+      margin-bottom: 12px;
+    }
+
+    &__title {
+      font-size: 15px;
+      margin-right: 12px;
+    }
+
+    &__count {
+      width: 26px;
+      height: 26px;
+    }
+
+    &__count-number {
+      font-size: 11px;
+    }
+
+    &__content {
+      margin-bottom: 16px;
+    }
+
+    &__description {
+      font-size: 12px;
+    }
+
+    &__progress-text {
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    &__progress-bar {
+      height: 5px;
+    }
+  }
+}
+
+// Animation for progress bar fill
+.test-category-card__progress-fill {
+  animation: progressFill 0.8s ease-out;
+}
+
+@keyframes progressFill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--progress-width, 0%);
+  }
+}

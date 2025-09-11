@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   ChatResponse,
   TestCategory,
@@ -8,6 +8,9 @@ import {
   useChat,
 } from "../context/ChatContext";
 import "./_chat_responses.scss";
+import Modal from "@/components/Modal";
+import TestCategoryCards from "./TestCases/TestCategoryCards";
+import TestCategoryCardsWrapper from "./TestCases/TestCategoryCardsWrapper";
 
 interface ChatResponsesProps {
   responses: Array<
@@ -19,6 +22,28 @@ interface ChatResponsesProps {
 }
 
 const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedTestCategory, setSelectedTestCategory] = useState<
+    | (ChatResponse & {
+        testCategories: Array<TestCategory & { testCases: Array<TestCase> }>;
+      })
+    | null
+  >(null);
+
+  const handleOpenModal = (
+    testCategory: ChatResponse & {
+      testCategories: Array<TestCategory & { testCases: Array<TestCase> }>;
+    }
+  ) => {
+    setSelectedTestCategory(testCategory);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedTestCategory(null);
+  };
+
   return (
     <section className="chat__layout__responses">
       <div className="chat__layout__responses__container">
@@ -49,8 +74,12 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
                     {response.timestamp.toLocaleTimeString()}
                   </p> */}
                   {response.testCategories.length !== 0 ? (
-                    // todo complete the button, and modal from here!
-                    <button>Test cases</button>
+                    <div className="chat-container__item__test-cases">
+                      {/* // todo complete the button, and modal from here! */}
+                      <button onClick={() => handleOpenModal(response)}>
+                        View Test cases
+                      </button>
+                    </div>
                   ) : null}
                 </li>
               ))}
@@ -59,6 +88,17 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
         </main>
         <footer className="chat__layout__messages__footer"></footer>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title="Test cases"
+        content={
+          <TestCategoryCardsWrapper
+            data={selectedTestCategory?.testCategories || []}
+          />
+        }
+      />
     </section>
   );
 };

@@ -80,8 +80,9 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     testCases.filter((val) => val.testCategoryId === testCategoryId);
 
   const addChatResponse = (chatId: string, message: string): ChatResponse => {
+    const chatResponseId = Date.now().toString();
     const newChatResponse: ChatResponse = {
-      id: Date.now().toString(),
+      id: chatResponseId,
       chatId,
       prompt: message,
       content:
@@ -90,6 +91,105 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       timestamp: new Date(),
     };
     setChatResponses([...chatResponses, newChatResponse]);
+
+    const testCategoryId = Date.now().toString();
+    const newTestCategory: TestCategory = {
+      id: testCategoryId,
+      chatResponseId,
+      chatId,
+      label: "Test Category 1",
+      description:
+        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    };
+    const newTestCategory1: TestCategory = {
+      id: testCategoryId + 1,
+      chatResponseId,
+      chatId,
+      label: "Test Category 2",
+      description:
+        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    };
+    const newTestCategory3: TestCategory = {
+      id: testCategoryId + 2,
+      chatResponseId,
+      chatId,
+      label: "Test Category 2",
+      description:
+        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    };
+    const newTestCategory4: TestCategory = {
+      id: testCategoryId + 3,
+      chatResponseId,
+      chatId,
+      label: "Test Category 2",
+      description:
+        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    };
+    const newTestCategory5: TestCategory = {
+      id: testCategoryId + 4,
+      chatResponseId,
+      chatId,
+      label: "Test Category 2",
+      description:
+        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    };
+    const newTestCategory6: TestCategory = {
+      id: testCategoryId + 5,
+      chatResponseId,
+      chatId,
+      label: "Test Category 2",
+      description:
+        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    };
+    const newTestCategory7: TestCategory = {
+      id: testCategoryId + 7,
+      chatResponseId,
+      chatId,
+      label: "Test Category 2",
+      description:
+        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    };
+    const newTestCategory8: TestCategory = {
+      id: testCategoryId + 6,
+      chatResponseId,
+      chatId,
+      label: "Test Category 2",
+      description:
+        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    };
+    setTestCategories([
+      ...testCategories,
+      newTestCategory,
+      newTestCategory1,
+      newTestCategory3,
+      newTestCategory4,
+      newTestCategory5,
+      newTestCategory6,
+      newTestCategory7,
+      newTestCategory8,
+    ]);
+
+    const testCaseId = Date.now().toString();
+    const newTestCase: TestCase = {
+      id: testCaseId,
+      testCategoryId,
+      chatResponseId,
+      title: "Test Case 1",
+      content:
+        "Adipisicing exercitation duis laborum ea consectetur proident dolor mollit anim ullamco adipisicing sit dolore est. Aliqua est enim culpa sit qui excepteur. Excepteur laboris dolore eiusmod est sunt nostrud ipsum amet proident quis do cupidatat. \nPariatur quis elit sunt ullamco nisi ad adipisicing aliquip cillum est commodo qui. Pariatur laboris ut aute tempor nulla pariatur pariatur consequat. Dolore magna nostrud ad pariatur eu nostrud. Veniam ad excepteur qui commodo. Amet et Lorem in aliquip proident voluptate cupidatat proident occaecat officia tempor. Sunt ullamco eu sit amet cupidatat elit ipsum excepteur id est irure. Voluptate nisi voluptate laboris tempor culpa proident voluptate officia. Reprehenderit ex adipisicing proident nostrud reprehenderit cupidatat.\n Deserunt ut qui commodo velit aliqua sint ipsum minim id consectetur non ut aliqua nisi. Et non non nulla ad Lorem enim elit sunt velit aute. Laborum qui fugiat id mollit.",
+      status: TestCaseStatus.APPROVED,
+    };
+
+    const newTestCase2: TestCase = {
+      id: testCaseId + 1,
+      testCategoryId,
+      chatResponseId,
+      title: "Test Case 2",
+      content:
+        "Adipisicing exercitation duis laborum ea consectetur proident dolor mollit anim ullamco adipisicing sit dolore est. Aliqua est enim culpa sit qui excepteur. Excepteur laboris dolore eiusmod est sunt nostrud ipsum amet proident quis do cupidatat. \nPariatur quis elit sunt ullamco nisi ad adipisicing aliquip cillum est commodo qui. Pariatur laboris ut aute tempor nulla pariatur pariatur consequat. Dolore magna nostrud ad pariatur eu nostrud. Veniam ad excepteur qui commodo. Amet et Lorem in aliquip proident voluptate cupidatat proident occaecat officia tempor. Sunt ullamco eu sit amet cupidatat elit ipsum excepteur id est irure. Voluptate nisi voluptate laboris tempor culpa proident voluptate officia. Reprehenderit ex adipisicing proident nostrud reprehenderit cupidatat.\n Deserunt ut qui commodo velit aliqua sint ipsum minim id consectetur non ut aliqua nisi. Et non non nulla ad Lorem enim elit sunt velit aute. Laborum qui fugiat id mollit.",
+      status: TestCaseStatus.REJECTED,
+    };
+    setTestCases([...testCases, newTestCase, newTestCase2]);
     return newChatResponse;
   };
 
