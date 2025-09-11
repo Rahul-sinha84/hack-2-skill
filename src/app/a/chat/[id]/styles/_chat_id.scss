@@ -1,0 +1,19 @@
+@import "./mixins";
+@import "./variables";
+
+.chat-id {
+  height: 100vh;
+  width: 80%;
+  max-width: 80rem;
+
+  margin: 0 auto;
+  margin-top: 5rem;
+  &__container {
+  }
+  &__header {
+  }
+  &__main {
+  }
+  &__footer {
+  }
+}

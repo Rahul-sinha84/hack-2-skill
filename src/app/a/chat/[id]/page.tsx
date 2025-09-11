@@ -1,5 +1,6 @@
 import React from "react";
 import SmoothChatLayout from "../components/SmoothChatLayout";
+import "./styles/_chat_id.scss";
 
 interface ChatIDPageProps {
   params: {
@@ -8,8 +9,17 @@ interface ChatIDPageProps {
 }
 
 const ChatIDPage: React.FC<ChatIDPageProps> = async ({ params }) => {
-  const { id } = await params;
-  return <SmoothChatLayout />;
+  return (
+    <section className="chat-id">
+      <div className="chat-id__container">
+        <header className="chat-id__header"></header>
+        <main className="chat-id__main">
+          <SmoothChatLayout />
+        </main>
+        <footer className="chat-id__footer"></footer>
+      </div>
+    </section>
+  );
 };
 
 export default ChatIDPage;

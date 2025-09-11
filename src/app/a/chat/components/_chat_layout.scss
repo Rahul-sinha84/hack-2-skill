@@ -1,0 +1,30 @@
+@import "../../../../app/styles/app";
+.chat__layout {
+  position: relative;
+  &__container {
+  }
+  &__header {
+  }
+  &__main {
+  }
+  &__footer {
+  }
+
+  &__chats {
+  }
+  &__input {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 80rem;
+    padding-bottom: 4rem;
+    background-color: $color-primary;
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+  }
+  &__input-new-chat {
+    margin-top: 2rem;
+  }
+}
