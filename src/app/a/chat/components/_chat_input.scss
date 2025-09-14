@@ -3,62 +3,71 @@
 
 .chat__input {
   &__container {
-    display: flex;
-    align-items: center;
-    background-color: #1f2121;
-    padding: 0.5rem;
-    border-radius: 2rem;
+    @include flex-center;
+    background-color: $color-primary-dark-shade;
+    padding: $spacing-sm;
+    border-radius: $border-radius-2xl;
     border: 1.5px solid $color-primary-light-shade;
+    gap: $spacing-sm;
 
     &:focus-within {
       border-color: $color-primary-light-shade-2;
     }
+
     .prefix {
+      flex-shrink: 0;
+
       .attachment-icon {
+        @include button-base;
         background: none;
-        outline: none;
-        border: none;
-        cursor: pointer;
-        color: $color-text;
-
-        padding: 0.75rem;
-        border-radius: 5rem;
-        width: fit-content;
         border: 1.5px solid transparent;
-
-        @include center-grid;
+        padding: $spacing-sm;
+        border-radius: $border-radius-full;
+        color: $color-text;
 
         &:hover {
           background-color: $color-primary-light-shade;
         }
 
         &:focus {
-          border: 1.5px solid $color-text;
+          border-color: $color-text;
         }
+
         i {
-          width: 1.25rem;
-          height: 1.25rem;
+          width: $spacing-lg;
+          height: $spacing-lg;
+
           svg {
-            width: 1.25rem;
-            height: 1.25rem;
+            width: $spacing-lg;
+            height: $spacing-lg;
           }
         }
       }
     }
+
     .main {
       flex: 1;
+      min-width: 0; // Allow flex item to shrink below content size
+
       textarea {
-        padding: 0.5rem 1rem;
-        width: 100%;
-        min-width: 50rem;
-        background-color: transparent;
-        outline: none;
+        @include input-base;
+        padding: $spacing-sm $spacing-md;
+        min-height: 44px; // Minimum touch target size
+        max-height: 200px;
+        resize: none;
         border: none;
-        color: $color-text;
-        font-size: 1rem;
+        background-color: transparent;
+        font-size: $font-size-base;
+        line-height: 1.5;
+
+        @include mobile-only {
+          font-size: 16px; // Prevent zoom on iOS
+        }
       }
     }
+
     .suffix {
+      flex-shrink: 0;
     }
   }
 }

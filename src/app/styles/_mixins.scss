@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import "./variables";
 
 @mixin font-nunito {
   // default font
@@ -6,6 +7,137 @@
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-size: 16px;
+  font-size: $font-size-base;
   color: $color-text;
+}
+
+// Responsive mixins
+@mixin mobile-only {
+  @media (max-width: #{$breakpoint-sm - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @media (min-width: #{$breakpoint-sm}) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: #{$breakpoint-md}) {
+    @content;
+  }
+}
+
+@mixin large-desktop-up {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+
+@mixin xl-desktop-up {
+  @media (min-width: #{$breakpoint-xl}) {
+    @content;
+  }
+}
+
+// Container mixins
+@mixin container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @include tablet-up {
+    max-width: $breakpoint-sm;
+    padding: 0 $spacing-lg;
+  }
+
+  @include desktop-up {
+    max-width: $breakpoint-md;
+    padding: 0 $spacing-xl;
+  }
+
+  @include large-desktop-up {
+    max-width: $breakpoint-lg;
+  }
+
+  @include xl-desktop-up {
+    max-width: $breakpoint-xl;
+  }
+}
+
+// Flexbox utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Grid utilities
+@mixin grid-responsive($min-width: 250px, $gap: $spacing-md) {
+  display: grid;
+  gap: $gap;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+}
+
+// Button base styles
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-md;
+  border: 2px solid transparent;
+  border-radius: $border-radius-md;
+  font-family: inherit;
+  font-size: $font-size-base;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+
+  &:focus {
+    border-color: $color-secondary;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Input base styles
+@mixin input-base {
+  width: 100%;
+  padding: $spacing-md;
+  border: 2px solid $color-primary-light-shade-2;
+  border-radius: $border-radius-md;
+  background-color: transparent;
+  color: $color-text;
+  font-family: inherit;
+  font-size: $font-size-base;
+  line-height: 1.5;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $color-secondary;
+  }
+
+  &::placeholder {
+    color: $color-text-light-shade;
+  }
 }

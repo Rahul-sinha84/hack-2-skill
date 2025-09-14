@@ -3,38 +3,56 @@
 .test-category-card {
   background-color: $color-primary-light-shade;
   border: 1px solid $color-primary-light-shade-2;
-  border-radius: 12px;
-  padding: 24px;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
   transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
-  height: 30rem;
-  width: 25rem;
+  min-height: 280px;
+  width: 100%;
+  cursor: pointer;
+
+  @include mobile-only {
+    min-height: 240px;
+    padding: $spacing-md;
+  }
+
+  @include tablet-up {
+    min-height: 300px;
+    padding: $spacing-lg;
+  }
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     border-color: $color-secondary;
-    cursor: pointer;
+  }
+
+  &:focus-within {
+    border-color: $color-secondary;
+    outline: 2px solid $color-secondary;
+    outline-offset: 2px;
   }
 
   &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
+    @include flex-between;
+    margin-bottom: $spacing-md;
     flex-shrink: 0;
   }
 
   &__title {
     @include font-nunito;
-    font-size: 18px;
+    font-size: $font-size-lg;
     font-weight: 600;
     color: $color-text;
     margin: 0;
     line-height: 1.3;
     flex: 1;
-    margin-right: 16px;
+    margin-right: $spacing-md;
+
+    @include mobile-only {
+      font-size: $font-size-base;
+    }
   }
 
   &__count {
@@ -42,11 +60,14 @@
     border-radius: 50%;
     width: 32px;
     height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-center;
     flex-shrink: 0;
     transition: all 0.2s ease;
+
+    @include mobile-only {
+      width: 28px;
+      height: 28px;
+    }
 
     .test-category-card:hover & {
       background-color: $color-secondary;
@@ -56,22 +77,26 @@
 
   &__count-number {
     @include font-nunito;
-    font-size: 14px;
+    font-size: $font-size-sm;
     font-weight: 600;
     color: $color-text;
     line-height: 1;
+
+    @include mobile-only {
+      font-size: $font-size-xs;
+    }
   }
 
   &__content {
     flex: 1;
-    margin-bottom: 20px;
+    margin-bottom: $spacing-lg;
     display: flex;
     align-items: center;
   }
 
   &__description {
     @include font-nunito;
-    font-size: 14px;
+    font-size: $font-size-sm;
     color: $color-text;
     line-height: 1.5;
     margin: 0;
@@ -81,6 +106,11 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    @include mobile-only {
+      font-size: $font-size-xs;
+      -webkit-line-clamp: 2;
+    }
   }
 
   &__footer {
@@ -89,9 +119,9 @@
 
   &__progress-text {
     @include font-nunito;
-    font-size: 13px;
+    font-size: $font-size-xs;
     color: $color-text;
-    margin-bottom: 8px;
+    margin-bottom: $spacing-sm;
     opacity: 0.7;
   }
 
@@ -99,9 +129,13 @@
     width: 100%;
     height: 6px;
     background-color: $color-primary-light-shade-2;
-    border-radius: 3px;
+    border-radius: $border-radius-sm;
     overflow: hidden;
     position: relative;
+
+    @include mobile-only {
+      height: 5px;
+    }
   }
 
   &__progress-fill {
@@ -111,7 +145,7 @@
       $color-secondary 0%,
       lighten($color-secondary, 10%) 100%
     );
-    border-radius: 3px;
+    border-radius: $border-radius-sm;
     transition: width 0.3s ease;
     position: relative;
 
@@ -139,87 +173,6 @@
   }
   100% {
     transform: translateX(100%);
-  }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .test-category-cards {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .test-category-card {
-    padding: 20px;
-    min-height: 180px;
-
-    &__title {
-      font-size: 16px;
-    }
-
-    &__count {
-      width: 28px;
-      height: 28px;
-    }
-
-    &__count-number {
-      font-size: 12px;
-    }
-
-    &__description {
-      font-size: 13px;
-      -webkit-line-clamp: 2;
-    }
-
-    &__progress-text {
-      font-size: 12px;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .test-category-cards {
-    gap: 1rem;
-  }
-
-  .test-category-card {
-    padding: 16px;
-    min-height: 160px;
-
-    &__header {
-      margin-bottom: 12px;
-    }
-
-    &__title {
-      font-size: 15px;
-      margin-right: 12px;
-    }
-
-    &__count {
-      width: 26px;
-      height: 26px;
-    }
-
-    &__count-number {
-      font-size: 11px;
-    }
-
-    &__content {
-      margin-bottom: 16px;
-    }
-
-    &__description {
-      font-size: 12px;
-    }
-
-    &__progress-text {
-      font-size: 11px;
-      margin-bottom: 6px;
-    }
-
-    &__progress-bar {
-      height: 5px;
-    }
   }
 }
 

@@ -1,17 +1,46 @@
 @import "../../../styles/chat";
 
 .test-cases-container {
+  width: 100%;
+  height: 100%;
+
   &__container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
+
   &__header {
+    flex-shrink: 0;
+    margin-bottom: $spacing-lg;
+
+    @include mobile-only {
+      margin-bottom: $spacing-md;
+    }
   }
+
   &__main {
+    flex: 1;
+    overflow-y: auto;
+
     ul.test-cases-card-container {
       list-style: none;
       list-style-position: inside;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+
       li {
-        &:not(:first-child) {
-          margin-top: 1rem;
+        width: 100%;
+        margin-bottom: $spacing-md;
+
+        @include mobile-only {
+          margin-bottom: $spacing-sm;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
         }
 
         input[type="radio"] {
@@ -20,28 +49,50 @@
           &:checked + label {
             border-color: $color-secondary;
             background-color: rgba($color-secondary, 0.05);
+            box-shadow: 0 0 0 1px rgba($color-secondary, 0.2);
           }
         }
 
         label {
           display: block;
-          border-radius: 0.8rem;
+          border-radius: $border-radius-lg;
           cursor: pointer;
           border: 2px solid $color-primary-light-shade-2;
           transition: all 0.2s ease;
           outline: none;
+          width: 100%;
+          min-height: 60px; // Ensure minimum touch target
+
+          @include mobile-only {
+            min-height: 50px;
+            border-radius: $border-radius-md;
+          }
 
           &:hover {
             background-color: rgba($color-secondary, 0.05);
+            border-color: rgba($color-secondary, 0.3);
+            transform: translateY(-1px);
           }
 
           &:focus {
-            border-color: $color-text-light-shade;
+            border-color: $color-secondary;
+            box-shadow: 0 0 0 2px rgba($color-secondary, 0.2);
+          }
+
+          &:active {
+            transform: translateY(0);
           }
         }
       }
     }
   }
+
   &__footer {
+    flex-shrink: 0;
+    margin-top: $spacing-lg;
+
+    @include mobile-only {
+      margin-top: $spacing-md;
+    }
   }
 }

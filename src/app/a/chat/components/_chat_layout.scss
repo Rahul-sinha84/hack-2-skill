@@ -1,30 +1,83 @@
 @import "../../../../app/styles/app";
+
 .chat__layout {
   position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
   &__container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
+
   &__header {
+    flex-shrink: 0;
   }
+
   &__main {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 120px; // Space for fixed input
+
+    @include tablet-up {
+      padding-bottom: 140px;
+    }
   }
+
   &__footer {
+    flex-shrink: 0;
   }
 
   &__chats {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 $spacing-md;
+
+    @include tablet-up {
+      max-width: 768px;
+      padding: 0 $spacing-lg;
+    }
+
+    @include desktop-up {
+      max-width: 1024px;
+      padding: 0 $spacing-xl;
+    }
   }
+
   &__input {
     position: fixed;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
     width: 100%;
-    max-width: 80rem;
-    padding-bottom: 4rem;
+    padding: $spacing-md;
     background-color: $color-primary;
-    border-top-left-radius: 2rem;
-    border-top-right-radius: 2rem;
+    border-top: 1px solid $color-primary-light-shade-2;
+    z-index: 10;
+
+    @include tablet-up {
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 768px;
+      border-top: none;
+      border-top-left-radius: $border-radius-2xl;
+      border-top-right-radius: $border-radius-2xl;
+      padding: $spacing-lg;
+    }
+
+    @include desktop-up {
+      max-width: 1024px;
+    }
   }
+
   &__input-new-chat {
-    margin-top: 2rem;
+    margin-top: $spacing-lg;
+
+    @include mobile-only {
+      margin-top: $spacing-md;
+    }
   }
 }

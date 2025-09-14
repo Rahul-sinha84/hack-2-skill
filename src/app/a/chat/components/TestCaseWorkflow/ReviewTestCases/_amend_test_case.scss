@@ -2,39 +2,71 @@
 
 .amend-test-case {
   height: 100%;
+  width: 100%;
+
   &__container {
     border: 1px solid $color-primary-light-shade-2;
     height: 100%;
     background-color: $color-primary-dark-shade;
-    padding: 1rem 1.25rem;
+    padding: $spacing-md;
+    border-radius: $border-radius-lg;
+    display: flex;
+    flex-direction: column;
+
+    @include tablet-up {
+      padding: $spacing-lg;
+    }
   }
+
   &__header {
+    flex-shrink: 0;
+    margin-bottom: $spacing-md;
   }
+
   &__main {
-    margin-top: 1rem;
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: $spacing-md;
   }
+
   &__footer {
-    margin-top: 1rem;
+    flex-shrink: 0;
+
     .btn-container {
-      display: flex;
-      gap: 1rem;
+      @include flex-center;
+      gap: $spacing-md;
       justify-content: flex-end;
 
+      @include mobile-only {
+        flex-direction: column;
+        gap: $spacing-sm;
+      }
+
+      @include tablet-up {
+        flex-direction: row;
+      }
+
       button {
+        @include button-base;
         background-color: transparent;
-        outline: none;
-        border: 2px solid transparent;
-        padding: 0.5rem 1rem;
-        font-size: 1.25rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
+        padding: $spacing-sm $spacing-md;
+        font-size: $font-size-base;
+        border-radius: $border-radius-md;
+        min-width: 100px;
+
+        @include mobile-only {
+          width: 100%;
+          padding: $spacing-md;
+          font-size: $font-size-lg;
+        }
 
         &:hover {
           opacity: 0.8;
+          transform: translateY(-1px);
         }
 
-        &:focus {
-          border-color: $color-secondary;
+        &:active {
+          transform: translateY(0);
         }
       }
 
@@ -42,11 +74,22 @@
         background-color: $color-green-light-shade;
         color: $color-green;
         border-color: $color-green;
+
+        &:hover {
+          background-color: $color-green;
+          color: $color-primary;
+        }
       }
+
       .reject-btn {
         background-color: $color-red-light-shade;
         color: $color-red;
         border-color: $color-red;
+
+        &:hover {
+          background-color: $color-red;
+          color: $color-primary;
+        }
       }
     }
   }

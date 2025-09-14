@@ -7,7 +7,75 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px;
+
+  @include mobile-only {
+    font-size: 14px;
+  }
+}
+
 body {
   @include font-nunito;
   background-color: $color-primary;
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Global responsive utilities
+.container {
+  @include container;
+}
+
+// Responsive typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+  margin-bottom: $spacing-md;
+}
+
+h1 {
+  font-size: $font-size-4xl;
+
+  @include mobile-only {
+    font-size: $font-size-3xl;
+  }
+}
+
+h2 {
+  font-size: $font-size-3xl;
+
+  @include mobile-only {
+    font-size: $font-size-2xl;
+  }
+}
+
+h3 {
+  font-size: $font-size-2xl;
+
+  @include mobile-only {
+    font-size: $font-size-xl;
+  }
+}
+
+p {
+  margin-bottom: $spacing-md;
+}
+
+// Responsive images
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+// Focus styles for accessibility
+*:focus-visible {
+  outline: 2px solid $color-secondary;
+  outline-offset: 2px;
 }

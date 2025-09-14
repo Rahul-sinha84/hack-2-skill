@@ -1,33 +1,36 @@
 @import "../../../styles/chat";
 
 .review-test-cases {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+
   &__container {
-  }
-  &__header {
+    width: 100%;
+    height: 100%;
     display: flex;
-    gap: 0.5rem;
-    align-items: center;
+    flex-direction: column;
+  }
+
+  &__header {
+    @include flex-center;
+    gap: $spacing-sm;
+    flex-shrink: 0;
+    margin-bottom: $spacing-xl;
+    justify-content: flex-start;
 
     &__back-btn {
       width: 1.75rem;
       height: 1.75rem;
+      flex-shrink: 0;
+
       button {
+        @include button-base;
         background-color: transparent;
         border: 1px dashed transparent;
-        cursor: pointer;
-        outline: none;
         width: 1.75rem;
         height: 1.75rem;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-          width: 1.75rem;
-          height: 1.75rem;
-          color: $color-text-light-shade;
-        }
+        padding: 0;
 
         &:hover {
           svg {
@@ -38,25 +41,66 @@
         &:focus {
           border-color: $color-text-light-shade;
         }
+
+        svg {
+          width: 1.75rem;
+          height: 1.75rem;
+          color: $color-text-light-shade;
+          transition: color 0.2s ease;
+        }
       }
     }
+
     &__title {
-      font-size: 1.5rem;
+      font-size: $font-size-2xl;
+      font-weight: 600;
+      color: $color-text;
+      margin: 0;
+
+      @include mobile-only {
+        font-size: $font-size-xl;
+      }
     }
   }
+
   &__main {
-    margin-top: 3rem;
+    flex: 1;
     display: flex;
-    gap: 1rem;
-    align-items: start;
-    justify-content: space-between;
+    gap: $spacing-lg;
+    align-items: flex-start;
+    overflow: hidden;
+
+    @include mobile-only {
+      flex-direction: column;
+      gap: $spacing-md;
+      align-items: stretch;
+    }
+
+    @include tablet-up {
+      flex-direction: row;
+    }
+
     &__left {
       flex: 1;
+      min-width: 0; // Allow flex item to shrink
+
+      @include mobile-only {
+        order: 2;
+      }
     }
+
     &__right {
       flex: 1;
+      min-width: 0; // Allow flex item to shrink
+
+      @include mobile-only {
+        order: 1;
+      }
     }
   }
+
   &__footer {
+    flex-shrink: 0;
+    margin-top: $spacing-xl;
   }
 }

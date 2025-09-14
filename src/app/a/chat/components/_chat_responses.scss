@@ -2,52 +2,105 @@
 
 .chat__layout__responses {
   &__container {
+    width: 100%;
+    max-width: 100%;
   }
+
   &__header {
+    margin-bottom: $spacing-xl;
   }
+
   &__main {
+    flex: 1;
   }
+
   &__footer {
+    margin-top: auto;
   }
 
   .chat-container {
     list-style: none;
+    padding: 0;
+    margin: 0;
+
     &__item {
-      &:not(:first-child) {
-        margin-top: 4rem;
+      margin-bottom: $spacing-3xl;
+
+      @include mobile-only {
+        margin-bottom: $spacing-2xl;
       }
+
       &:last-child {
-        padding-bottom: 15rem;
+        padding-bottom: $spacing-3xl;
+
+        @include mobile-only {
+          padding-bottom: $spacing-2xl;
+        }
       }
+
       &__prompt {
         margin-left: auto;
-        padding: 0.75rem 1.25rem;
+        margin-bottom: $spacing-lg;
+        padding: $spacing-sm $spacing-lg;
         background-color: $color-primary-light-shade;
-        border-radius: 3rem;
+        border-radius: $border-radius-2xl;
         width: fit-content;
+        max-width: 80%;
+
+        @include mobile-only {
+          max-width: 90%;
+          padding: $spacing-sm $spacing-md;
+        }
+
         &__para {
           text-align: right;
+          margin: 0;
+          font-size: $font-size-base;
+          line-height: 1.5;
         }
       }
+
       &__response {
-        margin-top: 2rem;
+        margin-bottom: $spacing-lg;
+
         &__para {
-          font-size: 1.15rem;
+          font-size: $font-size-lg;
+          line-height: 1.6;
+          margin: 0;
+
+          @include mobile-only {
+            font-size: $font-size-base;
+          }
         }
       }
+
       &__test-cases {
-        margin-top: 1rem;
+        margin-top: $spacing-md;
+
         button {
-          font-size: 1rem;
-          background-color: #fff;
-          border-radius: 3rem;
-          border: none;
-          padding: 0.75rem 1.25rem;
-          width: fit-content;
-          outline: none;
+          @include button-base;
+          background-color: $color-secondary;
+          color: $color-primary;
+          border-radius: $border-radius-2xl;
+          padding: $spacing-sm $spacing-lg;
+          font-size: $font-size-base;
           font-weight: 500;
-          font-family: inherit;
-          cursor: pointer;
+          width: fit-content;
+          transition: all 0.2s ease;
+
+          @include mobile-only {
+            padding: $spacing-sm $spacing-md;
+            font-size: $font-size-sm;
+          }
+
+          &:hover {
+            background-color: lighten($color-secondary, 10%);
+            transform: translateY(-1px);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
         }
       }
     }
