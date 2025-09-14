@@ -1,0 +1,25 @@
+@import "../../../styles/chat";
+
+.text-area-input {
+  width: 100%;
+
+  &__textarea {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid $color-primary-light-shade-2;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: transparent;
+    resize: vertical;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    color: $color-text;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: $color-secondary;
+    }
+  }
+}

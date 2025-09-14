@@ -1,0 +1,47 @@
+@import "../../../styles/chat";
+
+.test-cases-container {
+  &__container {
+  }
+  &__header {
+  }
+  &__main {
+    ul.test-cases-card-container {
+      list-style: none;
+      list-style-position: inside;
+      li {
+        &:not(:first-child) {
+          margin-top: 1rem;
+        }
+
+        input[type="radio"] {
+          display: none;
+
+          &:checked + label {
+            border-color: $color-secondary;
+            background-color: rgba($color-secondary, 0.05);
+          }
+        }
+
+        label {
+          display: block;
+          border-radius: 0.8rem;
+          cursor: pointer;
+          border: 2px solid $color-primary-light-shade-2;
+          transition: all 0.2s ease;
+          outline: none;
+
+          &:hover {
+            background-color: rgba($color-secondary, 0.05);
+          }
+
+          &:focus {
+            border-color: $color-text-light-shade;
+          }
+        }
+      }
+    }
+  }
+  &__footer {
+  }
+}

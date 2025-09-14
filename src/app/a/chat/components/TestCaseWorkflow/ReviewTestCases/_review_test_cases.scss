@@ -1,0 +1,62 @@
+@import "../../../styles/chat";
+
+.review-test-cases {
+  &__container {
+  }
+  &__header {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    &__back-btn {
+      width: 1.75rem;
+      height: 1.75rem;
+      button {
+        background-color: transparent;
+        border: 1px dashed transparent;
+        cursor: pointer;
+        outline: none;
+        width: 1.75rem;
+        height: 1.75rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+          width: 1.75rem;
+          height: 1.75rem;
+          color: $color-text-light-shade;
+        }
+
+        &:hover {
+          svg {
+            color: $color-text;
+          }
+        }
+
+        &:focus {
+          border-color: $color-text-light-shade;
+        }
+      }
+    }
+    &__title {
+      font-size: 1.5rem;
+    }
+  }
+  &__main {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+    align-items: start;
+    justify-content: space-between;
+    &__left {
+      flex: 1;
+    }
+    &__right {
+      flex: 1;
+    }
+  }
+  &__footer {
+  }
+}

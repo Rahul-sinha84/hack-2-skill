@@ -1,12 +1,4 @@
-@import "../../../../../app/styles/variables";
-@import "../../../../../app/styles/mixins";
-
-.test-category-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
-  gap: 1rem;
-  padding: 0;
-}
+@import "../../../styles/chat";
 
 .test-category-card {
   background-color: $color-primary-light-shade;

@@ -1,0 +1,23 @@
+@import "../../../styles/chat";
+
+.single-line-input {
+  width: 100%;
+  &__input {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid $color-primary-light-shade-2;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: transparent;
+    resize: none;
+    color: $color-text;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: $color-secondary;
+    }
+  }
+}

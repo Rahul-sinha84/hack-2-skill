@@ -1,7 +1,6 @@
-@import "../../../../../app/styles/variables";
-@import "../../../../../app/styles/mixins";
+@import "../../../styles/chat";
 
-.test-category-cards-wrapper {
+.select-test-category-step {
   &__container {
   }
   &__header {
@@ -16,6 +15,12 @@
   }
   &__main {
     margin-top: 2rem;
+    .test-category-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+      gap: 1rem;
+      padding: 0;
+    }
   }
   &__footer {
   }

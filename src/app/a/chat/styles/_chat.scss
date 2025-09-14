@@ -1,5 +1,7 @@
 @import "./mixins";
 @import "./variables";
+@import "../../../styles/app";
+
 .chat {
   @include center-grid;
   height: 100vh;

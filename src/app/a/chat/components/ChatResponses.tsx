@@ -1,16 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  ChatResponse,
-  TestCategory,
-  TestCase,
-  useChat,
-} from "../context/ChatContext";
+import { ChatResponse, TestCategory, TestCase } from "../context/ChatContext";
 import "./_chat_responses.scss";
 import Modal from "@/components/Modal";
-import TestCategoryCards from "./TestCases/TestCategoryCards";
-import TestCategoryCardsWrapper from "./TestCases/TestCategoryCardsWrapper";
+import TestCaseWorkflow from "./TestCaseWorkflow/TestCaseWorkflow";
 
 interface ChatResponsesProps {
   responses: Array<
@@ -75,7 +69,6 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
                   </p> */}
                   {response.testCategories.length !== 0 ? (
                     <div className="chat-container__item__test-cases">
-                      {/* // todo complete the button, and modal from here! */}
                       <button onClick={() => handleOpenModal(response)}>
                         View Test cases
                       </button>
@@ -94,9 +87,7 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
         onClose={handleCloseModal}
         title="Test cases"
         content={
-          <TestCategoryCardsWrapper
-            data={selectedTestCategory?.testCategories || []}
-          />
+          <TestCaseWorkflow data={selectedTestCategory?.testCategories || []} />
         }
       />
     </section>

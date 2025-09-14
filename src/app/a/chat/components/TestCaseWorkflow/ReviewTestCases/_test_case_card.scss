@@ -1,0 +1,61 @@
+@import "../../../styles/chat";
+
+.test-case-card {
+  padding: 1rem 0.75rem;
+  color: $color-text;
+  width: 100%;
+
+  &:not(:first-child) {
+    gap: 1rem;
+  }
+  &__container {
+  }
+  &__header {
+  }
+  &__main {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+    &__title {
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+    &__status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      &.approved {
+        color: $color-green;
+        .test-case-card__main__status__icon {
+          background-color: $color-green;
+        }
+      }
+      &.pending {
+        color: $color-yellow;
+        .test-case-card__main__status__icon {
+          background-color: $color-yellow;
+        }
+      }
+      &.rejected {
+        color: $color-red;
+        .test-case-card__main__status__icon {
+          background-color: $color-red;
+        }
+      }
+
+      &__icon {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+      }
+
+      &__text {
+        font-size: 1rem;
+        font-weight: 500;
+      }
+    }
+  }
+  &__footer {
+  }
+}
