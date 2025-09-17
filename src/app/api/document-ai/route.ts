@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Truncate the full text to a reasonable limit
-    const MAX_TEXT_LENGTH = 20000;
+    const MAX_TEXT_LENGTH = 15000;
     const truncatedText =
       text!.length > MAX_TEXT_LENGTH
         ? text!.substring(0, MAX_TEXT_LENGTH) + "..."
