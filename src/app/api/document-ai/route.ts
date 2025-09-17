@@ -94,11 +94,15 @@ export async function POST(request: NextRequest) {
         ) || []
     );
 
+    // Truncate the full text to a reasonable limit
+    const MAX_TEXT_LENGTH = 20000;
+    const truncatedText = text.length > MAX_TEXT_LENGTH ? text.substring(0, MAX_TEXT_LENGTH) + '...' : text;
+
     // Return a successful response with the extracted data
     return NextResponse.json({
       success: true,
       data: {
-        fullText: text,
+        fullText: truncatedText,
         paragraphs: extractedParagraphs,
         fileName: file.name,
         fileSize: file.size,

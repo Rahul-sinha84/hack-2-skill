@@ -6,10 +6,11 @@ import {
   TestCategory,
   TestCase,
   TestCaseStatus,
+  useChat,
 } from "../../../context/ChatContext";
 
 interface TestCategoryCardsProps {
-  data: TestCategory & { testCases: Array<TestCase> };
+  data: TestCategory;
   onSelect: (testCategory: TestCategory) => void;
 }
 
@@ -17,6 +18,9 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
   data,
   onSelect,
 }) => {
+  const { getTestCasesByTestCategoryId } = useChat();
+  const testCases = getTestCasesByTestCategoryId(data.id);
+
   const calculateProgress = (testCases: Array<TestCase>) => {
     const total = testCases.length;
     const approved = testCases.filter(
@@ -24,7 +28,7 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
     ).length;
     return { approved, total };
   };
-  const { approved, total } = calculateProgress(data.testCases);
+  const { approved, total } = calculateProgress(testCases);
 
   const getProgressPercentage = (approved: number, total: number) => {
     if (total === 0) return 0;
@@ -35,7 +39,7 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
 
   return (
     <button
-      onClick={() => onSelect(data)}
+      onClick={() => onSelect({ ...data, testCases })}
       key={data.id}
       className="test-category-card"
     >

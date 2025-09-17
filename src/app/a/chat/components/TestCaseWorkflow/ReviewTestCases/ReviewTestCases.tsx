@@ -43,7 +43,7 @@ const ReviewTestCases = ({
           </div>
           <div className="review-test-cases__main__right">
             <TestCasesContainer
-              data={selectedTestCategory!.testCases}
+              testCategoryId={selectedTestCategory!.id}
               onSelect={selectTestCase}
             />
           </div>

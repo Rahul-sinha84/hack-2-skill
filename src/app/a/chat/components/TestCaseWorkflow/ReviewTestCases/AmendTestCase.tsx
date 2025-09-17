@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TestCase, TestCategory } from "../../../context/ChatContext";
+import {
+  TestCase,
+  TestCategory,
+  useChat,
+  TestCaseStatus,
+} from "../../../context/ChatContext";
 
 import "./_amend_test_case.scss";
 import {
@@ -17,6 +22,8 @@ interface AmendTestCaseProps {
 const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
+  const { updateTestCaseStatus } = useChat();
 
   // Update local state when data changes
   useEffect(() => {
@@ -61,8 +68,22 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
         <footer className="amend-test-case__footer">
           {data ? (
             <div className="btn-container">
-              <button className="reject-btn">Reject</button>
-              <button className="approve-btn">Approve</button>
+              <button
+                className="reject-btn"
+                onClick={() =>
+                  updateTestCaseStatus(data.id, TestCaseStatus.REJECTED)
+                }
+              >
+                Reject
+              </button>
+              <button
+                className="approve-btn"
+                onClick={() =>
+                  updateTestCaseStatus(data.id, TestCaseStatus.APPROVED)
+                }
+              >
+                Approve
+              </button>
             </div>
           ) : null}
         </footer>

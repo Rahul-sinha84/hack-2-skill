@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 
 import "./_test_cases_container.scss";
-import { TestCase } from "../../../context/ChatContext";
+import { TestCase, useChat } from "../../../context/ChatContext";
 import { TestCaseCard } from ".";
 
 interface TestCasesContainerProps {
-  data: Array<TestCase>;
+  testCategoryId: string;
   onSelect: (testcase: TestCase) => void;
 }
 
-const TestCasesContainer = ({ data, onSelect }: TestCasesContainerProps) => {
+const TestCasesContainer = ({
+  testCategoryId,
+  onSelect,
+}: TestCasesContainerProps) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const { getTestCasesByTestCategoryId } = useChat();
+
+  const testCases = getTestCasesByTestCategoryId(testCategoryId);
 
   const handleSelection = (testcase: TestCase) => {
     setSelectedId(testcase.id);
@@ -23,7 +30,7 @@ const TestCasesContainer = ({ data, onSelect }: TestCasesContainerProps) => {
         <header className="test-cases-container__header"></header>
         <main className="test-cases-container__main">
           <ul className="test-cases-card-container">
-            {data.map((testcase) => (
+            {testCases.map((testcase) => (
               <li key={testcase.id}>
                 <input
                   type="radio"

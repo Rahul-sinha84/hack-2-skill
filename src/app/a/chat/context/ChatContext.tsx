@@ -77,6 +77,7 @@ export interface ChatContextType {
   addProcessingMessage: (chatId: string, status: string) => ChatResponse;
   updateProcessingMessage: (responseId: string, status: string) => void;
   completeProcessingMessage: (responseId: string, finalContent: string, testCaseData?: any) => void;
+  updateTestCaseStatus: (testCaseId: string, status: TestCaseStatus) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -192,7 +193,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
               chatResponseId: responseId,
               title: testCase.title || `Test Case ${testCaseIndex + 1}`,
               content: testCase.content || "Generated test case content",
-              status: testCase.priority === "High" ? TestCaseStatus.PENDING : TestCaseStatus.APPROVED,
+              status: TestCaseStatus.PENDING ,
             };
             newTestCases.push(newTestCase);
           });
@@ -265,7 +266,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
               chatResponseId,
               title: testCase.title || `Test Case ${testCaseIndex + 1}`,
               content: testCase.content || "Generated test case content",
-              status: testCase.priority === "High" ? TestCaseStatus.PENDING : TestCaseStatus.APPROVED,
+              status: TestCaseStatus.PENDING ,
             };
             newTestCases.push(newTestCase);
           });
@@ -277,6 +278,14 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     }
 
     return newChatResponse;
+  };
+
+  const updateTestCaseStatus = (testCaseId: string, status: TestCaseStatus): void => {
+    setTestCases(prev => prev.map(testCase => 
+      testCase.id === testCaseId 
+        ? { ...testCase, status }
+        : testCase
+    ));
   };
 
   const value: ChatContextType = {
@@ -293,6 +302,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     addProcessingMessage,
     updateProcessingMessage,
     completeProcessingMessage,
+    updateTestCaseStatus,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
