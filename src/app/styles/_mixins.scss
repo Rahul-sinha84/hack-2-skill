@@ -1,5 +1,11 @@
+@use "./variables" as *;
 @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
-@import "./variables";
+
+// Grid centering mixin
+@mixin center-grid {
+  display: grid;
+  place-items: center;
+}
 
 @mixin font-nunito {
   // default font

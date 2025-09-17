@@ -1,0 +1,14 @@
+{
+    "type": "service_account",
+    "project_id": "poc-genai-hacks",
+    "private_key_id": "b8af28e720839fd2e5233be6d0413b40cd3af471",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDqK5st425oKtCY\nsGIFnY5m/KmRxUQ2koNoqShk2Lfl1PW8rqK4UN1miM4qTlEiMoANVO1MjT60LXeP\nSWoFvk+RytCarLbhIQQOP5mdMhU0UC0wsiobIyS0SrjUYJ7RVEcB6TfZZc9ToYPz\nGOxMpzM0mV2KeWUNgjFVtPuNWBeWfnS6MGHwwj3K+XolTl93tdX8Q6Bx/k0pJJ32\nvDujTdBOQ0vVQes/vZod1VwSTA78xbhTMtIepxygQ96CX+eItHRqrLaWFwtok/9r\nNXRjIM+uv/zgtXZvwMzCsf3k+WEgCY5sM0ET1xOjtsoBgUgfiTQDeM+ljW9MbweM\n2BVFGqhHAgMBAAECggEAbz+eLnPQ/P3yMcgCGYbbo0O/z3f3SzHZ6jwK67Ylz7OX\ntzcEKSqJtG+j+mdQlj2Fpk/FmMu1kWXUWidXjjj2ll3TMtiA3X2Q7q/6a7riZgL9\nJRhPdqsAggLJwmPQr8QpI9hHZym+EI44IKKjiFsasY926BV6E6vZgk1EAMdsFVs/\nnGKTl/O6w1rih++Jcz4+i9+SgJuFIs9ZzvTVuKzlZYRMiaZ8j0hBlBe4O9IzS12n\nUsnSBukZCq8QzNEvFTEJn5v3WO2fwsyvy1WIf3AMOWfXAQal99bW0UzaqUiuDQFx\nAKN64TSqCfjtMgoqeNE0L0uPupyowXanD0uvWUi6OQKBgQD8Uka8KJEcSy4MeJDJ\nmlsS7Vr8MFTleF7jCPe3EFH3naJoUO513SaB10l1NRaJAQNwfOUYNWHWnsPyDLoJ\nNG8cBH1QQwDhFpvo110h03sqEW/hD3noWSvuXRevx4x2Oldexku0xwC7gtX25Rfp\nMBOQGl/qbZPLac5ZaLIzqWt11QKBgQDtlZX2LMWrFOATUEn4FNMMDfIeacDXMJmO\nHW1B+DxdrGFMHvIDy+kfCAnW5na5lOg4faI0Ba1u9Fn3O0+mlEWeQAmJXEeAXNXS\nN63UzUsGI9yGZ07it0VL6o0Xn/nFM2aKkbLMSdCzp0NZwDAS7dFX1YfFt77wPo6v\nheE8kCGnqwKBgQDIOeoTygVM9IO4Nbx/ntOCs4Ot+BSGe/ygIS+hv3usCRUlvoNc\nWIAELPkH33bghUNbcmDB0yquixJm8551S3yYOR/QHzuFYtGZ9bzb6Nwlx+yGJifR\nL2HjJ1ByluFpuGY4uRa+f+Se5/YulCFjVFlR0vwmJYpQsseiv6gZwumZeQKBgG80\n2WDFTDDsMIZZyoXImZDG5lG+BnmzUezncUCzxO3DxjcvNPD5/UB9Lr3cWi47uQbY\nJ5haH/gTgBjtNjcup/eO2eflvcIjsiIX1dIJ1dgl6Q8wRAhy6IjEXQ513x+jE5hA\n4oQk+P9eh3P3NYlmr9qBJHAztbgWUAtwiyEiBd7JAoGAQrM2N4cDb8ADawYSPpEE\nvLMQBjx+6i8t2SB0+smNnLDF8R+vCQq+VM/3kh8HJPehjV/8au0C6xIbRXzpDwHB\nQ9ZfpJaIJujnwXPGAWB+FSS62BwrrecuPYaGvwgyP8z86utG1zDuhPG7k1AO7I6H\nhkW7f3+flwZr9NbUq+a+YeQ=\n-----END PRIVATE KEY-----\n",
+    "client_email": "vertex-ai-backend-sa-981@poc-genai-hacks.iam.gserviceaccount.com",
+    "client_id": "108959406815361334707",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vertex-ai-backend-sa-981%40poc-genai-hacks.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+}
+  

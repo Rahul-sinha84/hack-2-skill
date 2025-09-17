@@ -1,5 +1,5 @@
-@import "./mixins";
-@import "./variables";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
 
 .chat-id {
   height: 100vh;

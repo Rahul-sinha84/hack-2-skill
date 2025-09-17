@@ -1,4 +1,5 @@
-@import "../../app/styles/app";
+@use "../../app/styles/variables" as *;
+@use "../../app/styles/mixins" as *;
 
 .popup {
   .popup__title {
@@ -29,27 +30,41 @@
     margin: $spacing-xs;
     border-radius: $border-radius-md;
     padding: $spacing-sm;
+    min-width: 280px;
+    max-width: calc(100vw - 32px);
   }
 
   @include tablet-up {
     margin: $spacing-sm;
     border-radius: $border-radius-lg;
     padding: $spacing-md;
+    min-width: 320px;
+    max-width: 500px;
   }
 }
 
 .Toastify__toast-container {
-  @include mobile-only {
-    width: 100%;
-    left: 0;
-    right: 0;
-    padding: 0 $spacing-sm;
+  // Ensure proper positioning for bottom-center
+  &--bottom-center {
+    @include mobile-only {
+      width: 100%;
+      left: 50% !important;
+      right: auto !important;
+      bottom: 16px !important;
+      transform: translateX(-50%);
+      padding: 0 $spacing-sm;
+    }
+
+    @include tablet-up {
+      width: auto !important;
+      left: 50% !important;
+      right: auto !important;
+      bottom: 24px !important;
+      transform: translateX(-50%);
+      padding: 0;
+    }
   }
 
-  @include tablet-up {
-    width: auto;
-    left: auto;
-    right: auto;
-    padding: 0;
-  }
+  // Fix for any positioning issues
+  z-index: 9999 !important;
 }

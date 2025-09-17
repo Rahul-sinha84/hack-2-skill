@@ -1,9 +1,60 @@
-@import "../../../../app/styles/app";
-@import "../styles/chat";
+@use "../../../../app/styles/variables" as *;
+@use "../../../../app/styles/mixins" as *;
+
+.selected-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $color-primary-light-shade;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-lg;
+  margin-bottom: $spacing-xs;
+  border: 1px solid $color-primary-light-shade-2;
+
+  .file-name {
+    font-size: $font-size-sm;
+    color: $color-text;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  .remove-file {
+    background: none;
+    border: none;
+    color: $color-red;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    padding: $spacing-xs;
+    border-radius: 50%;
+    
+    &:hover {
+      background-color: rgba($color-red, 0.1);
+    }
+  }
+}
+
+.processing-indicator {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-size: $font-size-sm;
+  color: $color-text-light-shade;
+  
+  span {
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 
 .chat__input {
   &__container {
-    @include flex-center;
+    display: flex;
+    align-items: center;
     background-color: $color-primary-dark-shade;
     padding: $spacing-sm;
     border-radius: $border-radius-2xl;
@@ -20,54 +71,115 @@
       .attachment-icon {
         @include button-base;
         background: none;
-        border: 1.5px solid transparent;
+        color: $color-text-light-shade;
         padding: $spacing-sm;
         border-radius: $border-radius-full;
-        color: $color-text;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:hover {
           background-color: $color-primary-light-shade;
         }
 
-        &:focus {
-          border-color: $color-text;
-        }
-
-        i {
-          width: $spacing-lg;
-          height: $spacing-lg;
-
-          svg {
-            width: $spacing-lg;
-            height: $spacing-lg;
-          }
+        svg {
+          width: 24px;
+          height: 24px;
         }
       }
     }
 
     .main {
       flex: 1;
-      min-width: 0; // Allow flex item to shrink below content size
+      min-width: 0;
 
-      textarea {
+      .drag-drop-area {
+        &.drag-over {
+          background-color: rgba($color-primary-light-shade, 0.1);
+          border-radius: $border-radius-lg;
+        }
+      }
+
+      .selected-file {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: $color-primary-light-shade;
+        padding: $spacing-xs $spacing-sm;
+        border-radius: $border-radius-lg;
+        margin-bottom: $spacing-xs;
+        border: 1px solid $color-primary-light-shade-2;
+        font-size: $font-size-sm;
+
+        .remove-file {
+          @include button-base;
+          color: $color-red;
+          font-size: 18px;
+          font-weight: bold;
+          padding: 2px 6px;
+          border-radius: 50%;
+          line-height: 1;
+          &:hover {
+            background-color: rgba($color-red, 0.1);
+          }
+        }
+      }
+
+      .input-wrapper {
+        display: flex;
+        align-items: flex-end; // Align items to the bottom
+        gap: $spacing-sm;
+      }
+
+      .chat-input__textarea {
         @include input-base;
-        padding: $spacing-sm $spacing-md;
-        min-height: 44px; // Minimum touch target size
-        max-height: 200px;
-        resize: none;
-        border: none;
+        width: 100%;
         background-color: transparent;
         font-size: $font-size-base;
         line-height: 1.5;
+        min-height: 24px;
+        max-height: 200px;
+        resize: none;
+        border: none;
+        padding: 8px 0; // Fine-tune vertical alignment
 
-        @include mobile-only {
-          font-size: 16px; // Prevent zoom on iOS
+        &::placeholder {
+          color: $color-text-light-shade;
         }
       }
     }
-
+    
     .suffix {
-      flex-shrink: 0;
+      .send-button {
+        @include button-base;
+        width: 56px;
+        height: 56px;
+        border-radius: $border-radius-full;
+        background-color: $color-secondary;
+        color: $color-primary-dark-shade;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+
+        svg {
+          width: 26px;
+          height: 26px;
+        }
+
+        &:hover {
+          background-color: lighten($color-secondary, 10%);
+          transform: scale(1.05);
+        }
+
+        &:disabled {
+          background-color: $color-primary-light-shade;
+          color: $color-primary-light-shade-2;
+          cursor: not-allowed;
+          transform: none;
+        }
+      }
     }
   }
 }

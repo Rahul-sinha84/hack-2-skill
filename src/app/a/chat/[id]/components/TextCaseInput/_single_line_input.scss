@@ -1,4 +1,5 @@
-@import "../../../styles/chat";
+@use "../../../../../styles/variables" as *;
+@use "../../../../../styles/mixins" as *;
 
 .single-line-input {
   width: 100%;

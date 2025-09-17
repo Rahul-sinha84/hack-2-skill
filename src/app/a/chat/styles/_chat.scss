@@ -1,6 +1,5 @@
-@import "./mixins";
-@import "./variables";
-@import "../../../styles/app";
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
 
 .chat {
   @include center-grid;

@@ -1,5 +1,5 @@
-@import "../../../../../app/styles/variables";
-@import "../../../../../app/styles/mixins";
+@use "../../../../../app/styles/variables" as *;
+@use "../../../../../app/styles/mixins" as *;
 
 .test-case-workflow {
   width: 100%;

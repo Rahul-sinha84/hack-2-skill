@@ -1,49 +1,110 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import "./_chat_input.scss";
 import { IoIosAttach } from "react-icons/io";
-import { showToastInfo } from "@/components/ReactToastify/ReactToastify";
+import { BiSolidSend } from "react-icons/bi";
+import { showToastInfo, showToastError, showToastSuccess } from "@/components/ReactToastify/ReactToastify";
 
 interface ChatInputProps {
-  onSubmit: (message: string) => void;
+  onSubmit: (message: string, file?: File) => void;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [message, setMessage] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const message = formData.get("message") as string;
 
-    if (!message.trim()) {
-      showToastInfo("Please enter a message");
+    if (!message.trim() && !selectedFile) {
+      showToastInfo("Please enter a message or upload a file");
       return;
     }
 
-    onSubmit(message);
+    onSubmit(message, selectedFile || undefined);
     // Clear the form after submission
-    (e.currentTarget as HTMLFormElement).reset();
+    setMessage("");
+    setSelectedFile(null);
     // Reset textarea height
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
   };
 
+  const handleFileSelect = (file: File) => {
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      showToastError('Please upload a PDF, TXT, or DOCX file');
+      return;
+    }
+
+    // Validate file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      showToastError('File size must be less than 10MB');
+      return;
+    }
+
+    setSelectedFile(file);
+    showToastSuccess(`File "${file.name}" selected`);
+  };
+
+  const handleAttachmentClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const removeFile = () => {
+    setSelectedFile(null);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      // Trigger form submission
-      const form = e.currentTarget.closest("form");
-      if (form) {
-        form.requestSubmit();
+      // Manually trigger form submission if there's content
+      if (message.trim() || selectedFile) {
+        const form = e.currentTarget.closest("form");
+        if (form) {
+          form.requestSubmit();
+        }
       }
     }
     // If Shift+Enter, let the default behavior happen (new line)
   };
 
-  const handleInput = () => {
+  const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    setMessage(e.currentTarget.value);
     // Auto-resize textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -56,27 +117,66 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
     <article className="chat__input">
       <div className="chat__input__container">
         <div className="prefix">
-          <button type="button" className="attachment-icon">
+          <button 
+            type="button" 
+            className="attachment-icon"
+            onClick={handleAttachmentClick}
+            title="Upload file"
+          >
             <i>
               <IoIosAttach />
             </i>
           </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf,.txt,.docx"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+          />
         </div>
         <main className="main">
-          <form onSubmit={handleSubmit} className="">
-            <textarea
-              ref={textareaRef}
-              name="message"
-              placeholder="Type your message..."
-              className="chat__input__input"
-              onKeyDown={handleKeyDown}
-              onInput={handleInput}
-              rows={1}
-              style={{ resize: "none", overflow: "hidden" }}
-            />
-          </form>
+          <div
+            className={`drag-drop-area ${isDragOver ? 'drag-over' : ''}`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            {selectedFile && (
+              <div className="selected-file">
+                <span>{selectedFile.name}</span>
+                <button type="button" onClick={removeFile} className="remove-file">
+                  ×
+                </button>
+              </div>
+            )}
+            <form onSubmit={handleSubmit} className="" id="chat-form">
+              <div className="input-wrapper">
+                <textarea
+                  ref={textareaRef}
+                  name="message"
+                  value={message}
+                  placeholder={selectedFile ? "Add a message about your file..." : "Type your message..."}
+                  className="chat-input__textarea"
+                  onKeyDown={handleKeyDown}
+                  onInput={handleInput}
+                  rows={1}
+                />
+              </div>
+            </form>
+          </div>
         </main>
-        <div className="suffix"></div>
+        <div className="suffix">
+          <button 
+            type="submit" 
+            className="send-button"
+            title="Send message"
+            disabled={!message.trim() && !selectedFile}
+            form="chat-form" // Associate button with the form
+          >
+            <BiSolidSend />
+          </button>
+        </div>
       </div>
     </article>
   );

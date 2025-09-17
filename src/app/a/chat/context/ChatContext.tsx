@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import generateUniqueId from "@/utils/generateUniqueId";
 
 export enum TestCaseStatus {
   PENDING = "pending",
@@ -15,6 +16,13 @@ export interface Chat {
   timestamp: Date;
 }
 
+export enum MessageType {
+  USER = "user",
+  ASSISTANT = "assistant",
+  PROCESSING = "processing",
+  SYSTEM = "system",
+}
+
 export interface ChatResponse {
   id: string;
   prompt: string;
@@ -22,6 +30,18 @@ export interface ChatResponse {
   chatId: string;
   userId: string; // for indexing the response
   timestamp: Date;
+  messageType: MessageType;
+  isProcessing?: boolean;
+  processingStatus?: string;
+  attachedFile?: {
+    name: string;
+    type: string;
+    size: number;
+  };
+  user?: {
+    name?: string | null;
+    image?: string | null;
+  };
 }
 
 export interface TestCategory {
@@ -52,6 +72,11 @@ export interface ChatContextType {
   ) => Array<TestCategory>;
   getTestCasesByTestCategoryId: (testCategoryId: string) => Array<TestCase>;
   addChatResponse: (chatId: string, message: string) => ChatResponse;
+  addChatResponseWithTestCases: (chatId: string, message: string, testCaseData: any, fileName?: string) => ChatResponse;
+  addUserMessage: (chatId: string, message: string, file?: File, user?: { name?: string | null; image?: string | null }) => ChatResponse;
+  addProcessingMessage: (chatId: string, status: string) => ChatResponse;
+  updateProcessingMessage: (responseId: string, status: string) => void;
+  completeProcessingMessage: (responseId: string, finalContent: string, testCaseData?: any) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -79,117 +104,178 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   ): Array<TestCase> =>
     testCases.filter((val) => val.testCategoryId === testCategoryId);
 
+  const addUserMessage = (chatId: string, message: string, file?: File, user?: { name?: string | null; image?: string | null }): ChatResponse => {
+    const chatResponseId = generateUniqueId('user_msg_');
+    const newChatResponse: ChatResponse = {
+      id: chatResponseId,
+      chatId,
+      prompt: message,
+      content: message,
+      userId: "rahul-sinha", // This could be replaced with a dynamic user ID from session
+      timestamp: new Date(),
+      messageType: MessageType.USER,
+      attachedFile: file ? {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+      } : undefined,
+      user,
+    };
+    setChatResponses(prev => [...prev, newChatResponse]);
+    return newChatResponse;
+  };
+
+  const addProcessingMessage = (chatId: string, status: string): ChatResponse => {
+    const chatResponseId = generateUniqueId('processing_msg_');
+    const newChatResponse: ChatResponse = {
+      id: chatResponseId,
+      chatId,
+      prompt: "",
+      content: status,
+      userId: "assistant",
+      timestamp: new Date(),
+      messageType: MessageType.PROCESSING,
+      isProcessing: true,
+      processingStatus: status,
+    };
+    setChatResponses(prev => [...prev, newChatResponse]);
+    return newChatResponse;
+  };
+
+  const updateProcessingMessage = (responseId: string, status: string): void => {
+    setChatResponses(prev => prev.map(response => 
+      response.id === responseId 
+        ? { ...response, content: status, processingStatus: status }
+        : response
+    ));
+  };
+
+  const completeProcessingMessage = (responseId: string, finalContent: string, testCaseData?: any): void => {
+    setChatResponses(prev => prev.map(response => 
+      response.id === responseId 
+        ? { 
+            ...response, 
+            content: finalContent, 
+            messageType: MessageType.ASSISTANT,
+            isProcessing: false,
+            processingStatus: undefined 
+          }
+        : response
+    ));
+
+    // Process test case data if provided
+    if (testCaseData && testCaseData.categories) {
+      const newTestCategories: TestCategory[] = [];
+      const newTestCases: TestCase[] = [];
+
+      testCaseData.categories.forEach((category: any, categoryIndex: number) => {
+        const testCategoryId = generateUniqueId(`cat_${categoryIndex}_`);
+        
+        const chatResponse = chatResponses.find(r => r.id === responseId);
+        const newTestCategory: TestCategory = {
+          id: testCategoryId,
+          chatResponseId: responseId,
+          chatId: chatResponse?.chatId || "",
+          label: category.label || `Test Category ${categoryIndex + 1}`,
+          description: category.description || "Generated test category",
+        };
+        newTestCategories.push(newTestCategory);
+
+        // Add test cases for this category
+        if (category.testCases && Array.isArray(category.testCases)) {
+          category.testCases.forEach((testCase: any, testCaseIndex: number) => {
+            const testCaseId = generateUniqueId(`tc_${categoryIndex}_${testCaseIndex}_`);
+            
+            const newTestCase: TestCase = {
+              id: testCaseId,
+              testCategoryId,
+              chatResponseId: responseId,
+              title: testCase.title || `Test Case ${testCaseIndex + 1}`,
+              content: testCase.content || "Generated test case content",
+              status: testCase.priority === "High" ? TestCaseStatus.PENDING : TestCaseStatus.APPROVED,
+            };
+            newTestCases.push(newTestCase);
+          });
+        }
+      });
+
+      setTestCategories(prev => [...prev, ...newTestCategories]);
+      setTestCases(prev => [...prev, ...newTestCases]);
+    }
+  };
+
   const addChatResponse = (chatId: string, message: string): ChatResponse => {
-    const chatResponseId = Date.now().toString();
+    const chatResponseId = generateUniqueId('assistant_msg_');
     const newChatResponse: ChatResponse = {
       id: chatResponseId,
       chatId,
       prompt: message,
       content:
-        "Est exercitation mollit proident ipsum dolore dolore duis. Dolore in ullamco magna sunt dolor deserunt Lorem. Occaecat nisi ipsum cupidatat adipisicing laboris sint officia aute minim eu. Nisi cupidatat nulla anim Lorem dolor. Excepteur eu reprehenderit ipsum quis dolore veniam cupidatat officia cupidatat magna ullamco id. Elit quis ullamco amet sint pariatur esse et culpa cupidatat cupidatat enim tempor.",
+        "This is a response to a message without a file. Test cases are not generated for this type of message.",
       userId: "rahul-sinha",
       timestamp: new Date(),
+      messageType: MessageType.ASSISTANT,
     };
-    setChatResponses([...chatResponses, newChatResponse]);
+    setChatResponses(prev => [...prev, newChatResponse]);
+    return newChatResponse;
+  };
 
-    const testCategoryId = Date.now().toString();
-    const newTestCategory: TestCategory = {
-      id: testCategoryId,
-      chatResponseId,
+  const addChatResponseWithTestCases = (chatId: string, message: string, testCaseData: any, fileName?: string): ChatResponse => {
+    const chatResponseId = generateUniqueId('assistant_msg_');
+    const responseContent = fileName 
+      ? `Document "${fileName}" processed successfully. Generated ${testCaseData.categories?.length || 0} test categories with comprehensive test cases.`
+      : "Test cases generated successfully based on your input.";
+    
+    const newChatResponse: ChatResponse = {
+      id: chatResponseId,
       chatId,
-      label: "Test Category 1",
-      description:
-        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+      prompt: message,
+      content: responseContent,
+      userId: "rahul-sinha",
+      timestamp: new Date(),
+      messageType: MessageType.ASSISTANT,
     };
-    const newTestCategory1: TestCategory = {
-      id: testCategoryId + 1,
-      chatResponseId,
-      chatId,
-      label: "Test Category 2",
-      description:
-        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    };
-    const newTestCategory3: TestCategory = {
-      id: testCategoryId + 2,
-      chatResponseId,
-      chatId,
-      label: "Test Category 2",
-      description:
-        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    };
-    const newTestCategory4: TestCategory = {
-      id: testCategoryId + 3,
-      chatResponseId,
-      chatId,
-      label: "Test Category 2",
-      description:
-        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    };
-    const newTestCategory5: TestCategory = {
-      id: testCategoryId + 4,
-      chatResponseId,
-      chatId,
-      label: "Test Category 2",
-      description:
-        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    };
-    const newTestCategory6: TestCategory = {
-      id: testCategoryId + 5,
-      chatResponseId,
-      chatId,
-      label: "Test Category 2",
-      description:
-        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    };
-    const newTestCategory7: TestCategory = {
-      id: testCategoryId + 7,
-      chatResponseId,
-      chatId,
-      label: "Test Category 2",
-      description:
-        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    };
-    const newTestCategory8: TestCategory = {
-      id: testCategoryId + 6,
-      chatResponseId,
-      chatId,
-      label: "Test Category 2",
-      description:
-        "Test Category Description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    };
-    setTestCategories([
-      ...testCategories,
-      newTestCategory,
-      newTestCategory1,
-      newTestCategory3,
-      newTestCategory4,
-      newTestCategory5,
-      newTestCategory6,
-      newTestCategory7,
-      newTestCategory8,
-    ]);
+    setChatResponses(prev => [...prev, newChatResponse]);
 
-    const testCaseId = Date.now().toString();
-    const newTestCase: TestCase = {
-      id: testCaseId,
-      testCategoryId,
-      chatResponseId,
-      title: "Test Case 1",
-      content:
-        "Adipisicing exercitation duis laborum ea consectetur proident dolor mollit anim ullamco adipisicing sit dolore est. Aliqua est enim culpa sit qui excepteur. Excepteur laboris dolore eiusmod est sunt nostrud ipsum amet proident quis do cupidatat. \nPariatur quis elit sunt ullamco nisi ad adipisicing aliquip cillum est commodo qui. Pariatur laboris ut aute tempor nulla pariatur pariatur consequat. Dolore magna nostrud ad pariatur eu nostrud. Veniam ad excepteur qui commodo. Amet et Lorem in aliquip proident voluptate cupidatat proident occaecat officia tempor. Sunt ullamco eu sit amet cupidatat elit ipsum excepteur id est irure. Voluptate nisi voluptate laboris tempor culpa proident voluptate officia. Reprehenderit ex adipisicing proident nostrud reprehenderit cupidatat.\n Deserunt ut qui commodo velit aliqua sint ipsum minim id consectetur non ut aliqua nisi. Et non non nulla ad Lorem enim elit sunt velit aute. Laborum qui fugiat id mollit.",
-      status: TestCaseStatus.APPROVED,
-    };
+    // Process the test case data from Gemini API
+    if (testCaseData && testCaseData.categories) {
+      const newTestCategories: TestCategory[] = [];
+      const newTestCases: TestCase[] = [];
 
-    const newTestCase2: TestCase = {
-      id: testCaseId + 1,
-      testCategoryId,
-      chatResponseId,
-      title: "Test Case 2",
-      content:
-        "Adipisicing exercitation duis laborum ea consectetur proident dolor mollit anim ullamco adipisicing sit dolore est. Aliqua est enim culpa sit qui excepteur. Excepteur laboris dolore eiusmod est sunt nostrud ipsum amet proident quis do cupidatat. \nPariatur quis elit sunt ullamco nisi ad adipisicing aliquip cillum est commodo qui. Pariatur laboris ut aute tempor nulla pariatur pariatur consequat. Dolore magna nostrud ad pariatur eu nostrud. Veniam ad excepteur qui commodo. Amet et Lorem in aliquip proident voluptate cupidatat proident occaecat officia tempor. Sunt ullamco eu sit amet cupidatat elit ipsum excepteur id est irure. Voluptate nisi voluptate laboris tempor culpa proident voluptate officia. Reprehenderit ex adipisicing proident nostrud reprehenderit cupidatat.\n Deserunt ut qui commodo velit aliqua sint ipsum minim id consectetur non ut aliqua nisi. Et non non nulla ad Lorem enim elit sunt velit aute. Laborum qui fugiat id mollit.",
-      status: TestCaseStatus.REJECTED,
-    };
-    setTestCases([...testCases, newTestCase, newTestCase2]);
+      testCaseData.categories.forEach((category: any, categoryIndex: number) => {
+        const testCategoryId = generateUniqueId(`cat_${categoryIndex}_`);
+        
+        const newTestCategory: TestCategory = {
+          id: testCategoryId,
+          chatResponseId,
+          chatId,
+          label: category.label || `Test Category ${categoryIndex + 1}`,
+          description: category.description || "Generated test category",
+        };
+        newTestCategories.push(newTestCategory);
+
+        // Add test cases for this category
+        if (category.testCases && Array.isArray(category.testCases)) {
+          category.testCases.forEach((testCase: any, testCaseIndex: number) => {
+            const testCaseId = generateUniqueId(`tc_${categoryIndex}_${testCaseIndex}_`);
+            
+            const newTestCase: TestCase = {
+              id: testCaseId,
+              testCategoryId,
+              chatResponseId,
+              title: testCase.title || `Test Case ${testCaseIndex + 1}`,
+              content: testCase.content || "Generated test case content",
+              status: testCase.priority === "High" ? TestCaseStatus.PENDING : TestCaseStatus.APPROVED,
+            };
+            newTestCases.push(newTestCase);
+          });
+        }
+      });
+
+      setTestCategories(prev => [...prev, ...newTestCategories]);
+      setTestCases(prev => [...prev, ...newTestCases]);
+    }
+
     return newChatResponse;
   };
 
@@ -202,6 +288,11 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     getTestCategoriesByChatResponseId,
     getTestCasesByTestCategoryId,
     addChatResponse,
+    addChatResponseWithTestCases,
+    addUserMessage,
+    addProcessingMessage,
+    updateProcessingMessage,
+    completeProcessingMessage,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

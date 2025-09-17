@@ -1,4 +1,5 @@
-@import "../../../styles/chat";
+@use "../../../../../../app/styles/variables" as *;
+@use "../../../../../../app/styles/mixins" as *;
 
 .test-case-card {
   padding: $spacing-md $spacing-sm;

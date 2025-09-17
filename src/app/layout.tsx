@@ -23,6 +23,14 @@ export default function RootLayout({
           hideProgressBar={true}
           newestOnTop={false}
           theme="light"
+          closeOnClick
+          pauseOnHover
+          draggable
+          limit={3}
+          style={{
+            width: 'auto',
+            maxWidth: '500px',
+          }}
         />
       </body>
     </html>
