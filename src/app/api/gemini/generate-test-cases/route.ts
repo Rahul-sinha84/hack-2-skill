@@ -11,24 +11,38 @@ export async function POST(request: NextRequest) {
   try {
     console.log('Using project: poc-genai-hacks for Vertex AI');
     
-    const { documentText, userQuery, fileName } = await request.json();
+    const { documentText, tables, userQuery, fileName } = await request.json();
 
     if (!documentText) {
       return NextResponse.json({ error: 'No document text provided' }, { status: 400 });
     }
 
-    console.log('Using Vertex AI to generate test cases for:', fileName);
+    console.log("Using Vertex AI to generate test cases for:", fileName);
 
-    const prompt = `Generate test cases for this PRD. Focus on key features and requirements.
+    const prompt = `Generate test cases for this PRD.
 
-                    Document: ${fileName}
-                    Request: ${userQuery || 'Generate test cases'}
+                    **Primary Goal:**
+                    Follow the user's request. The user's request is: "${
+                      userQuery || "Generate test cases"
+                    }"
 
-                    PRD:
+                    **If the user's request specifies a number of test cases or categories, you MUST follow it.**
+
+                    **If the user's request is generic, follow this default guideline:**
+                    Create 8-12 test cases across 4-5 categories (Functional, UI, Performance, Security).
+
+                    **Document Details:**
+                    - Document: ${fileName}
+                    - PRD Content:
                     ${documentText}
+                    - Tables (pay special attention to these):
+                    ${tables.join("\\n\\n")}
 
-                    Create 8-12 test cases across 3-4 categories (Functional, UI, Performance, Security). Keep test cases concise but complete.
-
+                    **General Guidelines:**
+                    - Focus on key features and requirements.
+                    - Keep test cases concise but complete.
+                    
+                    **Output Format:**
                     Respond with JSON only:
                     {
                       "categories": [
@@ -40,7 +54,7 @@ export async function POST(request: NextRequest) {
                             {
                               "id": "tc_1",
                               "title": "Brief test title",
-                              "content": "Test steps:\n1. Action\n2. Verify\nExpected: Result",
+                              "content": "Test steps:\\n1. Action\\n2. Verify\\nExpected: Result",
                               "priority": "High"
                             }
                           ]
@@ -73,12 +87,12 @@ export async function POST(request: NextRequest) {
             }
           ],
           generationConfig: {
-            responseMimeType: 'application/json',
+            responseMimeType: "application/json",
             temperature: 0.1, // Lower temperature for faster, more consistent responses
-            maxOutputTokens: 4000, // Limit output for faster generation
+            maxOutputTokens: 8192, // Limit output for faster generation
             topP: 0.8,
-            topK: 10
-          }
+            topK: 10,
+          },
         })
       });
 
@@ -87,18 +101,45 @@ export async function POST(request: NextRequest) {
       }
 
       const result = await response.json();
-      console.log('Vertex AI response received, parsing JSON...');
-      
-      // Extract text from Vertex AI response format
-      const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!generatedText) {
-        throw new Error('No generated text found in response');
-      }
-      
-      testData = JSON.parse(generatedText);
+      console.log("Vertex AI response received, parsing JSON...");
 
+      // Extract text from Vertex AI response format
+      let generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!generatedText) {
+        throw new Error("No generated text found in response");
+      }
+
+      // Clean the generated text to ensure it's valid JSON
+      // Remove markdown fences and trim whitespace
+      generatedText = generatedText
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+
+      // Find the first '{' and last '}' to extract the JSON object
+      const startIndex = generatedText.indexOf("{");
+      const endIndex = generatedText.lastIndexOf("}");
+      if (startIndex === -1 || endIndex === -1) {
+        throw new Error("No valid JSON object found in the response");
+      }
+      generatedText = generatedText.substring(startIndex, endIndex + 1);
+
+      try {
+        testData = JSON.parse(generatedText);
+      } catch (parseError) {
+        console.error(
+          "Failed to parse JSON from Vertex AI response. Response text:",
+          generatedText
+        );
+        // Re-throw a more informative error
+        throw new Error(
+          `SyntaxError: Failed to parse JSON from AI response. Details: ${
+            (parseError as Error).message
+          }`
+        );
+      }
     } catch (apiError) {
-      console.error('Vertex AI API error:', apiError);
+      console.error("Vertex AI API error:", apiError);
       return NextResponse.json(
         { 
           error: 'Failed to generate test cases via Vertex AI', 

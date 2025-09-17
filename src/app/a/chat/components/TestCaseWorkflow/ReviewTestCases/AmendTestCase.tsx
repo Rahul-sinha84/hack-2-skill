@@ -23,7 +23,7 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const { updateTestCaseStatus } = useChat();
+  const { updateTestCaseStatus, updateTestCaseDetails } = useChat();
 
   // Update local state when data changes
   useEffect(() => {
@@ -78,9 +78,10 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
               </button>
               <button
                 className="approve-btn"
-                onClick={() =>
-                  updateTestCaseStatus(data.id, TestCaseStatus.APPROVED)
-                }
+                onClick={() => {
+                  updateTestCaseDetails(data.id, title, content);
+                  updateTestCaseStatus(data.id, TestCaseStatus.APPROVED);
+                }}
               >
                 Approve
               </button>

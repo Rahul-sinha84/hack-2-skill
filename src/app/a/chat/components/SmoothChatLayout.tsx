@@ -77,6 +77,7 @@ const SmoothChatLayout: React.FC = () => {
 
       const documentData = await documentResponse.json();
       let documentText = documentData.data.fullText;
+      let tables = documentData.data.tables || [];
 
       // Optimize: Truncate very long documents to speed up Gemini processing
       const MAX_CHARS = 50000; // ~12,500 words limit for faster processing
@@ -99,6 +100,7 @@ const SmoothChatLayout: React.FC = () => {
         },
         body: JSON.stringify({
           documentText,
+          tables,
           userQuery,
           fileName: file.name,
         }),

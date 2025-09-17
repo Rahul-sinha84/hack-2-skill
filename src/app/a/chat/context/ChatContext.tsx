@@ -78,6 +78,7 @@ export interface ChatContextType {
   updateProcessingMessage: (responseId: string, status: string) => void;
   completeProcessingMessage: (responseId: string, finalContent: string, testCaseData?: any) => void;
   updateTestCaseStatus: (testCaseId: string, status: TestCaseStatus) => void;
+  updateTestCaseDetails: (testCaseId: string, title: string, content: string) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -288,6 +289,14 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     ));
   };
 
+  const updateTestCaseDetails = (testCaseId: string, title: string, content: string): void => {
+    setTestCases(prev => prev.map(testCase => 
+      testCase.id === testCaseId 
+        ? { ...testCase, title, content }
+        : testCase
+    ));
+  };
+
   const value: ChatContextType = {
     chats,
     chatResponses,
@@ -303,6 +312,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     updateProcessingMessage,
     completeProcessingMessage,
     updateTestCaseStatus,
+    updateTestCaseDetails,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
