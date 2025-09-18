@@ -1,8 +1,8 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 
-const JiraConnectPage = () => {
+const JiraConnectContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -19,8 +19,16 @@ const JiraConnectPage = () => {
       router.push("/a/chat");
     };
     fetchAccessToken();
-  }, [code, userId]);
+  }, [code, userId, router]);
   return <div>JiraConnectPage</div>;
+};
+
+const JiraConnectPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <JiraConnectContent />
+    </Suspense>
+  );
 };
 
 export default JiraConnectPage;

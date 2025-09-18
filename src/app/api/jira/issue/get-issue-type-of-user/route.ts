@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { JiraCookieKeys } from "../../utils";
 
-export const GET = async (request: Request) => {
+export const GET = async () => {
   try {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get(JiraCookieKeys.ACCESS_TOKEN)?.value;

@@ -15,7 +15,7 @@ export const POST = async (req: Request) => {
       );
     }
 
-    const { testCase, projectKey } = await req.json();
+    const { testCase } = await req.json();
 
     // First, get the current user's accountId
     // const userResponse = await fetch(

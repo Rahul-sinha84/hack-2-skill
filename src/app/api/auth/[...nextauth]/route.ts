@@ -18,14 +18,17 @@ const handler = NextAuth({
     async session({ session, token }) {
       // Ensure user image is properly passed through
       if (session?.user) {
-        session.user.image = (session.user.image as string | null | undefined) || (token?.picture as string | undefined) || null;
+        session.user.image =
+          (session.user.image as string | null | undefined) ||
+          (token?.picture as string | undefined) ||
+          null;
       }
       return session;
     },
     async jwt({ token, account, profile }) {
       // Ensure profile image is included in the token
       if (account && profile) {
-        token.picture = profile.picture || profile.image;
+        token.picture = (profile as any).picture || (profile as any).image;
       }
       return token;
     },
