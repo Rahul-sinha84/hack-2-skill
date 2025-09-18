@@ -137,7 +137,7 @@ const SelectTestCategoryStep = ({
     <section className="select-test-category-step">
       <div className="select-test-category-step__container">
         <header className="select-test-category-step__header">
-          <button onClick={connectJira}>Connect Jira</button>
+          {/* <button onClick={connectJira}>Connect Jira</button>
           <button onClick={getCloudId}>Get Cloud ID</button>
           <button onClick={getCurrentUser}>Get Current User</button>
           <button onClick={getProjects}>Get Projects</button>
@@ -146,7 +146,7 @@ const SelectTestCategoryStep = ({
           <button onClick={getIssueTypesOfProject}>
             Get Issue Types of Project
           </button>
-          <button onClick={uploadBulkIssues}>Upload Bulk Issues</button>
+          <button onClick={uploadBulkIssues}>Upload Bulk Issues</button> */}
           {/* // todo add pie chart here */}
           <h5 className="select-test-category-step__header__title">
             Generated {totalCategories} test{" "}

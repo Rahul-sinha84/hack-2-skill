@@ -13,7 +13,10 @@ import {
   MessageType,
   useChat,
 } from "../context/ChatContext";
-import { showToastError, showToastInfo } from "@/components/ReactToastify/ReactToastify";
+import {
+  showToastError,
+  showToastInfo,
+} from "@/components/ReactToastify/ReactToastify";
 import "./_chat_layout.scss";
 
 const SmoothChatLayout: React.FC = () => {
@@ -47,33 +50,63 @@ const SmoothChatLayout: React.FC = () => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const processFileAndGenerateTestCases = async (
-    file: File, 
-    userQuery: string, 
+    file: File,
+    userQuery: string,
     chatId: string,
     processingMessageId: string
   ) => {
     try {
+      if (process.env.NEXT_PUBLIC_LIVE === "false") {
+        const testCaseResponse = await fetch("/api/auth/get-mock-test-cases", {
+          method: "GET",
+        });
+
+        if (!testCaseResponse.ok) {
+          throw new Error("Failed to get mock test cases");
+        }
+
+        const testCaseData = await testCaseResponse.json();
+
+        completeProcessingMessage(
+          processingMessageId,
+          testCaseData.data.documentSummary,
+          testCaseData.data
+        );
+
+        return {
+          documentText: testCaseData.data.documentText,
+          testCases: testCaseData.data.testCases,
+          fileName: file.name,
+        };
+      }
+
       setIsProcessing(true);
 
       // Step 1: Scanning document
-      updateProcessingMessage(processingMessageId, "📄 Scanning PRD document...");
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Small delay for UX
+      updateProcessingMessage(
+        processingMessageId,
+        "📄 Scanning PRD document..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Small delay for UX
 
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
-      const documentResponse = await fetch('/api/document-ai', {
-        method: 'POST',
+      const documentResponse = await fetch("/api/document-ai", {
+        method: "POST",
         body: formData,
       });
 
       if (!documentResponse.ok) {
-        throw new Error('Failed to process document');
+        throw new Error("Failed to process document");
       }
 
       // Step 2: Reading document
-      updateProcessingMessage(processingMessageId, "🔍 Reading document content...");
-      await new Promise(resolve => setTimeout(resolve, 800));
+      updateProcessingMessage(
+        processingMessageId,
+        "🔍 Reading document content..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
       const documentData = await documentResponse.json();
       let documentText = documentData.data.fullText;
@@ -82,21 +115,31 @@ const SmoothChatLayout: React.FC = () => {
       // Optimize: Truncate very long documents to speed up Gemini processing
       const MAX_CHARS = 50000; // ~12,500 words limit for faster processing
       if (documentText.length > MAX_CHARS) {
-        documentText = documentText.substring(0, MAX_CHARS) + '\n\n[Document truncated for faster processing...]';
-        console.log(`Document truncated from ${documentData.data.fullText.length} to ${documentText.length} characters`);
+        documentText =
+          documentText.substring(0, MAX_CHARS) +
+          "\n\n[Document truncated for faster processing...]";
+        console.log(
+          `Document truncated from ${documentData.data.fullText.length} to ${documentText.length} characters`
+        );
       }
 
       // Step 3: Understanding context
-      updateProcessingMessage(processingMessageId, "🧠 Understanding context and requirements...");
-      await new Promise(resolve => setTimeout(resolve, 1200));
+      updateProcessingMessage(
+        processingMessageId,
+        "🧠 Understanding context and requirements..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1200));
 
       // Step 4: Generating test cases
-      updateProcessingMessage(processingMessageId, "⚡ Generating comprehensive test cases...");
+      updateProcessingMessage(
+        processingMessageId,
+        "⚡ Generating comprehensive test cases..."
+      );
 
-      const testCaseResponse = await fetch('/api/gemini/generate-test-cases', {
-        method: 'POST',
+      const testCaseResponse = await fetch("/api/gemini/generate-test-cases", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           documentText,
@@ -107,25 +150,35 @@ const SmoothChatLayout: React.FC = () => {
       });
 
       if (!testCaseResponse.ok) {
-        throw new Error('Failed to generate test cases');
+        throw new Error("Failed to generate test cases");
       }
 
       const testCaseData = await testCaseResponse.json();
-      
+
       // Step 5: Complete processing
-      const documentSummary = testCaseData.metadata?.documentSummary || `PRD document "${file.name}" processed successfully`;
-      const finalContent = `${documentSummary}. Generated ${testCaseData.data.categories?.length || 0} test categories with comprehensive test cases.`;
-      completeProcessingMessage(processingMessageId, finalContent, testCaseData.data);
+      const documentSummary =
+        testCaseData.metadata?.documentSummary ||
+        `PRD document "${file.name}" processed successfully`;
+      const finalContent = `${documentSummary}. Generated ${
+        testCaseData.data.categories?.length || 0
+      } test categories with comprehensive test cases.`;
+      completeProcessingMessage(
+        processingMessageId,
+        finalContent,
+        testCaseData.data
+      );
 
       return {
         documentText,
         testCases: testCaseData.data,
         fileName: file.name,
       };
-
     } catch (error) {
-      console.error('Error processing file:', error);
-      completeProcessingMessage(processingMessageId, "❌ Failed to process document and generate test cases. Please try again.");
+      console.error("Error processing file:", error);
+      completeProcessingMessage(
+        processingMessageId,
+        "❌ Failed to process document and generate test cases. Please try again."
+      );
       throw error;
     } finally {
       setIsProcessing(false);
@@ -134,18 +187,26 @@ const SmoothChatLayout: React.FC = () => {
 
   const handleMessageSubmit = async (message: string, file?: File) => {
     try {
-      const currentChatId = chatId || generateUniqueId('chat_');
-      
+      const currentChatId = chatId || generateUniqueId("chat_");
+
       // Add user message first
-      console.log('NextAuth session.user:', session?.user);
+      console.log("NextAuth session.user:", session?.user);
       addUserMessage(currentChatId, message, file, session?.user);
-      
+
       if (file) {
         // Add processing message for file uploads
-        const processingMessage = addProcessingMessage(currentChatId, "🚀 Starting document processing...");
-        
+        const processingMessage = addProcessingMessage(
+          currentChatId,
+          "🚀 Starting document processing..."
+        );
+
         // Process the file asynchronously
-        processFileAndGenerateTestCases(file, message, currentChatId, processingMessage.id);
+        processFileAndGenerateTestCases(
+          file,
+          message,
+          currentChatId,
+          processingMessage.id
+        );
       } else {
         // For text-only messages, just add a simple response
         addChatResponse(currentChatId, message);
@@ -156,8 +217,8 @@ const SmoothChatLayout: React.FC = () => {
         router.push(`/a/chat/${currentChatId}`);
       }
     } catch (error) {
-      console.error('Error in handleMessageSubmit:', error);
-      showToastError('Failed to send message');
+      console.error("Error in handleMessageSubmit:", error);
+      showToastError("Failed to send message");
     }
   };
 
@@ -189,20 +250,28 @@ const SmoothChatLayout: React.FC = () => {
       });
 
       setCurChatResponses(requiredData);
-      
+
       // Auto-scroll to bottom when new messages are added
       setTimeout(() => {
         if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+          chatContainerRef.current.scrollTop =
+            chatContainerRef.current.scrollHeight;
         }
       }, 100);
     }
-  }, [chatId, chatResponses, getChatResponsesByChatId, getTestCategoriesByChatResponseId, getTestCasesByTestCategoryId]);
+  }, [
+    chatId,
+    chatResponses,
+    getChatResponsesByChatId,
+    getTestCategoriesByChatResponseId,
+    getTestCasesByTestCategoryId,
+  ]);
 
   // Also scroll when processing status updates
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [curChatResponses]);
 
@@ -219,22 +288,30 @@ const SmoothChatLayout: React.FC = () => {
                 {session?.user?.image ? (
                   <img
                     src={session.user.image}
-                    alt={session.user.name || 'User'}
+                    alt={session.user.name || "User"}
                     onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                      const parent = (e.target as HTMLImageElement).parentElement;
+                      (e.target as HTMLImageElement).style.display = "none";
+                      const parent = (e.target as HTMLImageElement)
+                        .parentElement;
                       if (parent) {
-                        const span = document.createElement('span');
-                        span.textContent = (session?.user?.name?.charAt(0) || 'U').toUpperCase();
+                        const span = document.createElement("span");
+                        span.textContent = (
+                          session?.user?.name?.charAt(0) || "U"
+                        ).toUpperCase();
                         parent.appendChild(span);
                       }
                     }}
                   />
                 ) : (
-                  <span>{(session?.user?.name?.charAt(0) || 'U').toUpperCase()}</span>
+                  <span>
+                    {(session?.user?.name?.charAt(0) || "U").toUpperCase()}
+                  </span>
                 )}
               </div>
-              <button className="topbar__logout" onClick={() => signOut({ callbackUrl: '/login' })}>
+              <button
+                className="topbar__logout"
+                onClick={() => signOut({ callbackUrl: "/login" })}
+              >
                 Sign out
               </button>
             </div>
