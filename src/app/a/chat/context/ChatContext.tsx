@@ -72,13 +72,31 @@ export interface ChatContextType {
   ) => Array<TestCategory>;
   getTestCasesByTestCategoryId: (testCategoryId: string) => Array<TestCase>;
   addChatResponse: (chatId: string, message: string) => ChatResponse;
-  addChatResponseWithTestCases: (chatId: string, message: string, testCaseData: any, fileName?: string) => ChatResponse;
-  addUserMessage: (chatId: string, message: string, file?: File, user?: { name?: string | null; image?: string | null }) => ChatResponse;
+  addChatResponseWithTestCases: (
+    chatId: string,
+    message: string,
+    testCaseData: any,
+    fileName?: string
+  ) => ChatResponse;
+  addUserMessage: (
+    chatId: string,
+    message: string,
+    file?: File,
+    user?: { name?: string | null; image?: string | null }
+  ) => ChatResponse;
   addProcessingMessage: (chatId: string, status: string) => ChatResponse;
   updateProcessingMessage: (responseId: string, status: string) => void;
-  completeProcessingMessage: (responseId: string, finalContent: string, testCaseData?: any) => void;
+  completeProcessingMessage: (
+    responseId: string,
+    finalContent: string,
+    testCaseData?: any
+  ) => void;
   updateTestCaseStatus: (testCaseId: string, status: TestCaseStatus) => void;
-  updateTestCaseDetails: (testCaseId: string, title: string, content: string) => void;
+  updateTestCaseDetails: (
+    testCaseId: string,
+    title: string,
+    content: string
+  ) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -106,8 +124,13 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   ): Array<TestCase> =>
     testCases.filter((val) => val.testCategoryId === testCategoryId);
 
-  const addUserMessage = (chatId: string, message: string, file?: File, user?: { name?: string | null; image?: string | null }): ChatResponse => {
-    const chatResponseId = generateUniqueId('user_msg_');
+  const addUserMessage = (
+    chatId: string,
+    message: string,
+    file?: File,
+    user?: { name?: string | null; image?: string | null }
+  ): ChatResponse => {
+    const chatResponseId = generateUniqueId("user_msg_");
     const newChatResponse: ChatResponse = {
       id: chatResponseId,
       chatId,
@@ -116,19 +139,24 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       userId: "rahul-sinha", // This could be replaced with a dynamic user ID from session
       timestamp: new Date(),
       messageType: MessageType.USER,
-      attachedFile: file ? {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-      } : undefined,
+      attachedFile: file
+        ? {
+            name: file.name,
+            type: file.type,
+            size: file.size,
+          }
+        : undefined,
       user,
     };
-    setChatResponses(prev => [...prev, newChatResponse]);
+    setChatResponses((prev) => [...prev, newChatResponse]);
     return newChatResponse;
   };
 
-  const addProcessingMessage = (chatId: string, status: string): ChatResponse => {
-    const chatResponseId = generateUniqueId('processing_msg_');
+  const addProcessingMessage = (
+    chatId: string,
+    status: string
+  ): ChatResponse => {
+    const chatResponseId = generateUniqueId("processing_msg_");
     const newChatResponse: ChatResponse = {
       id: chatResponseId,
       chatId,
@@ -140,74 +168,91 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       isProcessing: true,
       processingStatus: status,
     };
-    setChatResponses(prev => [...prev, newChatResponse]);
+    setChatResponses((prev) => [...prev, newChatResponse]);
     return newChatResponse;
   };
 
-  const updateProcessingMessage = (responseId: string, status: string): void => {
-    setChatResponses(prev => prev.map(response => 
-      response.id === responseId 
-        ? { ...response, content: status, processingStatus: status }
-        : response
-    ));
+  const updateProcessingMessage = (
+    responseId: string,
+    status: string
+  ): void => {
+    setChatResponses((prev) =>
+      prev.map((response) =>
+        response.id === responseId
+          ? { ...response, content: status, processingStatus: status }
+          : response
+      )
+    );
   };
 
-  const completeProcessingMessage = (responseId: string, finalContent: string, testCaseData?: any): void => {
-    setChatResponses(prev => prev.map(response => 
-      response.id === responseId 
-        ? { 
-            ...response, 
-            content: finalContent, 
-            messageType: MessageType.ASSISTANT,
-            isProcessing: false,
-            processingStatus: undefined 
-          }
-        : response
-    ));
+  const completeProcessingMessage = (
+    responseId: string,
+    finalContent: string,
+    testCaseData?: any
+  ): void => {
+    setChatResponses((prev) =>
+      prev.map((response) =>
+        response.id === responseId
+          ? {
+              ...response,
+              content: finalContent,
+              messageType: MessageType.ASSISTANT,
+              isProcessing: false,
+              processingStatus: undefined,
+            }
+          : response
+      )
+    );
 
     // Process test case data if provided
     if (testCaseData && testCaseData.categories) {
       const newTestCategories: TestCategory[] = [];
       const newTestCases: TestCase[] = [];
 
-      testCaseData.categories.forEach((category: any, categoryIndex: number) => {
-        const testCategoryId = generateUniqueId(`cat_${categoryIndex}_`);
-        
-        const chatResponse = chatResponses.find(r => r.id === responseId);
-        const newTestCategory: TestCategory = {
-          id: testCategoryId,
-          chatResponseId: responseId,
-          chatId: chatResponse?.chatId || "",
-          label: category.label || `Test Category ${categoryIndex + 1}`,
-          description: category.description || "Generated test category",
-        };
-        newTestCategories.push(newTestCategory);
+      testCaseData.categories.forEach(
+        (category: any, categoryIndex: number) => {
+          const testCategoryId = generateUniqueId(`cat_${categoryIndex}_`);
 
-        // Add test cases for this category
-        if (category.testCases && Array.isArray(category.testCases)) {
-          category.testCases.forEach((testCase: any, testCaseIndex: number) => {
-            const testCaseId = generateUniqueId(`tc_${categoryIndex}_${testCaseIndex}_`);
-            
-            const newTestCase: TestCase = {
-              id: testCaseId,
-              testCategoryId,
-              chatResponseId: responseId,
-              title: testCase.title || `Test Case ${testCaseIndex + 1}`,
-              content: testCase.content || "Generated test case content",
-              status: TestCaseStatus.PENDING ,
-            };
-            newTestCases.push(newTestCase);
-          });
+          const chatResponse = chatResponses.find((r) => r.id === responseId);
+          const newTestCategory: TestCategory = {
+            id: testCategoryId,
+            chatResponseId: responseId,
+            chatId: chatResponse?.chatId || "",
+            label: category.label || `Test Category ${categoryIndex + 1}`,
+            description: category.description || "Generated test category",
+          };
+          newTestCategories.push(newTestCategory);
+
+          // Add test cases for this category
+          if (category.testCases && Array.isArray(category.testCases)) {
+            category.testCases.forEach(
+              (testCase: any, testCaseIndex: number) => {
+                const testCaseId = generateUniqueId(
+                  `tc_${categoryIndex}_${testCaseIndex}_`
+                );
+
+                const newTestCase: TestCase = {
+                  id: testCaseId,
+                  testCategoryId,
+                  chatResponseId: responseId,
+                  title: testCase.title || `Test Case ${testCaseIndex + 1}`,
+                  content: testCase.content || "Generated test case content",
+                  status: TestCaseStatus.PENDING,
+                };
+                newTestCases.push(newTestCase);
+              }
+            );
+          }
         }
-      });
+      );
 
-      setTestCategories(prev => [...prev, ...newTestCategories]);
-      setTestCases(prev => [...prev, ...newTestCases]);
+      setTestCategories((prev) => [...prev, ...newTestCategories]);
+      setTestCases((prev) => [...prev, ...newTestCases]);
     }
   };
 
   const addChatResponse = (chatId: string, message: string): ChatResponse => {
-    const chatResponseId = generateUniqueId('assistant_msg_');
+    const chatResponseId = generateUniqueId("assistant_msg_");
     const newChatResponse: ChatResponse = {
       id: chatResponseId,
       chatId,
@@ -218,17 +263,26 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       timestamp: new Date(),
       messageType: MessageType.ASSISTANT,
     };
-    setChatResponses(prev => [...prev, newChatResponse]);
+    setChatResponses((prev) => [...prev, newChatResponse]);
     return newChatResponse;
   };
 
-  const addChatResponseWithTestCases = (chatId: string, message: string, testCaseData: any, fileName?: string): ChatResponse => {
-    const chatResponseId = generateUniqueId('assistant_msg_');
+  const addChatResponseWithTestCases = (
+    chatId: string,
+    message: string,
+    testCaseData: any,
+    fileName?: string
+  ): ChatResponse => {
+    const chatResponseId = generateUniqueId("assistant_msg_");
     const documentSummary = testCaseData.metadata?.documentSummary;
-    const responseContent = fileName 
-      ? `${documentSummary || `Document "${fileName}" processed successfully`}. Generated ${testCaseData.categories?.length || 0} test categories with comprehensive test cases.`
+    const responseContent = fileName
+      ? `${
+          documentSummary || `Document "${fileName}" processed successfully`
+        }. Generated ${
+          testCaseData.categories?.length || 0
+        } test categories with comprehensive test cases.`
       : "Test cases generated successfully based on your input.";
-    
+
     const newChatResponse: ChatResponse = {
       id: chatResponseId,
       chatId,
@@ -238,64 +292,77 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
       timestamp: new Date(),
       messageType: MessageType.ASSISTANT,
     };
-    setChatResponses(prev => [...prev, newChatResponse]);
+    setChatResponses((prev) => [...prev, newChatResponse]);
 
     // Process the test case data from Gemini API
     if (testCaseData && testCaseData.categories) {
       const newTestCategories: TestCategory[] = [];
       const newTestCases: TestCase[] = [];
 
-      testCaseData.categories.forEach((category: any, categoryIndex: number) => {
-        const testCategoryId = generateUniqueId(`cat_${categoryIndex}_`);
-        
-        const newTestCategory: TestCategory = {
-          id: testCategoryId,
-          chatResponseId,
-          chatId,
-          label: category.label || `Test Category ${categoryIndex + 1}`,
-          description: category.description || "Generated test category",
-        };
-        newTestCategories.push(newTestCategory);
+      testCaseData.categories.forEach(
+        (category: any, categoryIndex: number) => {
+          const testCategoryId = generateUniqueId(`cat_${categoryIndex}_`);
 
-        // Add test cases for this category
-        if (category.testCases && Array.isArray(category.testCases)) {
-          category.testCases.forEach((testCase: any, testCaseIndex: number) => {
-            const testCaseId = generateUniqueId(`tc_${categoryIndex}_${testCaseIndex}_`);
-            
-            const newTestCase: TestCase = {
-              id: testCaseId,
-              testCategoryId,
-              chatResponseId,
-              title: testCase.title || `Test Case ${testCaseIndex + 1}`,
-              content: testCase.content || "Generated test case content",
-              status: TestCaseStatus.PENDING ,
-            };
-            newTestCases.push(newTestCase);
-          });
+          const newTestCategory: TestCategory = {
+            id: testCategoryId,
+            chatResponseId,
+            chatId,
+            label: category.label || `Test Category ${categoryIndex + 1}`,
+            description: category.description || "Generated test category",
+          };
+          newTestCategories.push(newTestCategory);
+
+          // Add test cases for this category
+          if (category.testCases && Array.isArray(category.testCases)) {
+            category.testCases.forEach(
+              (testCase: any, testCaseIndex: number) => {
+                const testCaseId = generateUniqueId(
+                  `tc_${categoryIndex}_${testCaseIndex}_`
+                );
+
+                const newTestCase: TestCase = {
+                  id: testCaseId,
+                  testCategoryId,
+                  chatResponseId,
+                  title: testCase.title || `Test Case ${testCaseIndex + 1}`,
+                  content: testCase.content || "Generated test case content",
+                  status: TestCaseStatus.PENDING,
+                };
+                newTestCases.push(newTestCase);
+              }
+            );
+          }
         }
-      });
+      );
 
-      setTestCategories(prev => [...prev, ...newTestCategories]);
-      setTestCases(prev => [...prev, ...newTestCases]);
+      setTestCategories((prev) => [...prev, ...newTestCategories]);
+      setTestCases((prev) => [...prev, ...newTestCases]);
     }
 
     return newChatResponse;
   };
 
-  const updateTestCaseStatus = (testCaseId: string, status: TestCaseStatus): void => {
-    setTestCases(prev => prev.map(testCase => 
-      testCase.id === testCaseId 
-        ? { ...testCase, status }
-        : testCase
-    ));
+  const updateTestCaseStatus = (
+    testCaseId: string,
+    status: TestCaseStatus
+  ): void => {
+    setTestCases((prev) =>
+      prev.map((testCase) =>
+        testCase.id === testCaseId ? { ...testCase, status } : testCase
+      )
+    );
   };
 
-  const updateTestCaseDetails = (testCaseId: string, title: string, content: string): void => {
-    setTestCases(prev => prev.map(testCase => 
-      testCase.id === testCaseId 
-        ? { ...testCase, title, content }
-        : testCase
-    ));
+  const updateTestCaseDetails = (
+    testCaseId: string,
+    title: string,
+    content: string
+  ): void => {
+    setTestCases((prev) =>
+      prev.map((testCase) =>
+        testCase.id === testCaseId ? { ...testCase, title, content } : testCase
+      )
+    );
   };
 
   const value: ChatContextType = {

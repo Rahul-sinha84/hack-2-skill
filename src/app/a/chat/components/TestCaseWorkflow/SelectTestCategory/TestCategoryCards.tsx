@@ -10,8 +10,10 @@ import {
 } from "../../../context/ChatContext";
 
 interface TestCategoryCardsProps {
-  data: TestCategory;
-  onSelect: (testCategory: TestCategory) => void;
+  data: TestCategory & { testCases: Array<TestCase> };
+  onSelect: (
+    testCategory: TestCategory & { testCases: Array<TestCase> }
+  ) => void;
 }
 
 const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
