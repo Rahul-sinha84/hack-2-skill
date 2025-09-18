@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { DocumentProcessorServiceClient } from "@google-cloud/documentai";
+import DocumentAIClientSingleton from '@/utils/documentAIClient';
 import { google } from "@google-cloud/documentai/build/protos/protos";
 
 /**
@@ -27,25 +27,20 @@ const getText = (
 };
 
 // ================== CLIENT INSTANTIATION ==================
-// This section configures the Document AI client.
-// It uses the service account key file (key.json) for authentication.
-// Using values from working Postman API endpoint
-// =========================================================
-const DOCUMENT_AI_PROJECT_ID = "401328495550"; // Numeric project ID for Document AI
-const DOCUMENT_AI_LOCATION = "us";
-const DOCUMENT_AI_PROCESSOR_ID = "e7f52140009fdda2";
 
-const client = new DocumentProcessorServiceClient({
-  apiEndpoint: `${DOCUMENT_AI_LOCATION}-documentai.googleapis.com`,
-  keyFilename: "./key.json", // Path to your service account key file
-  projectId: DOCUMENT_AI_PROJECT_ID, // Use the numeric project ID
-});
+const DOCUMENT_AI_PROJECT_ID = process.env.DOCUMENT_AI_PROJECT_ID;
+const DOCUMENT_AI_LOCATION = process.env.DOCUMENT_AI_LOCATION || "us";
+const DOCUMENT_AI_PROCESSOR_ID = process.env.DOCUMENT_AI_PROCESSOR_ID;
 
 /**
  * API route handler for processing a document with Google Cloud Document AI.
  */
 export async function POST(request: NextRequest) {
   try {
+
+    // Client is initialized safely on the first request
+    const client = await DocumentAIClientSingleton.getClient();
+
     const formData = await request.formData();
     const file = formData.get("file") as File;
 

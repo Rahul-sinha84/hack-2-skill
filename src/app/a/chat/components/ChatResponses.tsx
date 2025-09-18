@@ -37,6 +37,7 @@ const FileAttachment: React.FC<{ file: { name: string; type: string; size: numbe
   </div>
 );
 
+
 const MessageBubble: React.FC<{
   response: ChatResponse & {
     testCategories: Array<TestCategory & { testCases: Array<TestCase> }>;
@@ -84,11 +85,43 @@ const MessageBubble: React.FC<{
 
       {isUser && (
         <div className="avatar user-avatar">
-          {response.user?.image ? (
-            <img src={response.user.image} alt={response.user.name || 'User Avatar'} />
-          ) : (
-            '👤'
-          )}
+          {(() => {
+            console.log('Rendering user avatar, user data:', response.user);
+            console.log('Has image?', !!response.user?.image);
+            console.log('Image URL:', response.user?.image);
+            
+            if (response.user?.image) {
+              return (
+                <img 
+                  src={response.user.image} 
+                  alt={response.user.name || 'User Avatar'}
+                  onError={(e) => {
+                    console.error('❌ Image failed to load:', response.user?.image);
+                    console.error('Error event:', e);
+                    // Hide the broken image and show fallback
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    const parent = (e.target as HTMLImageElement).parentElement;
+                    if (parent) {
+                      const fallback = document.createElement('span');
+                      fallback.className = 'avatar-initials';
+                      fallback.textContent = response.user?.name?.charAt(0)?.toUpperCase() || '👤';
+                      parent.appendChild(fallback);
+                    }
+                  }}
+                  onLoad={() => {
+                    console.log('✅ Image loaded successfully:', response.user?.image);
+                  }}
+                />
+              );
+            } else {
+              console.log('No image available, showing initials for:', response.user?.name);
+              return (
+                <span className="avatar-initials">
+                  {response.user?.name?.charAt(0)?.toUpperCase() || '👤'}
+                </span>
+              );
+            }
+          })()}
         </div>
       )}
     </div>

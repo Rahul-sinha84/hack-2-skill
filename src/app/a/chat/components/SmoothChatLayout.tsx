@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import generateUniqueId from "@/utils/generateUniqueId";
 import ChatInput from "./ChatInput";
 import ChatResponses from "./ChatResponses";
@@ -113,7 +113,8 @@ const SmoothChatLayout: React.FC = () => {
       const testCaseData = await testCaseResponse.json();
       
       // Step 5: Complete processing
-      const finalContent = `Document "${file.name}" processed successfully. Generated ${testCaseData.data.categories?.length || 0} test categories with comprehensive test cases.`;
+      const documentSummary = testCaseData.metadata?.documentSummary || `PRD document "${file.name}" processed successfully`;
+      const finalContent = `${documentSummary}. Generated ${testCaseData.data.categories?.length || 0} test categories with comprehensive test cases.`;
       completeProcessingMessage(processingMessageId, finalContent, testCaseData.data);
 
       return {
@@ -136,6 +137,7 @@ const SmoothChatLayout: React.FC = () => {
       const currentChatId = chatId || generateUniqueId('chat_');
       
       // Add user message first
+      console.log('NextAuth session.user:', session?.user);
       addUserMessage(currentChatId, message, file, session?.user);
       
       if (file) {
@@ -207,19 +209,47 @@ const SmoothChatLayout: React.FC = () => {
   return (
     <section className="chat__layout">
       <div className="chat__layout__container">
-        <header className="chat__layout__header"></header>
+        <header className="chat__layout__header">
+          <div className="chat__layout__topbar">
+            <div className="topbar__left">
+              <h2 className="app__title">Test Case Generator</h2>
+            </div>
+            <div className="topbar__right">
+              <div className="topbar__avatar">
+                {session?.user?.image ? (
+                  <img
+                    src={session.user.image}
+                    alt={session.user.name || 'User'}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      const parent = (e.target as HTMLImageElement).parentElement;
+                      if (parent) {
+                        const span = document.createElement('span');
+                        span.textContent = (session?.user?.name?.charAt(0) || 'U').toUpperCase();
+                        parent.appendChild(span);
+                      }
+                    }}
+                  />
+                ) : (
+                  <span>{(session?.user?.name?.charAt(0) || 'U').toUpperCase()}</span>
+                )}
+              </div>
+              <button className="topbar__logout" onClick={() => signOut({ callbackUrl: '/login' })}>
+                Sign out
+              </button>
+            </div>
+          </div>
+        </header>
         <main className="chat__layout__main">
           {chatId ? (
             <div className="chat__layout__chats" ref={chatContainerRef}>
               <ChatResponses responses={curChatResponses} chatId={chatId} />
             </div>
-          ) : null}
+          ) : (
+            <div className="chat__layout__chats" ref={chatContainerRef}></div>
+          )}
 
-          <div
-            className={`${
-              chatId ? "chat__layout__input" : "chat__layout__input-new-chat"
-            }`}
-          >
+          <div className={`chat__layout__input`}>
             <ChatInput onSubmit={handleMessageSubmit} />
           </div>
         </main>

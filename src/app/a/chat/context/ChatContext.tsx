@@ -224,8 +224,9 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
 
   const addChatResponseWithTestCases = (chatId: string, message: string, testCaseData: any, fileName?: string): ChatResponse => {
     const chatResponseId = generateUniqueId('assistant_msg_');
+    const documentSummary = testCaseData.metadata?.documentSummary;
     const responseContent = fileName 
-      ? `Document "${fileName}" processed successfully. Generated ${testCaseData.categories?.length || 0} test categories with comprehensive test cases.`
+      ? `${documentSummary || `Document "${fileName}" processed successfully`}. Generated ${testCaseData.categories?.length || 0} test categories with comprehensive test cases.`
       : "Test cases generated successfully based on your input.";
     
     const newChatResponse: ChatResponse = {

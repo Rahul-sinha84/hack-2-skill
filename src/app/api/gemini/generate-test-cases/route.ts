@@ -1,15 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleAuth } from 'google-auth-library';
+import GeminiAuthSingleton from '@/utils/geminiAuth'; 
 
-// Initialize Google Auth for Vertex AI
-const auth = new GoogleAuth({
-  keyFilename: './key.json',
-  scopes: ['https://www.googleapis.com/auth/cloud-platform']
-});
+// Configuration validation and setup
+function getGeminiConfig() {
+  const projectId = GeminiAuthSingleton.getProjectId();
+  const location = process.env.GOOGLE_CLOUD_LOCATION;
+  const model = process.env.GEMINI_MODEL;
+  
+  if (!location) {
+    throw new Error('GEMINI_LOCATION environment variable is required');
+  }
+  
+  if (!model) {
+    throw new Error('GEMINI_MODEL environment variable is required');
+  }
+  
+  return { projectId, location, model };
+}
+
+// Clean and parse JSON response from Gemini
+function parseGeminiResponse(text: string) {
+  // Clean the generated text to ensure it's valid JSON
+  let cleanedText = text
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+
+  // Find the first '{' and last '}' to extract the JSON object
+  const startIndex = cleanedText.indexOf("{");
+  const endIndex = cleanedText.lastIndexOf("}");
+  
+  if (startIndex === -1 || endIndex === -1) {
+    throw new Error("No valid JSON object found in the response");
+  }
+  
+  cleanedText = cleanedText.substring(startIndex, endIndex + 1);
+  
+  try {
+    return JSON.parse(cleanedText);
+  } catch (parseError) {
+    console.error("Failed to parse JSON from Vertex AI response. Response text:", cleanedText);
+    throw new Error(
+      `SyntaxError: Failed to parse JSON from AI response. Details: ${
+        (parseError as Error).message
+      }`
+    );
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Using project: poc-genai-hacks for Vertex AI');
+    const config = getGeminiConfig();
+    console.log(`Using project: ${config.projectId} for Vertex AI`);
     
     const { documentText, tables, userQuery, fileName } = await request.json();
 
@@ -45,6 +87,7 @@ export async function POST(request: NextRequest) {
                     **Output Format:**
                     Respond with JSON only:
                     {
+                      "documentSummary": "Brief 1-2 sentence summary of what this PRD is about",
                       "categories": [
                         {
                           "id": "functional",
@@ -64,16 +107,16 @@ export async function POST(request: NextRequest) {
 
     let testData;
     try {
-      // Get access token
-      const client = await auth.getClient();
-      const accessToken = await client.getAccessToken();
+      // Get a cached access token from the singleton
+      const accessToken = await GeminiAuthSingleton.getAccessToken();
 
-      // Make direct API call to Vertex AI with optimized config
-      const response = await fetch('https://aiplatform.googleapis.com/v1/projects/poc-genai-hacks/locations/global/publishers/google/models/gemini-2.0-flash-001:generateContent', {
+      // Build the endpoint URL using configuration
+      const apiEndpoint = `https://aiplatform.googleapis.com/v1/projects/${config.projectId}/locations/${config.location}/publishers/google/models/${config.model}:generateContent`;
+      const response = await fetch(apiEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken.token}`
+          'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify({
           contents: [
@@ -104,40 +147,13 @@ export async function POST(request: NextRequest) {
       console.log("Vertex AI response received, parsing JSON...");
 
       // Extract text from Vertex AI response format
-      let generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+      const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
       if (!generatedText) {
         throw new Error("No generated text found in response");
       }
 
-      // Clean the generated text to ensure it's valid JSON
-      // Remove markdown fences and trim whitespace
-      generatedText = generatedText
-        .replace(/```json/g, "")
-        .replace(/```/g, "")
-        .trim();
-
-      // Find the first '{' and last '}' to extract the JSON object
-      const startIndex = generatedText.indexOf("{");
-      const endIndex = generatedText.lastIndexOf("}");
-      if (startIndex === -1 || endIndex === -1) {
-        throw new Error("No valid JSON object found in the response");
-      }
-      generatedText = generatedText.substring(startIndex, endIndex + 1);
-
-      try {
-        testData = JSON.parse(generatedText);
-      } catch (parseError) {
-        console.error(
-          "Failed to parse JSON from Vertex AI response. Response text:",
-          generatedText
-        );
-        // Re-throw a more informative error
-        throw new Error(
-          `SyntaxError: Failed to parse JSON from AI response. Details: ${
-            (parseError as Error).message
-          }`
-        );
-      }
+      // Parse the response using our utility function
+      testData = parseGeminiResponse(generatedText);
     } catch (apiError) {
       console.error("Vertex AI API error:", apiError);
       return NextResponse.json(
@@ -174,6 +190,7 @@ export async function POST(request: NextRequest) {
       metadata: {
         fileName,
         userQuery,
+        documentSummary: testData.documentSummary || `PRD document "${fileName}" processed for test case generation`,
         generatedAt: new Date().toISOString(),
         totalCategories: testData.categories.length,
         totalTestCases: testData.categories.reduce((sum: number, cat: any) => sum + (cat.testCases?.length || 0), 0),

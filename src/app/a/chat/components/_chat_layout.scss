@@ -6,6 +6,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: 54px; // space for fixed TopBar
 
   &__container {
     flex: 1;
@@ -13,11 +14,79 @@
     flex-direction: column;
   }
 
-  &__header {
-    flex-shrink: 0;
+  &__header { display: none; }
+}
+
+// Dedicated topbar spanning full width, overlayed at very top
+.chat__topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.10) 100%);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba($color-text, 0.06);
+}
+
+.chat__topbar__inner {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $spacing-md;
+}
+
+.app__title {
+  font-size: $font-size-lg;
+  font-weight: 600;
+}
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.topbar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: $border-radius-full;
+  border: 2px solid $color-primary-light-shade-2;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background-color: $color-primary-light-shade;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
-  &__main {
+  span {
+    font-size: $font-size-sm;
+    font-weight: 700;
+    color: $color-text;
+  }
+}
+
+.topbar__logout {
+  @include button-base;
+  height: 32px;
+  padding: 0 $spacing-md;
+  font-size: $font-size-sm;
+  background: transparent;
+  color: $color-text;
+  border-color: $color-primary-light-shade-2;
+
+  &:hover {
+    background-color: $color-primary-light-shade;
+  }
+}
+
+.chat__layout__main {
     flex: 1;
     overflow-y: auto;
     padding-bottom: 120px; // Space for fixed input
@@ -25,13 +94,13 @@
     @include tablet-up {
       padding-bottom: 140px;
     }
-  }
+}
 
-  &__footer {
+.chat__layout__footer {
     flex-shrink: 0;
-  }
+}
 
-  &__chats {
+.chat__layout__chats {
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
@@ -66,9 +135,9 @@
       max-width: 1024px;
       padding: 0 $spacing-xl;
     }
-  }
+}
 
-  &__input {
+.chat__layout__input {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -92,13 +161,12 @@
     @include desktop-up {
       max-width: 1024px;
     }
-  }
+}
 
-  &__input-new-chat {
+.chat__layout__input-new-chat {
     margin-top: $spacing-lg;
 
     @include mobile-only {
       margin-top: $spacing-md;
     }
-  }
 }
