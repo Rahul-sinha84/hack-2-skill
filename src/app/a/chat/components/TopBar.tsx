@@ -13,7 +13,7 @@ const TopBar: React.FC = () => {
     <div className="chat__topbar">
       <div className="chat__topbar__inner">
         <div className="topbar__left">
-          <h2 className="app__title">Test Case Generator</h2>
+          <img className="app__logo" src="/globe.svg" alt="App logo" />
         </div>
         <div className="topbar__right">
           <div className="topbar__avatar">

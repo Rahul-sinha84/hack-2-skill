@@ -37,9 +37,10 @@
   padding: 0 $spacing-md;
 }
 
-.app__title {
-  font-size: $font-size-lg;
-  font-weight: 600;
+.app__logo {
+  height: 22px;
+  width: auto;
+  display: block;
 }
 
 .topbar__right {
