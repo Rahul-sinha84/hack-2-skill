@@ -15,15 +15,43 @@ class GeminiAuthSingleton {
   private static getAuth(): GoogleAuth {
     if (!this.auth) {
       const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-      
-      if (!credentialsPath) {
-        throw new Error('GOOGLE_APPLICATION_CREDENTIALS environment variable is required');
+      const credentialsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
+      const credentialsBase64 = process.env.GOOGLE_APPLICATION_CREDENTIALS_BASE64;
+
+      // Prefer file path if provided (useful locally)
+      if (credentialsPath) {
+        this.auth = new GoogleAuth({
+          keyFilename: credentialsPath,
+          scopes: ['https://www.googleapis.com/auth/cloud-platform']
+        });
+        return this.auth;
       }
 
-      this.auth = new GoogleAuth({
-        keyFilename: credentialsPath,
-        scopes: ['https://www.googleapis.com/auth/cloud-platform']
-      });
+      // Support raw JSON (ideal for Vercel env var)
+      if (credentialsJson) {
+        const parsed = JSON.parse(credentialsJson);
+        this.auth = new GoogleAuth({
+          credentials: parsed as any,
+          scopes: ['https://www.googleapis.com/auth/cloud-platform']
+        });
+        return this.auth;
+      }
+
+      // Support base64-encoded JSON
+      if (credentialsBase64) {
+        const decoded = Buffer.from(credentialsBase64, 'base64').toString('utf-8');
+        const parsed = JSON.parse(decoded);
+        this.auth = new GoogleAuth({
+          credentials: parsed as any,
+          scopes: ['https://www.googleapis.com/auth/cloud-platform']
+        });
+        return this.auth;
+      }
+
+      throw new Error(
+        'Missing Google credentials. Provide one of: GOOGLE_APPLICATION_CREDENTIALS (file path), ' +
+        'GOOGLE_APPLICATION_CREDENTIALS_JSON (raw JSON), or GOOGLE_APPLICATION_CREDENTIALS_BASE64 (base64 JSON).'
+      );
     }
     return this.auth;
   }

@@ -35,26 +35,44 @@ class DocumentAIClientSingleton {
       const projectId = process.env.DOCUMENT_AI_PROJECT_ID;
       const location = process.env.DOCUMENT_AI_LOCATION || 'us';
       const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+      const credentialsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
+      const credentialsBase64 = process.env.GOOGLE_APPLICATION_CREDENTIALS_BASE64;
 
       if (!projectId) {
         throw new Error('DOCUMENT_AI_PROJECT_ID environment variable is required');
       }
 
-      if (!credentialsPath) {
-        throw new Error('GOOGLE_APPLICATION_CREDENTIALS environment variable is required');
+      if (!credentialsPath && !credentialsJson && !credentialsBase64) {
+        throw new Error('Provide Google credentials via GOOGLE_APPLICATION_CREDENTIALS (path) or GOOGLE_APPLICATION_CREDENTIALS_JSON (raw) or GOOGLE_APPLICATION_CREDENTIALS_BASE64 (base64).');
       }
 
       // Create client with optimized configuration
-      this.instance = new DocumentProcessorServiceClient({
-        apiEndpoint: `${location}-documentai.googleapis.com`,
-        keyFilename: credentialsPath,
-        projectId: projectId,
-        timeout: 60000,        
-        retry: { 
+      if (credentialsPath) {
+        this.instance = new DocumentProcessorServiceClient({
+          apiEndpoint: `${location}-documentai.googleapis.com`,
+          keyFilename: credentialsPath,
+          projectId: projectId,
+          timeout: 60000,        
+          retry: { 
+              retryCodes: [14, 13],
+              maxRetries: 3,
+          },
+        });
+      } else {
+        const parsed = credentialsJson
+          ? JSON.parse(credentialsJson)
+          : JSON.parse(Buffer.from(credentialsBase64!, 'base64').toString('utf-8'));
+        this.instance = new DocumentProcessorServiceClient({
+          apiEndpoint: `${location}-documentai.googleapis.com`,
+          credentials: parsed as any,
+          projectId: projectId,
+          timeout: 60000,
+          retry: {
             retryCodes: [14, 13],
             maxRetries: 3,
-        },
-      });
+          },
+        });
+      }
 
       console.log('✅ Document AI client initialized successfully');
       return this.instance;
