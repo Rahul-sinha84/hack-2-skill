@@ -94,9 +94,26 @@
       min-width: 0;
 
       .drag-drop-area {
+        position: relative;
+        border: 2px dashed transparent;
+        border-radius: $border-radius-lg;
+        transition: all 0.2s ease;
+
         &.drag-over {
-          background-color: rgba($color-primary-light-shade, 0.1);
-          border-radius: $border-radius-lg;
+          background-color: rgba($color-primary-light-shade, 0.15);
+          border-color: $color-secondary;
+          box-shadow: 0 0 0 3px rgba($color-secondary, 0.15);
+
+          &::after {
+            content: "Drop your PRD file here";
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            color: $color-text-light-shade;
+            font-size: $font-size-sm;
+            pointer-events: none;
+          }
         }
       }
 
