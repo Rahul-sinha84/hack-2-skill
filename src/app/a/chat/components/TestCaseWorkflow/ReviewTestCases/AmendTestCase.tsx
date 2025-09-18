@@ -39,19 +39,6 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
     }
   }, [data]);
 
-  const uploadTestCase = async () => {
-    try {
-      const response = await fetch("/api/jira/issue/upload-issue", {
-        method: "POST",
-        body: JSON.stringify({ testCase: data, projectKey: "10000" }),
-      });
-      const responseData = await response.json();
-      console.log({ responseData });
-    } catch (err: any) {
-      console.error(err);
-    }
-  };
-
   return (
     <section className="amend-test-case">
       <div className="amend-test-case__container">
@@ -137,9 +124,6 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
                   }}
                 >
                   Approve
-                </button>
-                <button className="upload-btn" onClick={uploadTestCase}>
-                  Upload
                 </button>
               </div>
             )
