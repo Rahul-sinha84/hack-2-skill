@@ -1,6 +1,7 @@
 export enum JiraCookieKeys {
   ACCESS_TOKEN = "jira_access_token",
   REFRESH_TOKEN = "jira_refresh_token",
+  CLOUD_ID = "jira_cloud_id",
 }
 
 export const refreshAccessToken = async (
@@ -32,6 +33,31 @@ export const refreshAccessToken = async (
     const { access_token, expires_in } = data;
 
     return { accessToken: access_token, expiresIn: expires_in };
+  } catch (err: any) {
+    console.error(err);
+    throw new Error(err);
+  }
+};
+
+export const getCloudId = async (accessToken: string): Promise<string> => {
+  try {
+    const response = await fetch(
+      "https://api.atlassian.com/oauth/token/accessible-resources",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to get cloud id");
+    }
+
+    const data = await response.json();
+    return data[0].id;
   } catch (err: any) {
     console.error(err);
     throw new Error(err);

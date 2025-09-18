@@ -1,12 +1,13 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { JiraCookieKeys, refreshAccessToken } from "../../utils";
+import { getCloudId, JiraCookieKeys, refreshAccessToken } from "../../utils";
 
 export const POST = async (req: Request) => {
   try {
     const cookieStore = await cookies();
     let accessToken = cookieStore.get(JiraCookieKeys.ACCESS_TOKEN)?.value;
     const refreshToken = cookieStore.get(JiraCookieKeys.REFRESH_TOKEN)?.value;
+    let cloudId = cookieStore.get(JiraCookieKeys.CLOUD_ID)?.value;
 
     if (!accessToken) {
       if (!refreshToken)
@@ -34,6 +35,19 @@ export const POST = async (req: Request) => {
         console.error(err);
         return NextResponse.json({ error: err.message }, { status: 401 });
       }
+    }
+
+    if (!cloudId) {
+      cloudId = await getCloudId(accessToken);
+      cookieStore.set({
+        name: JiraCookieKeys.CLOUD_ID,
+        value: cloudId,
+        expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+      });
     }
 
     const { testCases, projectKey, issueType = "Task" } = await req.json();
@@ -88,7 +102,7 @@ export const POST = async (req: Request) => {
 
     // Create the bulk create request
     const jiraResponse = await fetch(
-      `${process.env.JIRA_CLIENT_URL}/rest/api/3/issue/bulk`,
+      `${process.env.JIRA_CLIENT_URL}/${cloudId}/rest/api/3/issue/bulk`,
       {
         method: "POST",
         headers: {

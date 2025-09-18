@@ -1,11 +1,12 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { JiraCookieKeys, refreshAccessToken } from "../utils";
+import { getCloudId, JiraCookieKeys, refreshAccessToken } from "../utils";
 
 export const GET = async () => {
   try {
     const cookieStore = await cookies();
     let accessToken = cookieStore.get(JiraCookieKeys.ACCESS_TOKEN)?.value;
+    let cloudId = cookieStore.get(JiraCookieKeys.CLOUD_ID)?.value;
     const refreshToken = cookieStore.get(JiraCookieKeys.REFRESH_TOKEN)?.value;
 
     if (!accessToken) {
@@ -36,7 +37,20 @@ export const GET = async () => {
       }
     }
 
-    const uri = `${process.env.JIRA_CLIENT_URL}/rest/api/3/myself`;
+    if (!cloudId) {
+      cloudId = await getCloudId(accessToken);
+      cookieStore.set({
+        name: JiraCookieKeys.CLOUD_ID,
+        value: cloudId,
+        expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+      });
+    }
+
+    const uri = `${process.env.JIRA_CLIENT_URL}/${cloudId}/rest/api/3/myself`;
     console.log({ uri });
     const response = await fetch(uri, {
       method: "GET",
