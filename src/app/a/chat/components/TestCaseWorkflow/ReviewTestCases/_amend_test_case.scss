@@ -94,4 +94,81 @@
       }
     }
   }
+
+  // Readonly styles for exported test cases
+  &__readonly-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+    background-color: rgba($color-green, 0.1);
+    border: 1px solid rgba($color-green, 0.3);
+    border-radius: $border-radius-md;
+  }
+
+  &__readonly-title {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $color-text;
+    margin: 0;
+    flex: 1;
+  }
+
+  &__exported-badge {
+    font-size: $font-size-sm;
+    color: $color-green;
+    background-color: rgba($color-green, 0.2);
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-sm;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  &__readonly-content {
+    padding: $spacing-md;
+    background-color: rgba($color-text-light-shade, 0.05);
+    border: 1px solid rgba($color-text-light-shade, 0.2);
+    border-radius: $border-radius-md;
+  }
+
+  &__readonly-text {
+    font-size: $font-size-base;
+    color: $color-text;
+    line-height: 1.5;
+    margin: 0 0 $spacing-md 0;
+  }
+
+  &__readonly-notice {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+    background-color: rgba($color-yellow, 0.1);
+    border: 1px solid rgba($color-yellow, 0.3);
+    border-radius: $border-radius-sm;
+    font-size: $font-size-sm;
+    color: $color-text-light-shade;
+
+    .notice-icon {
+      font-size: $font-size-base;
+    }
+  }
+
+  &__exported-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-md;
+    background-color: rgba($color-green, 0.1);
+    border: 1px solid rgba($color-green, 0.3);
+    border-radius: $border-radius-md;
+
+    .exported-message {
+      font-size: $font-size-sm;
+      color: $color-green;
+      font-weight: 500;
+      text-align: center;
+    }
+  }
 }

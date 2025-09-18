@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 
 import "./_test_cases_container.scss";
-import { TestCase, useChat } from "../../../context/ChatContext";
+import {
+  TestCase,
+  TestCaseStatus,
+  useChat,
+} from "../../../context/ChatContext";
 import { TestCaseCard } from ".";
 
 interface TestCasesContainerProps {
@@ -20,6 +24,10 @@ const TestCasesContainer = ({
   const testCases = getTestCasesByTestCategoryId(testCategoryId);
 
   const handleSelection = (testcase: TestCase) => {
+    // Don't allow selection of exported test cases
+    if (testcase.status === TestCaseStatus.EXPORTED) {
+      return;
+    }
     setSelectedId(testcase.id);
     onSelect(testcase);
   };
@@ -30,31 +38,36 @@ const TestCasesContainer = ({
         <header className="test-cases-container__header"></header>
         <main className="test-cases-container__main">
           <ul className="test-cases-card-container">
-            {testCases.map((testcase) => (
-              <li key={testcase.id}>
-                <input
-                  type="radio"
-                  name="test-case-selection"
-                  id={testcase.id}
-                  checked={selectedId === testcase.id}
-                  onChange={() => handleSelection(testcase)}
-                />
+            {testCases.map((testcase) => {
+              const isExported = testcase.status === TestCaseStatus.EXPORTED;
+              return (
+                <li key={testcase.id}>
+                  <input
+                    type="radio"
+                    name="test-case-selection"
+                    id={testcase.id}
+                    checked={selectedId === testcase.id}
+                    disabled={isExported}
+                    onChange={() => handleSelection(testcase)}
+                  />
 
-                <label
-                  htmlFor={testcase.id}
-                  tabIndex={0}
-                  onClick={() => handleSelection(testcase)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      handleSelection(testcase);
-                    }
-                  }}
-                >
-                  <TestCaseCard data={testcase} />
-                </label>
-              </li>
-            ))}
+                  <label
+                    htmlFor={testcase.id}
+                    tabIndex={isExported ? -1 : 0}
+                    className={isExported ? "test-case-card--disabled" : ""}
+                    onClick={() => handleSelection(testcase)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleSelection(testcase);
+                      }
+                    }}
+                  >
+                    <TestCaseCard data={testcase} />
+                  </label>
+                </li>
+              );
+            })}
           </ul>
         </main>
         <footer className="test-cases-container__footer"></footer>

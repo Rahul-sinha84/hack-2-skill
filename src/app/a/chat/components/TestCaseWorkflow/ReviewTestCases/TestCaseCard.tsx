@@ -20,6 +20,8 @@ const TestCaseCard = ({ data }: TestCaseCardProps) => {
                 ? "approved"
                 : data.status === TestCaseStatus.PENDING
                 ? "pending"
+                : data.status === TestCaseStatus.EXPORTED
+                ? "exported"
                 : "rejected"
             }`}
           >
@@ -29,6 +31,8 @@ const TestCaseCard = ({ data }: TestCaseCardProps) => {
                 ? "Approved"
                 : data.status === TestCaseStatus.PENDING
                 ? "Pending"
+                : data.status === TestCaseStatus.EXPORTED
+                ? "Exported"
                 : "Rejected"}
             </div>
           </div>

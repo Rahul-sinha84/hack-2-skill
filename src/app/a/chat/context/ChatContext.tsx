@@ -7,6 +7,7 @@ export enum TestCaseStatus {
   PENDING = "pending",
   APPROVED = "approved",
   REJECTED = "rejected",
+  EXPORTED = "exported",
 }
 
 export interface Chat {
@@ -97,6 +98,7 @@ export interface ChatContextType {
     title: string,
     content: string
   ) => void;
+  markTestCasesAsExported: (testCaseIds: string[]) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -365,6 +367,16 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     );
   };
 
+  const markTestCasesAsExported = (testCaseIds: string[]): void => {
+    setTestCases((prev) =>
+      prev.map((testCase) =>
+        testCaseIds.includes(testCase.id)
+          ? { ...testCase, status: TestCaseStatus.EXPORTED }
+          : testCase
+      )
+    );
+  };
+
   const value: ChatContextType = {
     chats,
     chatResponses,
@@ -381,6 +393,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     completeProcessingMessage,
     updateTestCaseStatus,
     updateTestCaseDetails,
+    markTestCasesAsExported,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

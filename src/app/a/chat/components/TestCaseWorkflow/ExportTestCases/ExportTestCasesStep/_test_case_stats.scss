@@ -1,0 +1,130 @@
+@use "../../../../../../../app/styles/variables" as *;
+@use "../../../../../../../app/styles/mixins" as *;
+
+.test-case-stats {
+  background-color: $color-primary-light-shade;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-xl;
+
+  &__header {
+    margin-bottom: $spacing-lg;
+    text-align: center;
+  }
+
+  &__header h4 {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $color-text;
+    margin: 0 0 $spacing-sm 0;
+  }
+
+  &__project {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    color: $color-text-light-shade;
+    flex-wrap: wrap;
+
+    .project-label {
+      font-weight: 500;
+    }
+
+    .project-name {
+      font-weight: 600;
+      color: $color-text;
+    }
+
+    .project-key {
+      background-color: $color-primary;
+      color: $color-secondary;
+      padding: $spacing-xs $spacing-sm;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-xs;
+      font-weight: 600;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+
+    @include mobile-only {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__info {
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-light-shade;
+    line-height: 1.5;
+
+    .warning-text {
+      color: $color-yellow;
+      font-weight: 500;
+    }
+  }
+}
+
+.stat-card {
+  background-color: $color-primary;
+  border-radius: $border-radius-md;
+  padding: $spacing-md;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+
+  &__number {
+    font-size: $font-size-2xl;
+    font-weight: 700;
+    color: $color-text;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    color: $color-text-light-shade;
+    font-weight: 500;
+  }
+
+  &--total {
+    border-color: $color-secondary;
+  }
+
+  &--approved {
+    border-color: $color-green;
+
+    .stat-card__number {
+      color: $color-green;
+    }
+  }
+
+  &--pending {
+    border-color: $color-yellow;
+
+    .stat-card__number {
+      color: $color-yellow;
+    }
+  }
+
+  &--rejected {
+    border-color: $color-red;
+
+    .stat-card__number {
+      color: $color-red;
+    }
+  }
+
+  &--exported {
+    border-color: $color-green;
+
+    .stat-card__number {
+      color: $color-green;
+    }
+  }
+}

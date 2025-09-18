@@ -37,7 +37,7 @@ export const GET = async () => {
       );
     }
 
-    const { access_token, expires_in, refresh_token } = data;
+    const { access_token, expires_in } = data;
 
     // setting tokens in cookies
     cookieStore.set({

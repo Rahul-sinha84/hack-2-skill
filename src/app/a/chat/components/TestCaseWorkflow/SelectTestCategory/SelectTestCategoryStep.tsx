@@ -168,7 +168,14 @@ const SelectTestCategoryStep = ({
             ))}
           </div>
         </main>
-        <footer className="select-test-category-step__footer"></footer>
+        <footer className="select-test-category-step__footer">
+          <button
+            className="select-test-category-step__export-btn"
+            onClick={() => setCurStep(Steps.EXPORT_TEST_CASES)}
+          >
+            Export test cases
+          </button>
+        </footer>
       </div>
     </section>
   );

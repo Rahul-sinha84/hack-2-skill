@@ -1,0 +1,285 @@
+@use "../../../../../../../app/styles/variables" as *;
+@use "../../../../../../../app/styles/mixins" as *;
+
+.connect-jira-step {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-lg;
+  }
+
+  &__header {
+    margin-bottom: $spacing-xl;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: 600;
+    color: $color-text;
+    margin: 0 0 $spacing-sm 0;
+  }
+
+  &__description {
+    font-size: $font-size-base;
+    color: $color-text-light-shade;
+    margin: 0;
+  }
+
+  &__main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__content {
+    text-align: center;
+    max-width: 400px;
+  }
+
+  &__icon {
+    font-size: 4rem;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__info {
+    font-size: $font-size-base;
+    color: $color-text-light-shade;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  &__footer {
+    margin-top: $spacing-xl;
+    display: flex;
+    justify-content: space-between;
+    gap: $spacing-md;
+  }
+
+  &__back-btn {
+    @include button-base;
+    background-color: $color-primary-light-shade;
+    color: $color-text;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+  }
+
+  &__connect-btn {
+    @include button-base;
+    background-color: $color-secondary;
+    color: $color-text;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    min-width: 150px;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__error {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    background-color: rgba($color-red, 0.1);
+    border: 1px solid rgba($color-red, 0.3);
+    border-radius: $border-radius-md;
+    margin-bottom: $spacing-lg;
+
+    &-icon {
+      font-size: $font-size-lg;
+      flex-shrink: 0;
+    }
+
+    &-content {
+      flex: 1;
+
+      h4 {
+        font-size: $font-size-base;
+        font-weight: 600;
+        color: $color-red;
+        margin: 0 0 $spacing-xs 0;
+      }
+
+      p {
+        font-size: $font-size-sm;
+        color: $color-text-light-shade;
+        margin: 0 0 $spacing-sm 0;
+      }
+    }
+  }
+
+  &__retry-btn {
+    @include button-base;
+    background-color: $color-red;
+    color: $color-primary;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+    border-radius: $border-radius-sm;
+    border: none;
+
+    &:hover:not(:disabled) {
+      background-color: darken($color-red, 10%);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    background-color: rgba($color-yellow, 0.1);
+    border: 1px solid rgba($color-yellow, 0.3);
+    border-radius: $border-radius-md;
+    margin-top: $spacing-md;
+
+    p {
+      font-size: $font-size-sm;
+      color: $color-text-light-shade;
+      margin: 0;
+      text-align: center;
+    }
+  }
+
+  &__auth-note {
+    font-size: $font-size-xs !important;
+    color: $color-text-light-shade !important;
+    font-style: italic;
+  }
+
+  &__polling-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-top: $spacing-md;
+    padding: $spacing-sm;
+    background-color: rgba($color-secondary, 0.1);
+    border: 1px solid rgba($color-secondary, 0.3);
+    border-radius: $border-radius-sm;
+
+    &--success {
+      background-color: rgba($color-green, 0.1);
+      border: 1px solid rgba($color-green, 0.3);
+    }
+  }
+}
+
+.polling-indicator {
+  display: flex;
+  gap: $spacing-xs;
+  align-items: center;
+}
+
+.polling-dot {
+  width: 8px;
+  height: 8px;
+  background-color: $color-secondary;
+  border-radius: 50%;
+  animation: polling-pulse 1.5s ease-in-out infinite;
+
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+}
+
+.polling-text {
+  font-size: $font-size-sm;
+  color: $color-secondary;
+  margin: 0;
+  font-weight: 500;
+}
+
+.success-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.success-icon {
+  width: 24px;
+  height: 24px;
+  background-color: $color-green;
+  color: $color-primary;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  animation: success-bounce 0.6s ease-out;
+}
+
+.success-text {
+  font-size: $font-size-sm;
+  color: $color-green;
+  margin: 0;
+  font-weight: 600;
+  text-align: center;
+}
+
+@keyframes success-bounce {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes polling-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba($color-yellow, 0.3);
+  border-top: 2px solid $color-yellow;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

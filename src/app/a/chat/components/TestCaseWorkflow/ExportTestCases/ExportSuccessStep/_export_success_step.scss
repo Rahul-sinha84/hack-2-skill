@@ -1,0 +1,172 @@
+@use "../../../../../../../app/styles/variables" as *;
+@use "../../../../../../../app/styles/mixins" as *;
+
+.export-success-step {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-lg;
+  }
+
+  &__header {
+    margin-bottom: $spacing-xl;
+    text-align: center;
+  }
+
+  &__icon {
+    font-size: 4rem;
+    margin-bottom: $spacing-md;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: 600;
+    color: $color-text;
+    margin: 0 0 $spacing-sm 0;
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    color: $color-text-light-shade;
+    margin: 0;
+  }
+
+  &__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__project-info {
+    background-color: $color-primary-light-shade;
+    border-radius: $border-radius-md;
+    padding: $spacing-md;
+    text-align: center;
+
+    h4 {
+      font-size: $font-size-sm;
+      color: $color-text-light-shade;
+      margin: 0 0 $spacing-sm 0;
+      font-weight: 500;
+    }
+
+    .project-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: $spacing-xs;
+      flex-wrap: wrap;
+
+      .project-name {
+        font-size: $font-size-lg;
+        font-weight: 600;
+        color: $color-text;
+      }
+
+      .project-key {
+        background-color: $color-primary;
+        color: $color-secondary;
+        padding: $spacing-xs $spacing-sm;
+        border-radius: $border-radius-sm;
+        font-size: $font-size-xs;
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__errors {
+    background-color: $color-red-light-shade;
+    border: 1px solid $color-red;
+    border-radius: $border-radius-md;
+    padding: $spacing-md;
+
+    h4 {
+      font-size: $font-size-sm;
+      color: $color-red;
+      margin: 0 0 $spacing-sm 0;
+      font-weight: 600;
+    }
+
+    .error-list {
+      margin: 0;
+      padding-left: $spacing-md;
+    }
+
+    .error-item {
+      font-size: $font-size-sm;
+      color: $color-text-light-shade;
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  &__timestamp {
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-light-shade;
+    margin-top: $spacing-md;
+  }
+
+  &__footer {
+    margin-top: $spacing-xl;
+    display: flex;
+    justify-content: center;
+    gap: $spacing-md;
+  }
+
+  &__view-btn {
+    @include button-base;
+    background-color: $color-primary-light-shade;
+    color: $color-text;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__close-btn {
+    @include button-base;
+    background-color: $color-secondary;
+    color: $color-text;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+  }
+}
+
+.summary-card {
+  background-color: $color-primary-light-shade;
+  border-radius: $border-radius-md;
+  padding: $spacing-md;
+  text-align: center;
+  border: 2px solid $color-secondary;
+
+  &__number {
+    font-size: $font-size-2xl;
+    font-weight: 700;
+    color: $color-secondary;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    color: $color-text-light-shade;
+    font-weight: 500;
+  }
+}

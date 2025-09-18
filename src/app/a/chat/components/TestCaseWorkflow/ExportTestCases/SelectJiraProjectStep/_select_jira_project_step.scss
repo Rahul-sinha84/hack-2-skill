@@ -1,0 +1,151 @@
+@use "../../../../../../../app/styles/variables" as *;
+@use "../../../../../../../app/styles/mixins" as *;
+
+.select-jira-project-step {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-lg;
+  }
+
+  &__header {
+    margin-bottom: $spacing-xl;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: $font-size-2xl;
+    font-weight: 600;
+    color: $color-text;
+    margin: 0 0 $spacing-sm 0;
+  }
+
+  &__description {
+    font-size: $font-size-base;
+    color: $color-text-light-shade;
+    margin: 0;
+  }
+
+  &__main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__loading {
+    text-align: center;
+    color: $color-text-light-shade;
+    font-size: $font-size-base;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+  }
+
+  &__error {
+    text-align: center;
+    color: $color-text-light-shade;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+    max-width: 400px;
+  }
+
+  &__empty {
+    text-align: center;
+    color: $color-text-light-shade;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+    max-width: 400px;
+  }
+
+  &__projects {
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $spacing-lg;
+    padding: $spacing-md;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+      gap: $spacing-md;
+    }
+  }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid $color-primary-light-shade-2;
+    border-top: 3px solid $color-secondary;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .error-icon,
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: $spacing-sm;
+  }
+
+  .retry-btn,
+  .jira-link {
+    @include button-base;
+    background-color: $color-secondary;
+    color: $color-text;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .jira-link {
+    background-color: $color-primary-light-shade;
+  }
+
+  &__footer {
+    margin-top: $spacing-xl;
+    display: flex;
+    justify-content: space-between;
+    gap: $spacing-md;
+  }
+
+  &__back-btn {
+    @include button-base;
+    background-color: $color-primary-light-shade;
+    color: $color-text;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+  }
+
+  &__continue-btn {
+    @include button-base;
+    background-color: $color-secondary;
+    color: $color-text;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+  }
+}

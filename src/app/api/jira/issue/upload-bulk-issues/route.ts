@@ -1,17 +1,39 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { JiraCookieKeys } from "../../utils";
+import { JiraCookieKeys, refreshAccessToken } from "../../utils";
 
 export const POST = async (req: Request) => {
   try {
     const cookieStore = await cookies();
-    const accessToken = cookieStore.get(JiraCookieKeys.ACCESS_TOKEN)?.value;
+    let accessToken = cookieStore.get(JiraCookieKeys.ACCESS_TOKEN)?.value;
+    const refreshToken = cookieStore.get(JiraCookieKeys.REFRESH_TOKEN)?.value;
 
     if (!accessToken) {
-      return NextResponse.json(
-        { error: "No access token found" },
-        { status: 401 }
-      );
+      if (!refreshToken)
+        return NextResponse.json(
+          { error: "No access token found" },
+          { status: 401 }
+        );
+
+      // refresh token available
+      // ? send 401 error always when this api fails
+      try {
+        const { accessToken: refreshedAccessToken, expiresIn } =
+          await refreshAccessToken(refreshToken);
+        accessToken = refreshedAccessToken;
+        cookieStore.set({
+          name: JiraCookieKeys.ACCESS_TOKEN,
+          value: accessToken,
+          expires: new Date(Date.now() + expiresIn * 1000),
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          path: "/",
+        });
+      } catch (err: any) {
+        console.error(err);
+        return NextResponse.json({ error: err.message }, { status: 401 });
+      }
     }
 
     const { testCases, projectKey, issueType = "Task" } = await req.json();

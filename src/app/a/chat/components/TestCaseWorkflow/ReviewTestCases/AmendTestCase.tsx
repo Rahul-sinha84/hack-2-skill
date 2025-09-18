@@ -25,6 +25,9 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
 
   const { updateTestCaseStatus, updateTestCaseDetails } = useChat();
 
+  // Check if the test case is exported
+  const isExported = data?.status === TestCaseStatus.EXPORTED;
+
   // Update local state when data changes
   useEffect(() => {
     if (data) {
@@ -59,7 +62,22 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
             </h3>
           ) : (
             <>
-              <SingleLineInput id={data.id} value={title} onChange={setTitle} />
+              {isExported ? (
+                <div className="amend-test-case__readonly-header">
+                  <h3 className="amend-test-case__readonly-title">
+                    {data.title}
+                  </h3>
+                  <span className="amend-test-case__exported-badge">
+                    ✓ Exported
+                  </span>
+                </div>
+              ) : (
+                <SingleLineInput
+                  id={data.id}
+                  value={title}
+                  onChange={setTitle}
+                />
+              )}
             </>
           )}
         </header>
@@ -70,38 +88,61 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
             </p>
           ) : (
             <>
-              <TextAreaInput
-                id={data.id}
-                value={content}
-                onChange={setContent}
-              />
+              {isExported ? (
+                <div className="amend-test-case__readonly-content">
+                  <p className="amend-test-case__readonly-text">
+                    {data.content}
+                  </p>
+                  <div className="amend-test-case__readonly-notice">
+                    <span className="notice-icon">ℹ️</span>
+                    <span>
+                      This test case has been exported to Jira and cannot be
+                      modified.
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <TextAreaInput
+                  id={data.id}
+                  value={content}
+                  onChange={setContent}
+                />
+              )}
             </>
           )}
         </main>
         <footer className="amend-test-case__footer">
           {data ? (
-            <div className="btn-container">
-              <button
-                className="reject-btn"
-                onClick={() =>
-                  updateTestCaseStatus(data.id, TestCaseStatus.REJECTED)
-                }
-              >
-                Reject
-              </button>
-              <button
-                className="approve-btn"
-                onClick={() => {
-                  updateTestCaseDetails(data.id, title, content);
-                  updateTestCaseStatus(data.id, TestCaseStatus.APPROVED);
-                }}
-              >
-                Approve
-              </button>
-              <button className="upload-btn" onClick={uploadTestCase}>
-                Upload
-              </button>
-            </div>
+            isExported ? (
+              <div className="amend-test-case__exported-footer">
+                <span className="exported-message">
+                  This test case has been exported and cannot be modified.
+                </span>
+              </div>
+            ) : (
+              <div className="btn-container">
+                <button
+                  className="reject-btn"
+                  onClick={() =>
+                    updateTestCaseStatus(data.id, TestCaseStatus.REJECTED)
+                  }
+                >
+                  Reject
+                </button>
+                <button
+                  className="approve-btn"
+                  onClick={() => {
+                    updateTestCaseDetails(data.id, title, content);
+                    updateTestCaseStatus(data.id, TestCaseStatus.APPROVED);
+                  }}
+                >
+                  Approve
+                </button>
+                <button className="upload-btn" onClick={uploadTestCase}>
+                  Upload
+                </button>
+              </div>
+            )
           ) : null}
         </footer>
       </div>

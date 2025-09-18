@@ -83,6 +83,24 @@
           &:active {
             transform: translateY(0);
           }
+
+          &.test-case-card--disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+            background-color: rgba($color-text-light-shade, 0.05);
+            border-color: rgba($color-text-light-shade, 0.3);
+
+            &:hover {
+              background-color: rgba($color-text-light-shade, 0.05);
+              border-color: rgba($color-text-light-shade, 0.3);
+              transform: none;
+            }
+
+            &:focus {
+              border-color: rgba($color-text-light-shade, 0.3);
+              box-shadow: none;
+            }
+          }
         }
       }
     }

@@ -91,6 +91,13 @@
         }
       }
 
+      &.exported {
+        color: $color-green;
+        .test-case-card__main__status__icon {
+          background-color: $color-green;
+        }
+      }
+
       &__icon {
         width: $spacing-sm;
         height: $spacing-sm;

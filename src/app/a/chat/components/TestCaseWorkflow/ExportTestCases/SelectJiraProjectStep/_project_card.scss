@@ -1,0 +1,71 @@
+@use "../../../../../../../app/styles/variables" as *;
+@use "../../../../../../../app/styles/mixins" as *;
+
+.project-card {
+  @include button-base;
+  background-color: $color-primary-light-shade;
+  padding: $spacing-lg;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  min-height: 120px;
+
+  &:hover {
+    border-color: $color-secondary;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &--selected {
+    border-color: $color-secondary;
+    background-color: $color-primary-light-shade-2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__key {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $color-secondary;
+    background-color: $color-primary;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-sm;
+    text-transform: uppercase;
+  }
+
+  &__status {
+    font-size: $font-size-lg;
+    color: $color-secondary;
+    font-weight: bold;
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &__name {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $color-text;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  &__id {
+    font-size: $font-size-sm;
+    color: $color-text-light-shade;
+    margin: 0;
+  }
+}
