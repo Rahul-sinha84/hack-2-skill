@@ -49,6 +49,26 @@ const SmoothChatLayout: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      const container = chatContainerRef.current;
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Force scroll to bottom with a slight delay
+  const forceScrollToBottom = () => {
+    setTimeout(() => {
+      if (chatContainerRef.current) {
+        const container = chatContainerRef.current;
+        container.scrollTop = container.scrollHeight;
+      }
+    }, 100);
+  };
+
   const processFileAndGenerateTestCases = async (
     file: File,
     userQuery: string,
@@ -123,19 +143,29 @@ const SmoothChatLayout: React.FC = () => {
         );
       }
 
+      // Step 2.5: Show input document stats before generation
+      const characterCount = documentText.length;
+      const wordCount = documentText.trim().split(/\s+/).filter(Boolean).length;
+      updateProcessingMessage(
+        processingMessageId,
+        `📊 Analyzing a document with ${wordCount.toLocaleString()} words (~${characterCount.toLocaleString()} characters)...`
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+
       // Step 3: Understanding context
       updateProcessingMessage(
         processingMessageId,
         "🧠 Understanding context and requirements..."
       );
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
       // Step 4: Generating test cases
       updateProcessingMessage(
         processingMessageId,
         "⚡ Generating comprehensive test cases..."
       );
-
+      const generationStart =
+        typeof performance !== "undefined" ? performance.now() : Date.now();
       const testCaseResponse = await fetch("/api/gemini/generate-test-cases", {
         method: "POST",
         headers: {
@@ -154,14 +184,20 @@ const SmoothChatLayout: React.FC = () => {
       }
 
       const testCaseData = await testCaseResponse.json();
+      const generationEnd =
+        typeof performance !== "undefined" ? performance.now() : Date.now();
+      const generationSeconds = (generationEnd - generationStart) / 1000;
 
       // Step 5: Complete processing
       const documentSummary =
         testCaseData.metadata?.documentSummary ||
         `PRD document "${file.name}" processed successfully`;
+      const latencyInfo = `✨ Generated in ${generationSeconds.toFixed(
+        1
+      )} seconds.`;
       const finalContent = `${documentSummary}. Generated ${
         testCaseData.data.categories?.length || 0
-      } test categories with comprehensive test cases.`;
+      } test categories with comprehensive test cases.\n${latencyInfo}`;
       completeProcessingMessage(
         processingMessageId,
         finalContent,
@@ -192,6 +228,10 @@ const SmoothChatLayout: React.FC = () => {
       // Add user message first
       console.log("NextAuth session.user:", session?.user);
       addUserMessage(currentChatId, message, file, session?.user);
+
+      // Immediately scroll after adding the user message
+      setTimeout(scrollToBottom, 0);
+      forceScrollToBottom();
 
       if (file) {
         // Add processing message for file uploads
@@ -267,13 +307,21 @@ const SmoothChatLayout: React.FC = () => {
     getTestCasesByTestCategoryId,
   ]);
 
-  // Also scroll when processing status updates
+  // Multiple scroll triggers to ensure it works
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
     }
+    scrollToBottom();
+    forceScrollToBottom();
   }, [curChatResponses]);
+
+  // Also scroll when chat ID changes (new conversation)
+  useEffect(() => {
+    scrollToBottom();
+    forceScrollToBottom();
+  }, [chatId]);
 
   return (
     <section className="chat__layout">
