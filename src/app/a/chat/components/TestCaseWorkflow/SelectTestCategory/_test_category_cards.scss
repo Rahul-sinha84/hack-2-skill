@@ -2,191 +2,377 @@
 @use "../../../../../../app/styles/mixins" as *;
 
 .test-category-card {
-  background-color: $color-primary-light-shade;
-  border: 1px solid $color-primary-light-shade-2;
+  @include button-base;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
   border-radius: $border-radius-lg;
   padding: $spacing-lg;
-  transition: all 0.2s ease;
+  margin-bottom: $spacing-lg;
+  text-align: left;
+  width: 100%;
+  height: auto;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
-  min-height: 280px;
-  width: 100%;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  border: 2px solid;
   cursor: pointer;
+  color: white;
+  position: relative;
+  overflow: hidden;
 
   @include mobile-only {
-    min-height: 240px;
+    min-height: 260px;
     padding: $spacing-md;
   }
 
-  @include tablet-up {
-    min-height: 300px;
-    padding: $spacing-lg;
+  // Add subtle color shading overlay
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Ensure content is above the overlay
+  > * {
+    position: relative;
+    z-index: 1;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: $color-secondary;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    position: relative;
+    
+    &::before {
+      opacity: 0.06;
+    }
   }
 
-  &:focus-within {
-    border-color: $color-secondary;
-    outline: 2px solid $color-secondary;
-    outline-offset: 2px;
+  &:active,
+  &:focus {
+    z-index: 15;
+    position: relative;
+  }
+
+  // Border colors and shading for different categories - VIBGYOR inspired with high contrast
+  &--functional {
+    border-color: #8b5cf6; // Violet
+    .test-category-card__chart {
+      color: #8b5cf6;
+    }
+    .test-category-card__progress-fill {
+      background-color: #8b5cf6;
+    }
+    &::before {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+  }
+
+  &--performance {
+    border-color: #f59e0b; // Orange
+    .test-category-card__chart {
+      color: #f59e0b;
+    }
+    .test-category-card__progress-fill {
+      background-color: #f59e0b;
+    }
+    &::before {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+  }
+
+  &--security {
+    border-color: #10b981; // Green
+    .test-category-card__chart {
+      color: #10b981;
+    }
+    .test-category-card__progress-fill {
+      background-color: #10b981;
+    }
+    &::before {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+  }
+
+  &--ui-ux {
+    border-color: #ef4444; // Red
+    .test-category-card__chart {
+      color: #ef4444;
+    }
+    .test-category-card__progress-fill {
+      background-color: #ef4444;
+    }
+    &::before {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+  }
+
+  &--integration {
+    border-color: #06b6d4; // Cyan/Blue
+    .test-category-card__chart {
+      color: #06b6d4;
+    }
+    .test-category-card__progress-fill {
+      background-color: #06b6d4;
+    }
+    &::before {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+    }
+  }
+
+  &--api {
+    border-color: #eab308; // Yellow
+    .test-category-card__chart {
+      color: #eab308;
+    }
+    .test-category-card__progress-fill {
+      background-color: #eab308;
+    }
+    &::before {
+      background: linear-gradient(135deg, #eab308, #ca8a04);
+    }
+  }
+
+  &--compliance {
+    border-color: #ec4899; // Pink/Magenta
+    .test-category-card__chart {
+      color: #ec4899;
+    }
+    .test-category-card__progress-fill {
+      background-color: #ec4899;
+    }
+    &::before {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+    }
+  }
+
+  &--default {
+    border-color: #6366f1; // Indigo
+    .test-category-card__chart {
+      color: #6366f1;
+    }
+    .test-category-card__progress-fill {
+      background-color: #6366f1;
+    }
+    &::before {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+    }
   }
 
   &__header {
-    @include flex-between;
-    margin-bottom: $spacing-md;
-    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-xl;
   }
 
-  &__title {
-    @include font-nunito;
-    font-size: $font-size-lg;
-    font-weight: 600;
-    color: $color-text;
-    margin: 0;
-    line-height: 1.3;
+  &__title-container {
     flex: 1;
-    margin-right: $spacing-md;
-
-    @include mobile-only {
-      font-size: $font-size-base;
-    }
   }
 
-  &__count {
-    background-color: $color-primary-light-shade-2;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    @include flex-center;
-    flex-shrink: 0;
-    transition: all 0.2s ease;
-
-    @include mobile-only {
-      width: 28px;
-      height: 28px;
-    }
-
-    .test-category-card:hover & {
-      background-color: $color-secondary;
-      transform: scale(1.1);
-    }
-  }
-
-  &__count-number {
-    @include font-nunito;
+  &__title-badge {
+    border-radius: $border-radius-sm;
+    padding: 6px 12px;
     font-size: $font-size-sm;
     font-weight: 600;
-    color: $color-text;
-    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+  }
+
+  &__count-badge {
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-left: $spacing-md;
+    border: 1.5px solid;
 
     @include mobile-only {
-      font-size: $font-size-xs;
+      width: 24px;
+      height: 24px;
+      font-size: 10px;
+      margin-left: $spacing-sm;
     }
   }
 
-  &__content {
-    flex: 1;
-    margin-bottom: $spacing-lg;
-    display: flex;
-    align-items: center;
+  // Count badge colors for different categories - lighter shades
+  &--functional &__count-badge {
+    background-color: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.6);
+    color: rgba(139, 92, 246, 0.9);
+  }
+
+  &--performance &__count-badge {
+    background-color: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.6);
+    color: rgba(245, 158, 11, 0.9);
+  }
+
+  &--security &__count-badge {
+    background-color: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.6);
+    color: rgba(16, 185, 129, 0.9);
+  }
+
+  &--ui-ux &__count-badge {
+    background-color: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.6);
+    color: rgba(239, 68, 68, 0.9);
+  }
+
+  &--integration &__count-badge {
+    background-color: rgba(6, 182, 212, 0.12);
+    border-color: rgba(6, 182, 212, 0.6);
+    color: rgba(6, 182, 212, 0.9);
+  }
+
+  &--api &__count-badge {
+    background-color: rgba(234, 179, 8, 0.12);
+    border-color: rgba(234, 179, 8, 0.6);
+    color: rgba(234, 179, 8, 0.9);
+  }
+
+  &--compliance &__count-badge {
+    background-color: rgba(236, 72, 153, 0.12);
+    border-color: rgba(236, 72, 153, 0.6);
+    color: rgba(236, 72, 153, 0.9);
+  }
+
+  &--default &__count-badge {
+    background-color: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.6);
+    color: rgba(99, 102, 241, 0.9);
+  }
+
+  // Title badge colors for different categories - matching the new VIBGYOR scheme
+  &--functional &__title-badge {
+    background-color: rgba(139, 92, 246, 0.15);
+    border: 1px solid #8b5cf6;
+    color: #8b5cf6;
+  }
+
+  &--performance &__title-badge {
+    background-color: rgba(245, 158, 11, 0.15);
+    border: 1px solid #f59e0b;
+    color: #f59e0b;
+  }
+
+  &--security &__title-badge {
+    background-color: rgba(16, 185, 129, 0.15);
+    border: 1px solid #10b981;
+    color: #10b981;
+  }
+
+  &--ui-ux &__title-badge {
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+  }
+
+  &--integration &__title-badge {
+    background-color: rgba(6, 182, 212, 0.15);
+    border: 1px solid #06b6d4;
+    color: #06b6d4;
+  }
+
+  &--api &__title-badge {
+    background-color: rgba(234, 179, 8, 0.15);
+    border: 1px solid #eab308;
+    color: #eab308;
+  }
+
+  &--compliance &__title-badge {
+    background-color: rgba(236, 72, 153, 0.15);
+    border: 1px solid #ec4899;
+    color: #ec4899;
+  }
+
+  &--default &__title-badge {
+    background-color: rgba(99, 102, 241, 0.15);
+    border: 1px solid #6366f1;
+    color: #6366f1;
   }
 
   &__description {
-    @include font-nunito;
     font-size: $font-size-sm;
-    color: $color-text;
-    line-height: 1.5;
-    margin: 0;
-    opacity: 0.8;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: $spacing-xl;
+    flex: 1;
 
     @include mobile-only {
       font-size: $font-size-xs;
-      -webkit-line-clamp: 2;
+      margin-bottom: $spacing-lg;
+    }
+  }
+
+  &__chart {
+    margin-bottom: $spacing-xl;
+    opacity: 0.8;
+    
+    svg {
+      width: 100%;
+      height: 60px;
+    }
+
+    @include mobile-only {
+      margin-bottom: $spacing-lg;
+      
+      svg {
+        height: 50px;
+      }
     }
   }
 
   &__footer {
-    flex-shrink: 0;
+    margin-top: auto;
+    padding-top: $spacing-sm;
   }
 
-  &__progress-text {
-    @include font-nunito;
-    font-size: $font-size-xs;
-    color: $color-text;
+  &__status {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     margin-bottom: $spacing-sm;
-    opacity: 0.7;
+
+    &-text {
+      font-size: $font-size-xs;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.4;
+
+      @include mobile-only {
+        font-size: 10px;
+      }
+    }
   }
 
   &__progress-bar {
     width: 100%;
-    height: 6px;
-    background-color: $color-primary-light-shade-2;
-    border-radius: $border-radius-sm;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-full;
     overflow: hidden;
     position: relative;
-
-    @include mobile-only {
-      height: 5px;
-    }
   }
 
   &__progress-fill {
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      $color-secondary 0%,
-      lighten($color-secondary, 10%) 100%
-    );
-    border-radius: $border-radius-sm;
+    border-radius: $border-radius-full;
     transition: width 0.3s ease;
     position: relative;
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.2) 50%,
-        transparent 100%
-      );
-      animation: shimmer 2s infinite;
-    }
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-// Animation for progress bar fill
-.test-category-card__progress-fill {
-  animation: progressFill 0.8s ease-out;
-}
-
-@keyframes progressFill {
-  from {
-    width: 0%;
-  }
-  to {
-    width: var(--progress-width, 0%);
   }
 }
