@@ -7,37 +7,49 @@ import "./styles/_login.scss";
 const LoginPage = () => {
   return (
     <div className="login">
-      <div className="login__container">
-        <div className="login__content">
-          <div className="login__header">
+      <div className="login__split">
+        {/* Left hero panel with image and headline */}
+        <aside
+          className="login__left"
+          style={{
+            backgroundImage:
+              "url(https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2060&auto=format&fit=crop)",
+          }}
+        >
+          <div className="login__left__overlay" />
+          <div className="login__left__content">
             <div className="login__logo">
-              <div className="logo-icon">🧪</div>
+              <img
+                className="logo-mark"
+                src="/next.svg"
+                alt="App logo"
+                width={40}
+                height={40}
+              />
               <h1 className="logo-text">Test Case Generator</h1>
             </div>
-            <p className="login__subtitle">
-              Transform your PRD documents into comprehensive test cases with AI
+            <h2 className="left__headline">
+              Ready to take your testing to the next level?
+            </h2>
+            <p className="left__subtext">
+              Turn your PRD into structured, review-ready test suites in seconds.
             </p>
           </div>
+        </aside>
 
-          <div className="login__main">
-            <div className="login__card">
-              <h2 className="card__title">Welcome Back</h2>
-              <p className="card__description">
-                Sign in to continue generating test cases from your PRD documents
-              </p>
-              
-              <div className="card__signin">
-                <SignIn />
-              </div>
+        {/* Right auth panel with only Google sign in */}
+        <main className="login__right">
+          <div className="auth-card">
+            <h2 className="auth-card__title">Sign In</h2>
+            <p className="auth-card__subtitle">
+              Continue with your Google account to get started
+            </p>
+            <div className="auth-card__actions">
+              <SignIn />
             </div>
+            <p className="auth-card__footer">Secure authentication via Google</p>
           </div>
-
-          <div className="login__footer">
-            <p className="footer__text">
-              Secure authentication powered by Google
-            </p>
-          </div>
-        </div>
+        </main>
       </div>
     </div>
   );

@@ -220,7 +220,18 @@ const MessageBubble: React.FC<{
     <div className={`message-bubble ${isUser ? 'user' : 'assistant'} ${isProcessing ? 'processing' : ''}`}>
       {!isUser && (
         <div className="avatar">
-          {isProcessing ? '⚡' : '🤖'}
+          <img
+            src="/ai-orb.png"
+            alt="AI"
+            width={28}
+            height={28}
+            onError={(e) => {
+              // Fallback to a simple sparkle emoji if image missing
+              (e.target as HTMLImageElement).style.display = 'none';
+              const parent = (e.target as HTMLImageElement).parentElement;
+              if (parent) parent.textContent = '✨';
+            }}
+          />
         </div>
       )}
       
@@ -250,7 +261,10 @@ const MessageBubble: React.FC<{
              </div>
            </div>
         ) : (
-          <div className="message-text">
+          <div className={`message-text ${(
+              isAssistant && typeof mainText === 'string' &&
+              mainText.toLowerCase().includes('response to a message without a file')
+            ) ? 'message-text--no-file' : ''}`}>
             {isProcessing ? (
               <>
                 <span className="processing-text">{response.content}</span>

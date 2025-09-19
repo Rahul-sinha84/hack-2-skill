@@ -5,26 +5,96 @@
   @include center-grid;
   min-height: 100vh;
   padding: $spacing-lg;
-  background: radial-gradient(1200px 600px at 20% -10%, rgba(49, 184, 198, 0.15), transparent 60%),
-    radial-gradient(1200px 600px at 120% 110%, rgba(49, 184, 198, 0.08), transparent 60%),
-    $color-primary;
+  position: relative;
+  overflow: hidden;
+  // Minimalist soft gradient background
+  background:
+    radial-gradient(1200px 700px at 120% 110%, rgba(99, 102, 241, 0.12), transparent 60%),
+    linear-gradient(180deg, lighten($color-primary, 3%), $color-primary);
 
-  &__container {
-    width: 100%;
-    max-width: 880px;
-    margin: 0 auto;
+  // Decorative aurora blobs
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.35;
+    pointer-events: none;
+    transform: translateZ(0);
   }
 
-  &__content {
-    background: linear-gradient(180deg, $color-primary-dark-shade 0%, $color-primary 100%);
-    border: 1px solid $color-primary-light-shade-2;
-    border-radius: $border-radius-xl;
-    padding: $spacing-2xl;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  &::before {
+    width: 520px;
+    height: 520px;
+    left: -140px;
+    top: -120px;
+    background: radial-gradient(closest-side, rgba(99,102,241,0.55), transparent 70%);
+  }
+
+  &::after {
+    width: 520px;
+    height: 520px;
+    right: -160px;
+    bottom: -140px;
+    background: radial-gradient(closest-side, rgba(14,165,233,0.55), transparent 70%);
+  }
+
+  &__split {
+    width: 100%;
+    max-width: 1100px;
+    height: 80vh;
+    min-height: 560px;
+    border-radius: $border-radius-2xl;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
 
     @include mobile-only {
-      padding: $spacing-xl;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr;
+      height: auto;
+      min-height: unset;
     }
+  }
+
+  &__left {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(58, 61, 72, 0.2), rgba(58, 61, 72, 0.6)),
+        radial-gradient(1000px 500px at -10% -10%, rgba(99,102,241,0.4), transparent 50%),
+        radial-gradient(1000px 500px at 110% 110%, rgba(14,165,233,0.35), transparent 50%);
+    }
+
+    &__content {
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: $spacing-lg;
+      padding: $spacing-2xl;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .left__headline {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .left__subtext {
+    font-size: $font-size-lg;
+    color: rgba(255,255,255,0.9);
   }
 
   &__logo {
@@ -32,16 +102,17 @@
     gap: $spacing-md;
     margin-bottom: $spacing-md;
 
-    .logo-icon {
+    .logo-mark {
       width: 44px;
       height: 44px;
+      display: block;
       border-radius: $border-radius-full;
-      background-color: $color-secondary;
-      display: grid;
-      place-items: center;
-      color: $color-primary;
-      font-weight: 700;
-      box-shadow: 0 6px 16px rgba(49, 184, 198, 0.35);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      padding: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
     }
 
     .logo-text {
@@ -57,16 +128,47 @@
     margin-bottom: $spacing-2xl;
   }
 
-  &__main {
+  &__right {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: grid;
-    gap: $spacing-xl;
+    place-items: center;
+    padding: $spacing-2xl;
   }
 
-  &__card {
-    background-color: $color-primary-dark-shade;
-    border: 1px solid $color-primary-light-shade-2;
-    border-radius: $border-radius-lg;
+  .auth-card {
+    width: min(420px, 100%);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: $border-radius-2xl;
     padding: $spacing-2xl;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.25);
+    color: $color-text;
+    text-align: center;
+
+    &__title {
+      font-size: $font-size-2xl;
+      font-weight: 800;
+      margin-bottom: $spacing-xs;
+    }
+
+    &__subtitle {
+      color: $color-text-light-shade;
+      margin-bottom: $spacing-xl;
+    }
+
+    &__actions {
+      display: grid;
+      gap: $spacing-md;
+    }
+
+    &__footer {
+      margin-top: $spacing-lg;
+      font-size: $font-size-sm;
+      color: $color-text-light-shade;
+      opacity: 0.85;
+    }
   }
 
   .card__title {
@@ -91,28 +193,42 @@
     width: 100%;
     height: 44px;
     gap: $spacing-sm;
+    .google-icon { display: inline-flex; }
   }
 
   .google-btn {
-    background-color: $color-secondary;
-    color: $color-primary;
+    background: rgba(255,255,255,0.10);
+    color: #fff;
     font-weight: 700;
     letter-spacing: 0.2px;
-    box-shadow: 0 6px 16px rgba(49, 184, 198, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
 
     &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.14);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+    }
+
+    &:active:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 10px 20px rgba(49, 184, 198, 0.45);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
     }
   }
 
   .secondary-btn {
-    background-color: transparent;
+    background: rgba(255, 255, 255, 0.06);
     color: $color-text;
-    border-color: $color-primary-light-shade-2;
+    border-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 
     &:hover:not(:disabled) {
-      background-color: $color-primary-light-shade;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-1px);
     }
   }
 
