@@ -218,13 +218,15 @@ const MessageBubble: React.FC<{
   const isProcessing = response.messageType === MessageType.PROCESSING;
   const isAssistant = response.messageType === MessageType.ASSISTANT;
 
-  // Extract latency line (e.g., "✨ Generated in 8.4 seconds.") from assistant content
+  // Extract latency line (e.g., "Generated in 8.4 seconds.") from assistant content
+  // Make emoji optional and support "second"/"seconds" with optional dot
   let mainText = response.content;
   let latencyLine: string | null = null;
   if (isAssistant && typeof response.content === 'string') {
-    const match = response.content.match(/✨\s*Generated in\s*[\d.]+\s*seconds\.?/i);
+    const match = response.content.match(/(?:^|\s)\s*(?:✨\s*)?Generated in\s*[\d.]+\s*seconds?\.?/i);
     if (match) {
-      latencyLine = match[0];
+      const matchedText = match[0].trim();
+      latencyLine = matchedText.startsWith('✨') ? matchedText : `✨ ${matchedText.replace(/^✨\s*/,'')}`;
       mainText = response.content.replace(match[0], '').trim();
     }
   }

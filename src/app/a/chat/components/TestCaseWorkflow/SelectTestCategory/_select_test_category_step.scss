@@ -87,12 +87,12 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     .test-category-cards {
       flex: 1; // Take remaining space
       display: grid;
-      gap: $spacing-lg;
+      gap: $spacing-md;
       overflow-y: auto; // ONLY this scrolls
       overflow-x: hidden;
-      padding-right: $spacing-xs;
+      padding-right: $spacing-sm;
       height: 0; // Force flex to work properly
-      justify-content: center; // Center the grid items
+      justify-content: start; // Left align for consistency
 
       @include mobile-only {
         grid-template-columns: 1fr;
@@ -101,17 +101,17 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       }
 
       @include tablet-up {
-        // For 2-4 items, use 2 columns; for 5+ items, use 3 columns
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        max-width: 800px; // Limit max width for better balance
-        margin: 0 auto; // Center the grid container
+        // Stable responsive grid regardless of item count
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        max-width: none;
+        margin: 0;
       }
 
       @include desktop-up {
-        // For 2-3 items, use 2 columns; for 4+ items, use 3 columns
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        max-width: 1000px; // Limit max width for better balance
-        margin: 0 auto; // Center the grid container
+        // Stable responsive grid regardless of item count
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        max-width: none;
+        margin: 0;
       }
 
       // Compact version for smaller cards
@@ -157,44 +157,82 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         }
       }
 
-      // Specific layouts for different card counts
-      &:has(.test-category-card:nth-child(1):last-child) {
-        // Single card - center it
-        @include tablet-up {
-          grid-template-columns: 1fr;
-          max-width: 400px;
-        }
-      }
+      // Remove card-count specific layouts for consistency
+    }
+  }
 
-      &:has(.test-category-card:nth-child(2):last-child) {
-        // Two cards - side by side
-        @include tablet-up {
-          grid-template-columns: 1fr 1fr;
-          max-width: 700px;
-        }
-      }
+  &__footer {
+    flex-shrink: 0;
+    padding: $spacing-lg 0 0;
+    margin-top: $spacing-lg;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 
-      &:has(.test-category-card:nth-child(3):last-child) {
-        // Three cards - 2 on top, 1 centered below
-        @include tablet-up {
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: auto auto;
-        }
+    @include mobile-only {
+      padding: $spacing-md 0 0;
+      margin-top: $spacing-md;
+    }
+  }
 
-        .test-category-card:nth-child(3) {
-          grid-column: 1 / -1;
-          justify-self: center;
-          max-width: 400px;
-        }
-      }
+  &__export-btn {
+    @include button-base;
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 35%, #ec4899 100%);
+    color: white;
+    padding: 16px 32px;
+    font-size: $font-size-base;
+    font-weight: 600;
+    min-width: 200px;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+      0 8px 32px rgba(59, 130, 246, 0.3),
+      0 4px 16px rgba(0, 0, 0, 0.1);
 
-      &:has(.test-category-card:nth-child(4):last-child) {
-        // Four cards - 2x2 grid
-        @include tablet-up {
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: 1fr 1fr;
-        }
+    @include mobile-only {
+      min-width: 180px;
+      padding: 14px 28px;
+      font-size: $font-size-sm;
+    }
+
+    // Subtle gradient overlay
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 
+        0 12px 40px rgba(59, 130, 246, 0.4),
+        0 8px 32px rgba(0, 0, 0, 0.15);
+
+      &::before {
+        opacity: 1;
       }
+    }
+
+    &:active {
+      transform: translateY(-1px) scale(1.01);
+      box-shadow: 
+        0 8px 24px rgba(59, 130, 246, 0.35),
+        0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    &:focus {
+      outline: 2px solid rgba(59, 130, 246, 0.6);
+      outline-offset: 2px;
     }
   }
 }

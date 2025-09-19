@@ -105,7 +105,7 @@
 }
 
 .modal__content {
-  padding: 24px;
+  padding: 16px 16px 20px;
   overflow-y: auto;
   flex: 1;
   min-height: 0;
@@ -132,13 +132,11 @@
 
 // Variant: disable modal content scroll for specific workflows
 .no-scroll-modal {
-  // Add a bit more breathing room at the bottom and keep centered
-  padding: $spacing-lg $spacing-lg $spacing-xl;
+  // tighter outer padding
+  padding: $spacing-md;
   .modal__container {
-    // Ensure the content area provides a hard height for inner grids
-    max-height: calc(
-      100vh - 2 * $spacing-lg - $spacing-xl
-    ); // account for backdrop padding
+    // account for backdrop padding
+    max-height: calc(100vh - 2 * $spacing-md);
     height: auto;
   }
   .modal__content {
@@ -146,7 +144,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: $spacing-md; // Reduced padding for tighter top space
+    // tighter inner padding
+    padding: $spacing-sm $spacing-md;
   }
 }
 
@@ -193,11 +192,11 @@
 
 .modal__content {
   @include mobile-only {
-    padding: $spacing-md;
+    padding: $spacing-sm;
   }
 
   @include tablet-up {
-    padding: $spacing-lg;
+    padding: $spacing-md $spacing-lg;
   }
 }
 

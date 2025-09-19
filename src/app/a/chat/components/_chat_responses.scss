@@ -192,7 +192,7 @@
     }
 
     .message-content {
-      padding: $spacing-sm $spacing-md;
+      padding: $spacing-xs $spacing-sm;
       word-wrap: break-word;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       transition: all 0.2s ease;
@@ -236,7 +236,7 @@
       .message-meta {
         margin-top: $spacing-xs;
         margin-bottom: $spacing-sm;
-        margin-left: 0; // align to left in footer row
+        margin-left: $spacing-sm; // add left offset for better separation
         font-size: $font-size-sm;
         color: rgba(255, 255, 255, 0.7); // Adjusted for dark background
       }
@@ -611,7 +611,7 @@
       max-width: 95%;
 
       .message-content {
-        padding: $spacing-xs $spacing-sm;
+        padding: $spacing-xs $spacing-xs;
       }
 
       .avatar {
@@ -626,11 +626,13 @@
 .assistant-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: $spacing-xl;
-  padding: $spacing-xl;
+  gap: $spacing-md;
+  padding: $spacing-md;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: $spacing-sm;
+    padding: $spacing-sm;
   }
 
   &__left {

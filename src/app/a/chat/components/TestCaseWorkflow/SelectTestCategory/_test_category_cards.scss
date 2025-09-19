@@ -3,340 +3,439 @@
 
 .test-category-card {
   @include button-base;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: $border-radius-xl;
-  padding: $spacing-xl !important;
-  margin-bottom: $spacing-lg;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.04));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 16px;
   text-align: left;
   width: 100%;
   height: auto;
-  min-height: 280px;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba($color-secondary, 0.35);
   cursor: pointer;
   color: white;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
   @include mobile-only {
-    min-height: 260px;
-    padding: $spacing-md;
+    min-height: 180px;
+    padding: 12px;
+    border-radius: 12px;
   }
 
-  // Remove glass overlay; use plain shadows
+  // Subtle gradient overlay for depth
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.2);
+    // transform: translateY(-4px) scale(1.02);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+    box-shadow: 
+      0 10px 24px rgba(0, 0, 0, 0.12),
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    border-color: rgba($color-secondary, 0.5);
   }
 
-  &:active,
+  &:active {
+    transform: translateY(-2px) scale(1.01);
+  }
+
   &:focus {
-    z-index: 15;
-    position: relative;
+    outline: 2px solid rgba(59, 130, 246, 0.6);
+    outline-offset: 2px;
   }
 
-  // Border colors for different categories with glass morphism
+  // Category-specific styling with enhanced visual identity
   &--functional {
-    border-color: rgba(139, 92, 246, 0.6) !important;
-    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
-
+    border-color: rgba($color-secondary, 0.35);
     &:hover {
-      border-color: rgba(139, 92, 246, 0.8) !important;
-      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.25);
+      border-color: rgba($color-secondary, 0.5);
+      box-shadow: 
+        0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
-
-    .test-category-card__chart {
-      color: #8b5cf6;
+    .test-category-card__icon-container {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+      border: 1px solid rgba(139, 92, 246, 0.3);
     }
-    .test-category-card__progress-fill {
-      background-color: #8b5cf6;
-    }
+    .test-category-card__icon { color: #a78bfa; }
+    .test-category-card__progress-fill { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+    .test-category-card__count-badge { background: rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.4); }
   }
 
   &--performance {
-    border-color: rgba(245, 158, 11, 0.6) !important;
-    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.15);
-
+    border-color: rgba($color-secondary, 0.35);
     &:hover {
-      border-color: rgba(245, 158, 11, 0.8) !important;
-      box-shadow: 0 12px 40px rgba(245, 158, 11, 0.25);
+      border-color: rgba($color-secondary, 0.5);
+      box-shadow: 
+        0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
-
-    .test-category-card__chart {
-      color: #f59e0b;
+    .test-category-card__icon-container {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));
+      border: 1px solid rgba(245, 158, 11, 0.3);
     }
-    .test-category-card__progress-fill {
-      background-color: #f59e0b;
-    }
+    .test-category-card__icon { color: #fbbf24; }
+    .test-category-card__progress-fill { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .test-category-card__count-badge { background: rgba(245, 158, 11, 0.2); border-color: rgba(245, 158, 11, 0.4); }
   }
 
   &--security {
-    border-color: rgba(74, 222, 128, 0.6) !important;
-    box-shadow: 0 8px 32px rgba(74, 222, 128, 0.15);
-
+    border-color: rgba($color-secondary, 0.35);
     &:hover {
-      border-color: rgba(74, 222, 128, 0.8) !important;
-      box-shadow: 0 12px 40px rgba(74, 222, 128, 0.25);
+      border-color: rgba($color-secondary, 0.5);
+      box-shadow: 
+        0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
-
-    .test-category-card__chart {
-      color: $color-green;
+    .test-category-card__icon-container {
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(74, 222, 128, 0.1));
+      border: 1px solid rgba(74, 222, 128, 0.3);
     }
-    .test-category-card__progress-fill {
-      background-color: $color-green;
-    }
+    .test-category-card__icon { color: #86efac; }
+    .test-category-card__progress-fill { background: linear-gradient(90deg, #4ade80, #86efac); }
+    .test-category-card__count-badge { background: rgba(74, 222, 128, 0.2); border-color: rgba(74, 222, 128, 0.4); }
   }
 
   &--ui-ux {
-    border-color: rgba(248, 113, 113, 0.6) !important;
-    box-shadow: 0 8px 32px rgba(248, 113, 113, 0.15);
-
+    border-color: rgba($color-secondary, 0.35);
     &:hover {
-      border-color: rgba(248, 113, 113, 0.8) !important;
-      box-shadow: 0 12px 40px rgba(248, 113, 113, 0.25);
+      border-color: rgba($color-secondary, 0.5);
+      box-shadow: 
+        0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
-
-    .test-category-card__chart {
-      color: $color-red;
+    .test-category-card__icon-container {
+      background: linear-gradient(135deg, rgba(248, 113, 113, 0.2), rgba(248, 113, 113, 0.1));
+      border: 1px solid rgba(248, 113, 113, 0.3);
     }
-    .test-category-card__progress-fill {
-      background-color: $color-red;
-    }
+    .test-category-card__icon { color: #fca5a5; }
+    .test-category-card__progress-fill { background: linear-gradient(90deg, #f87171, #fca5a5); }
+    .test-category-card__count-badge { background: rgba(248, 113, 113, 0.2); border-color: rgba(248, 113, 113, 0.4); }
   }
 
   &--integration {
-    border-color: rgba(6, 182, 212, 0.6) !important;
-    box-shadow: 0 8px 32px rgba(6, 182, 212, 0.15);
-
+    border-color: rgba($color-secondary, 0.35);
     &:hover {
-      border-color: rgba(6, 182, 212, 0.8) !important;
-      box-shadow: 0 12px 40px rgba(6, 182, 212, 0.25);
+      border-color: rgba($color-secondary, 0.5);
+      box-shadow: 
+        0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
-
-    .test-category-card__chart {
-      color: #06b6d4;
+    .test-category-card__icon-container {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.1));
+      border: 1px solid rgba(6, 182, 212, 0.3);
     }
-    .test-category-card__progress-fill {
-      background-color: #06b6d4;
-    }
+    .test-category-card__icon { color: #67e8f9; }
+    .test-category-card__progress-fill { background: linear-gradient(90deg, #06b6d4, #67e8f9); }
+    .test-category-card__count-badge { background: rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.4); }
   }
 
   &--api {
-    border-color: rgba(250, 204, 21, 0.6) !important;
-    box-shadow: 0 8px 32px rgba(250, 204, 21, 0.15);
-
+    border-color: rgba($color-secondary, 0.35);
     &:hover {
-      border-color: rgba(250, 204, 21, 0.8) !important;
-      box-shadow: 0 12px 40px rgba(250, 204, 21, 0.25);
+      border-color: rgba($color-secondary, 0.5);
+      box-shadow: 
+        0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
-
-    .test-category-card__chart {
-      color: $color-yellow;
+    .test-category-card__icon-container {
+      background: linear-gradient(135deg, rgba(250, 204, 21, 0.2), rgba(250, 204, 21, 0.1));
+      border: 1px solid rgba(250, 204, 21, 0.3);
     }
-    .test-category-card__progress-fill {
-      background-color: $color-yellow;
-    }
+    .test-category-card__icon { color: #fde047; }
+    .test-category-card__progress-fill { background: linear-gradient(90deg, #facc15, #fde047); }
+    .test-category-card__count-badge { background: rgba(250, 204, 21, 0.2); border-color: rgba(250, 204, 21, 0.4); }
   }
 
   &--compliance {
-    border-color: rgba(236, 72, 153, 0.6) !important;
-    box-shadow: 0 8px 32px rgba(236, 72, 153, 0.15);
-
+    border-color: rgba($color-secondary, 0.35);
     &:hover {
-      border-color: rgba(236, 72, 153, 0.8) !important;
-      box-shadow: 0 12px 40px rgba(236, 72, 153, 0.25);
+      border-color: rgba($color-secondary, 0.5);
+      box-shadow: 
+        0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
-
-    .test-category-card__chart {
-      color: #ec4899;
+    .test-category-card__icon-container {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(236, 72, 153, 0.1));
+      border: 1px solid rgba(236, 72, 153, 0.3);
     }
-    .test-category-card__progress-fill {
-      background-color: #ec4899;
-    }
+    .test-category-card__icon { color: #f9a8d4; }
+    .test-category-card__progress-fill { background: linear-gradient(90deg, #ec4899, #f9a8d4); }
+    .test-category-card__count-badge { background: rgba(236, 72, 153, 0.2); border-color: rgba(236, 72, 153, 0.4); }
   }
 
   &--default {
-    border-color: rgba(37, 100, 236, 0.6) !important;
-    box-shadow: 0 8px 32px rgba(37, 100, 236, 0.15);
-
+    border-color: rgba($color-secondary, 0.35);
     &:hover {
-      border-color: rgba(37, 100, 236, 0.8) !important;
-      box-shadow: 0 12px 40px rgba(37, 100, 236, 0.25);
+      border-color: rgba($color-secondary, 0.5);
+      box-shadow: 
+        0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
-
-    .test-category-card__chart {
-      color: $color-secondary;
+    .test-category-card__icon-container {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+      border: 1px solid rgba(59, 130, 246, 0.3);
     }
-    .test-category-card__progress-fill {
-      background-color: $color-secondary;
-    }
+    .test-category-card__icon { color: #93c5fd; }
+    .test-category-card__progress-fill { background: linear-gradient(90deg, #3b82f6, #93c5fd); }
+    .test-category-card__count-badge { background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4); }
   }
 
+  // Header with icon and count badge
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: $spacing-xl;
+    margin-bottom: 8px;
+    min-height: 28px;
+    gap: 8px;
   }
 
-  &__title-container {
-    flex: 1;
-  }
-
-  &__title-badge {
-    border-radius: $border-radius-sm;
-    padding: 6px 12px;
-    font-size: $font-size-lg !important;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-block;
-  }
+  // Icon removed per request
 
   &__count-badge {
-    border-radius: 50%;
-    width: 2rem !important;
-    height: 2rem !important;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: $font-size-sm !important;
-    font-weight: 600;
-    flex-shrink: 0;
-    margin-left: $spacing-md;
-    border: 1.5px solid;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid;
+    backdrop-filter: blur(8px);
+    position: relative;
 
     @include mobile-only {
-      width: 24px;
-      height: 24px;
-      font-size: 10px;
-      margin-left: $spacing-sm;
+      width: 28px;
+      height: 28px;
+      font-size: 11px;
+      border-radius: 8px;
     }
   }
 
+  // Content area with title, description and progress
   &__content {
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+
+    @include mobile-only {
+      font-size: 14px;
+    }
+  }
+
+  &__title--inline {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__description {
-    font-size: $font-size-base !important;
-    color: $color-text;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
     line-height: 1.5;
     margin: 0;
-    margin-bottom: $spacing-sm;
-    opacity: 0.8;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: center;
 
     @include mobile-only {
-      font-size: $font-size-xs;
-      margin-bottom: $spacing-lg;
+      font-size: 11px;
+      -webkit-line-clamp: 2;
     }
   }
 
-  &__chart {
-    margin-bottom: $spacing-xl;
-    opacity: 0.8;
+  // Progress section
+  &__progress {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
 
-    svg {
-      width: 100%;
-      height: 60px;
-    }
+  &__progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    @include mobile-only {
-      margin-bottom: $spacing-lg;
+  &__progress-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-      svg {
-        height: 50px;
-      }
+  &__progress-percentage {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  &__progress-bar {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 2s infinite;
     }
   }
 
+  &__progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      border-radius: inherit;
+    }
+  }
+
+  // Footer with status indicators
   &__footer {
-    flex-shrink: 0;
     margin-top: auto;
   }
 
-  &__status-list {
+  &__status-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: $spacing-sm;
+    gap: 8px;
   }
 
   &__status-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: $spacing-sm;
-    padding: $spacing-md $spacing-lg;
+    gap: 8px;
+    padding: 10px;
     background: rgba(255, 255, 255, 0.04);
-    border-radius: $border-radius-md;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     transition: all 0.2s ease;
-    min-height: 60px;
+    min-height: 46px;
 
     &:hover {
       background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
     }
   }
 
-  &__status-number {
-    @include font-nunito;
-    font-size: $font-size-lg;
-    font-weight: 700;
-    color: $color-text;
-    line-height: 1;
-    min-width: 30px;
-    text-align: center;
+  &__status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border-radius: 50%;
+      background: inherit;
+      opacity: 0.3;
+      filter: blur(2px);
+    }
+
+    &--approved { background: #4ade80; }
+    &--pending { background: #facc15; }
+    &--rejected { background: #f87171; }
+    &--exported { background: #06b6d4; }
   }
 
-  &__status-label {
-    @include font-nunito;
-    font-size: $font-size-sm;
-    font-weight: 600;
-    color: $color-text-light-shade;
-    line-height: 1;
+  &__status-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
     flex: 1;
   }
 
-  &__status-item--approved {
-    .test-category-card__status-number {
-      color: $color-green;
+  &__status-number {
+    font-size: 15px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1;
+
+    @include mobile-only {
+      font-size: 14px;
     }
   }
 
-  &__status-item--pending {
-    .test-category-card__status-number {
-      color: $color-yellow;
-    }
+  &__status-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
   }
+}
 
-  &__status-item--rejected {
-    .test-category-card__status-number {
-      color: $color-red;
-    }
-  }
-
-  &__status-item--exported {
-    .test-category-card__status-number {
-      color: $color-green;
-    }
-  }
+// Shimmer animation for progress bars
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }

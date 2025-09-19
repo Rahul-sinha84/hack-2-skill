@@ -23,6 +23,21 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
   const { getTestCasesByTestCategoryId } = useChat();
   const testCases = getTestCasesByTestCategoryId(data.id);
 
+  // Get category type for styling
+  const getCategoryType = (label: string) => {
+    const lowercaseLabel = label.toLowerCase();
+    if (lowercaseLabel.includes('functional')) return 'functional';
+    if (lowercaseLabel.includes('performance')) return 'performance';
+    if (lowercaseLabel.includes('security')) return 'security';
+    if (lowercaseLabel.includes('ui') || lowercaseLabel.includes('ux')) return 'ui-ux';
+    if (lowercaseLabel.includes('integration')) return 'integration';
+    if (lowercaseLabel.includes('api')) return 'api';
+    if (lowercaseLabel.includes('compliance')) return 'compliance';
+    return 'default';
+  };
+
+  const categoryType = getCategoryType(data.label);
+
   const calculateStats = (testCases: Array<TestCase>) => {
     const total = testCases.length;
     const approved = testCases.filter(
@@ -43,68 +58,69 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
   const { approved, exported, pending, rejected, total } =
     calculateStats(testCases);
 
+  const getProgressPercentage = () => {
+    return total > 0 ? Math.round(((approved + exported) / total) * 100) : 0;
+  };
+
+  const progressPercentage = getProgressPercentage();
+
   return (
     <button
       onClick={() => onSelect({ ...data, testCases })}
       key={data.id}
-      className={`test-category-card`}
+      className={`test-category-card test-category-card--${categoryType}`}
     >
       <div className="test-category-card__header">
-        <div className="test-category-card__title-container">
-          <span className="test-category-card__title-badge">{data.label}</span>
-        </div>
+        <h3 className="test-category-card__title test-category-card__title--inline">{data.label}</h3>
         <div className="test-category-card__count-badge">{total}</div>
       </div>
 
-      <div className="test-category-card__description">{data.description}</div>
-      {/* 
-      <div className="test-category-card__chart">
-        <svg width="100%" height="60" viewBox="0 0 100 60">
-          <defs>
-            <linearGradient id={`gradient-${data.id}`} x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="currentColor" stopOpacity="0.3"/>
-              <stop offset="100%" stopColor="currentColor" stopOpacity="0.1"/>
-            </linearGradient>
-          </defs>
-          <polyline
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            points={generateMiniChart(data.label)}
-          />
-          <polyline
-            fill={`url(#gradient-${data.id})`}
-            stroke="none"
-            points={`0,60 ${generateMiniChart(data.label)} 100,60`}
-          />
-        </svg>
-      </div> */}
+      <div className="test-category-card__content">
+        <p className="test-category-card__description">{data.description}</p>
+        
+        <div className="test-category-card__progress">
+          <div className="test-category-card__progress-header">
+            <span className="test-category-card__progress-label">Progress</span>
+            <span className="test-category-card__progress-percentage">{progressPercentage}%</span>
+          </div>
+          <div className="test-category-card__progress-bar">
+            <div 
+              className="test-category-card__progress-fill" 
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
+        </div>
+      </div>
 
       <div className="test-category-card__footer">
-        <div className="test-category-card__status-list">
+        <div className="test-category-card__status-grid">
           <div className="test-category-card__status-item test-category-card__status-item--approved">
-            <span className="test-category-card__status-number">
-              {approved}
-            </span>
-            <span className="test-category-card__status-label">Approved</span>
+            <div className="test-category-card__status-dot test-category-card__status-dot--approved"></div>
+            <div className="test-category-card__status-info">
+              <span className="test-category-card__status-number">{approved}</span>
+              <span className="test-category-card__status-label">Approved</span>
+            </div>
           </div>
           <div className="test-category-card__status-item test-category-card__status-item--pending">
-            <span className="test-category-card__status-number">{pending}</span>
-            <span className="test-category-card__status-label">Pending</span>
+            <div className="test-category-card__status-dot test-category-card__status-dot--pending"></div>
+            <div className="test-category-card__status-info">
+              <span className="test-category-card__status-number">{pending}</span>
+              <span className="test-category-card__status-label">Pending</span>
+            </div>
           </div>
           <div className="test-category-card__status-item test-category-card__status-item--rejected">
-            <span className="test-category-card__status-number">
-              {rejected}
-            </span>
-            <span className="test-category-card__status-label">Rejected</span>
+            <div className="test-category-card__status-dot test-category-card__status-dot--rejected"></div>
+            <div className="test-category-card__status-info">
+              <span className="test-category-card__status-number">{rejected}</span>
+              <span className="test-category-card__status-label">Rejected</span>
+            </div>
           </div>
           <div className="test-category-card__status-item test-category-card__status-item--exported">
-            <span className="test-category-card__status-number">
-              {exported}
-            </span>
-            <span className="test-category-card__status-label">Exported</span>
+            <div className="test-category-card__status-dot test-category-card__status-dot--exported"></div>
+            <div className="test-category-card__status-info">
+              <span className="test-category-card__status-number">{exported}</span>
+              <span className="test-category-card__status-label">Exported</span>
+            </div>
           </div>
         </div>
       </div>
