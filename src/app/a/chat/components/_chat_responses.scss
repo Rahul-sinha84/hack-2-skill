@@ -63,7 +63,7 @@
       flex-direction: row-reverse;
 
       .message-content {
-        background-color: #2563eb;
+        background-color: #2d323d; // Match response bubble color
         color: white;
         border-radius: 18px 18px 4px 18px;
       }
@@ -73,13 +73,20 @@
       margin-right: auto;
 
       .message-content {
-        background-color: $color-primary-light-shade;
-        color: $color-text;
-        border-radius: 18px 18px 18px 4px;
+        background-color: #2d323d; // Match user query bubble color
+        color: #ffffff; // Change text to white for contrast
+        border-radius: $border-radius-xl;
+        padding: 0; // Remove padding to allow layout to control it
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.05);
+        overflow: hidden; // Ensure layout respects border radius
       }
 
       &.processing .message-content {
-        background-color: rgba($color-primary-light-shade, 0.7);
+        background-color: $color-primary-light-shade;
+        color: $color-text;
+        border-radius: 18px 18px 18px 4px;
+        padding: $spacing-sm $spacing-md;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         border: 1px dashed $color-primary-light-shade-2;
       }
     }
@@ -120,6 +127,17 @@
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       transition: all 0.2s ease;
 
+      .assistant-header {
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+        margin-bottom: $spacing-sm;
+        color: rgba($color-text, 0.8);
+
+        &__icon { font-size: 16px; }
+        &__title { font-size: $font-size-sm; font-weight: 600; }
+      }
+
       .message-text {
         font-size: $font-size-base;
         line-height: 1.5;
@@ -129,6 +147,224 @@
       .processing-text {
         font-style: italic;
         opacity: 0.9;
+      }
+
+      .message-meta {
+        margin-top: $spacing-xs;
+        margin-bottom: $spacing-sm; // Added bottom margin
+        margin-left: $spacing-sm; // Added left margin
+        font-size: $font-size-sm;
+        color: rgba(255,255,255,0.7); // Adjusted for dark background
+      }
+
+      .category-chart {
+        margin-top: $spacing-md;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+
+        &__row {
+          display: grid;
+          grid-template-columns: 1fr 5fr auto;
+          gap: $spacing-sm;
+          align-items: center;
+        }
+
+        &__label {
+          font-size: $font-size-sm;
+          color: rgba($color-text, 0.85);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        &__bar {
+          height: 10px;
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 999px;
+          overflow: hidden;
+        }
+
+        &__bar-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #60a5fa, #2563eb);
+        }
+
+        &__count {
+          font-size: $font-size-sm;
+          color: rgba($color-text, 0.75);
+          min-width: 2ch;
+          text-align: right;
+        }
+      }
+
+      .category-donut {
+        margin-top: $spacing-md;
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: $spacing-md;
+        align-items: center;
+
+        &__chart {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        &__legend {
+          display: flex;
+          flex-direction: column;
+          gap: $spacing-xs;
+        }
+
+        &__legend-item {
+          display: grid;
+          grid-template-columns: auto 1fr auto;
+          gap: $spacing-sm;
+          align-items: center;
+        }
+
+        &__legend-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+        }
+
+        &__legend-label {
+          font-size: $font-size-sm;
+          color: rgba($color-text, 0.85);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        &__legend-count {
+          font-size: $font-size-sm;
+          color: rgba($color-text, 0.75);
+        }
+      }
+
+      .category-pie {
+        margin-top: 0; // Reset margin
+
+        &__chart {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        &__slice {
+          transform-origin: center;
+          stroke-linecap: round;
+          animation: draw-arc 1s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+        }
+
+        &__slice-label {
+          font-size: 13px;
+          font-weight: 700;
+          fill: #fff;
+          pointer-events: none; // Make sure text doesn't interfere with hover on slice
+          text-shadow: 0 1px 2px rgba(0,0,0,0.5); // Add shadow for better visibility
+          opacity: 0;
+          animation: fade-in 0.5s ease-out forwards;
+        }
+
+        &__total-value {
+          font-size: 26px; // Reduced from 28px for better fit
+          font-weight: 700;
+          fill: #ffffff; // White for contrast
+        }
+
+        &__total-label {
+          font-size: 10px;
+          fill: rgba(255,255,255,0.7); // Light grey for contrast
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+      }
+
+      .category-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+        justify-content: center;
+        margin-top: $spacing-md;
+
+        &__chip {
+          display: inline-flex;
+          align-items: center;
+          gap: $spacing-xs;
+          background: rgba(255,255,255,0.1); // Lighter background for chips
+          border: 1px solid rgba(255,255,255,0.2); // Lighter border for chips
+          border-radius: 999px;
+          padding: 4px 8px;
+        }
+
+        &__dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+        }
+
+        &__label { 
+          font-size: $font-size-sm; 
+          font-weight: 500;
+        }
+        &__percent { 
+          font-size: $font-size-sm; 
+          color: rgba(255,255,255,0.7); // Light grey for contrast
+          font-weight: 600;
+        }
+      }
+
+      .chart-and-action {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: $spacing-lg;
+        align-items: center;
+
+        @media (max-width: 640px) {
+          grid-template-columns: 1fr;
+          gap: $spacing-md;
+        }
+      }
+
+      .insight-card {
+        background: rgba(255, 255, 255, 0.6); // Semi-transparent white for better blending
+        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05); // Softer shadow
+        border-radius: $border-radius-xl;
+        padding: $spacing-lg;
+        margin-top: $spacing-md;
+
+        // Make sure it works on both user/assistant backgrounds
+        .message-bubble & { background: rgba(255, 255, 255, 0.6); }
+      }
+
+      .chart-and-action__side {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-sm;
+        align-items: flex-start;
+      }
+
+      .total-count {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+
+        &__value {
+          font-size: $font-size-2xl;
+          font-weight: 700;
+          color: $color-text;
+          line-height: 1;
+        }
+
+        &__label {
+          font-size: $font-size-sm;
+          color: rgba($color-text, 0.7);
+        }
       }
     }
 
@@ -165,12 +401,14 @@
 
     .test-cases-action {
       margin-top: $spacing-md;
+      margin-bottom: $spacing-md;
       padding-top: $spacing-xs;
 
       .view-test-cases-btn {
         @include button-base;
-        background-color: $color-secondary;
-        color: $color-primary;
+        // Harmonize with chat bubble tones
+        background-color: #2563eb;
+        color: #ffffff;
         border-radius: $border-radius-lg;
         padding: $spacing-sm $spacing-md;
         font-size: $font-size-sm;
@@ -178,7 +416,7 @@
         transition: all 0.2s ease;
 
         &:hover {
-          background-color: lighten($color-secondary, 10%);
+          background-color: lighten(#2563eb, 6%);
           transform: translateY(-1px);
         }
 
@@ -238,6 +476,82 @@
   }
 }
 
+.assistant-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-xl;
+  padding: $spacing-xl;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+
+    .message-text {
+      flex-grow: 1;
+      line-height: 1.6;
+    }
+
+    .test-cases-action {
+      margin-top: $spacing-lg;
+    }
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@keyframes draw-arc {
+  from {
+    stroke-dasharray: 0, 1000; // Start with a zero-length dash
+  }
+  // `to` state is defined by the inline style `stroke-dasharray`
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.description-title, .chart-title {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: #ffffff; // White for contrast
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px solid rgba(255,255,255,0.2); // Lighter border
+}
+
+.chart-title {
+  text-align: center;
+  border-bottom: none;
+  margin-bottom: $spacing-sm;
+}
+
+.view-test-cases-btn {
+  @include button-base;
+  background-image: linear-gradient(to right, #0ea5e9, #06b6d4);
+  color: #ffffff;
+  border-radius: $border-radius-lg;
+  padding: $spacing-sm $spacing-lg;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
+  }
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -255,5 +569,96 @@
   }
   30% {
     opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton-bubble {
+ 
+  .message-content {
+    background-color: #2d323d; // Match the bubble color
+    box-shadow: none; // No shadow for skeleton
+    padding: $spacing-xl;
+    border-radius: $border-radius-lg;
+  }
+
+  .processing-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    padding: $spacing-lg $spacing-md; // Increased padding for the "thinking" text
+    background-color: rgba(255,255,255,0.05); // Subtle background for the header
+    border-radius: $border-radius-lg; // Rounded corners for the header
+
+    .processing-text {
+      font-style: italic;
+      color: rgba(255,255,255,0.8);
+    }
+  }
+
+  // Override assistant-layout padding when inside a skeleton
+  .assistant-layout {
+    padding: 0;
+  }
+
+  .skeleton {
+    background-color: rgba(255,255,255,0.1);
+    border-radius: $border-radius-md;
+    animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+    &-line {
+      height: 16px;
+      width: 100%;
+      margin-top: $spacing-sm;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+.description-title, .chart-title {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: #ffffff; // White for contrast
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px solid rgba(255,255,255,0.2); // Lighter border
+}
+
+.chart-title {
+  text-align: center;
+  border-bottom: none;
+  margin-bottom: $spacing-sm;
+}
+
+.view-test-cases-btn {
+  @include button-base;
+  background-image: linear-gradient(to right, #0ea5e9, #06b6d4);
+  color: #ffffff;
+  border-radius: $border-radius-lg;
+  padding: $spacing-sm $spacing-lg;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
   }
 }
