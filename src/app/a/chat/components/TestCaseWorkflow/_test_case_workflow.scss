@@ -6,6 +6,9 @@
   max-width: 100%;
   margin: 0 auto;
   padding: $spacing-md;
+  min-height: 100%;
+  display: grid;
+  align-content: center; // vertically center inner sections
 
   @include tablet-up {
     max-width: 1024px;
@@ -32,6 +35,7 @@
   &__main {
     flex: 1;
     overflow-y: auto;
+    display: block;
   }
 
   &__footer {

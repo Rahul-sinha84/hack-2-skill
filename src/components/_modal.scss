@@ -132,10 +132,12 @@
 
 // Variant: disable modal content scroll for specific workflows
 .no-scroll-modal {
+  // Add a bit more breathing room at the bottom and keep centered
+  padding: $spacing-lg $spacing-lg $spacing-xl;
   .modal__container {
     // Ensure the content area provides a hard height for inner grids
-    max-height: 80vh; // matches desktop-up default
-    height: 80vh;
+    max-height: calc(100vh - 2 * $spacing-lg - $spacing-xl); // account for backdrop padding
+    height: auto;
   }
   .modal__content {
     overflow: hidden; // The content inside will manage its own scrolling

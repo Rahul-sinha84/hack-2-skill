@@ -1,6 +1,9 @@
 @use "../../../../../../app/styles/variables" as *;
 @use "../../../../../../app/styles/mixins" as *;
 
+// Brand gradient used across the app (matches View Test Cases button)
+$brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+
 .select-test-category-step {
   width: 100%;
   max-width: 100%;
@@ -70,9 +73,12 @@
 
     .main-section-title {
       font-size: $font-size-xl;
-      font-weight: 600;
-      color: $color-text;
+      font-weight: 800;
       margin: 0 0 $spacing-xs 0;
+      background-image: $brand-gradient;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
 
       @include mobile-only {
         font-size: $font-size-lg;
@@ -185,15 +191,15 @@
   }
 
   &__badge {
-    background: rgba(59, 130, 246, 0.15);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    color: #60a5fa;
+    background-image: $brand-gradient;
+    color: #ffffff;
     padding: 4px 12px;
     border-radius: $border-radius-full;
     font-size: $font-size-xs;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    box-shadow: 0 6px 14px rgba(91, 33, 182, 0.25);
   }
 
   &__stats {
@@ -250,8 +256,11 @@
 
 .categories-title {
   font-size: $font-size-base;
-  font-weight: 600;
-  color: $color-text;
+  font-weight: 700;
+  background-image: $brand-gradient;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   margin: 0 0 $spacing-md 0;
 }
 
