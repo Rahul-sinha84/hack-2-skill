@@ -130,6 +130,22 @@
   }
 }
 
+// Variant: disable modal content scroll for specific workflows
+.no-scroll-modal {
+  .modal__container {
+    // Ensure the content area provides a hard height for inner grids
+    max-height: 80vh; // matches desktop-up default
+    height: 80vh;
+  }
+  .modal__content {
+    overflow: hidden; // The content inside will manage its own scrolling
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-md; // Reduced padding for tighter top space
+  }
+}
+
 // Responsive design
 .modal__backdrop {
   @include mobile-only {

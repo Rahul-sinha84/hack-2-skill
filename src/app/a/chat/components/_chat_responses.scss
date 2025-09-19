@@ -63,9 +63,13 @@
       flex-direction: row-reverse;
 
       .message-content {
-        background-color: #2d323d; // Match response bubble color
+        background: rgba(45, 50, 61, 0.75); // Semi-transparent glassmorphism
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: white;
         border-radius: 18px 18px 4px 18px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
       }
     }
 
@@ -73,21 +77,26 @@
       margin-right: auto;
 
       .message-content {
-        background-color: #2d323d; // Match user query bubble color
+        background: rgba(45, 50, 61, 0.75); // Semi-transparent glassmorphism
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff; // Change text to white for contrast
         border-radius: $border-radius-xl;
         padding: 0; // Remove padding to allow layout to control it
-        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.05);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         overflow: hidden; // Ensure layout respects border radius
       }
 
       &.processing .message-content {
-        background-color: $color-primary-light-shade;
+        background: rgba(65, 74, 80, 0.7); // Semi-transparent processing bubble
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         color: $color-text;
         border-radius: 18px 18px 18px 4px;
         padding: $spacing-sm $spacing-md;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        border: 1px dashed $color-primary-light-shade-2;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
       }
     }
 
@@ -100,10 +109,17 @@
       justify-content: center;
       font-size: 16px;
       flex-shrink: 0;
-      background-color: $color-primary-light-shade-2;
+      background: rgba(65, 74, 80, 0.8); // Glassmorphism for bot avatar
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
       &.user-avatar {
-        background-color: #2563eb;
+        background: rgba(37, 99, 235, 0.85); // Semi-transparent blue
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         color: white;
 
         img {
@@ -294,10 +310,13 @@
           display: inline-flex;
           align-items: center;
           gap: $spacing-xs;
-          background: rgba(255,255,255,0.1); // Lighter background for chips
-          border: 1px solid rgba(255,255,255,0.2); // Lighter border for chips
+          background: rgba(255,255,255,0.08); // Subtle glassmorphism for chips
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          border: 1px solid rgba(255,255,255,0.15);
           border-radius: 999px;
           padding: 4px 8px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         &__dot {
@@ -330,15 +349,21 @@
       }
 
       .insight-card {
-        background: rgba(255, 255, 255, 0.6); // Semi-transparent white for better blending
-        border: 1px solid rgba(0,0,0,0.04);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05); // Softer shadow
+        background: rgba(255, 255, 255, 0.1); // Glassmorphism effect
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         border-radius: $border-radius-xl;
         padding: $spacing-lg;
         margin-top: $spacing-md;
 
         // Make sure it works on both user/assistant backgrounds
-        .message-bubble & { background: rgba(255, 255, 255, 0.6); }
+        .message-bubble & { 
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
       }
 
       .chart-and-action__side {
@@ -368,15 +393,18 @@
       }
     }
 
-    .file-attachment {
+      .file-attachment {
       display: flex;
       align-items: center;
       gap: $spacing-xs;
-      background-color: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08); // More subtle glassmorphism
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       padding: $spacing-xs $spacing-sm;
       border-radius: $border-radius-lg;
       margin-bottom: $spacing-xs;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
       .file-icon {
         font-size: 20px;
@@ -406,22 +434,31 @@
 
       .view-test-cases-btn {
         @include button-base;
-        // Harmonize with chat bubble tones
-        background-color: #2563eb;
+        // Glassmorphism effect for the button
+        background: rgba(37, 99, 235, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         color: #ffffff;
         border-radius: $border-radius-lg;
         padding: $spacing-sm $spacing-md;
         font-size: $font-size-sm;
         font-weight: 500;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
 
         &:hover {
-          background-color: lighten(#2563eb, 6%);
-          transform: translateY(-1px);
+          background: rgba(37, 99, 235, 0.9);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
         }
 
         &:active {
-          transform: translateY(0);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
         }
       }
     }
@@ -538,17 +575,30 @@
 
 .view-test-cases-btn {
   @include button-base;
-  background-image: linear-gradient(to right, #0ea5e9, #06b6d4);
+  // Glassmorphism effect with gradient undertone
+  background: rgba(14, 165, 233, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
   border-radius: $border-radius-lg;
   padding: $spacing-sm $spacing-lg;
   font-weight: 500;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.25);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
+    background: rgba(14, 165, 233, 0.95);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(14, 165, 233, 0.4);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(14, 165, 233, 0.35);
   }
 }
 
@@ -584,8 +634,11 @@
 .skeleton-bubble {
  
   .message-content {
-    background-color: #2d323d; // Match the bubble color
-    box-shadow: none; // No shadow for skeleton
+    background: rgba(45, 50, 61, 0.6); // Glassmorphism for skeleton
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     padding: $spacing-xl;
     border-radius: $border-radius-lg;
   }
@@ -649,16 +702,29 @@
 
 .view-test-cases-btn {
   @include button-base;
-  background-image: linear-gradient(to right, #0ea5e9, #06b6d4);
+  // Glassmorphism effect with gradient undertone
+  background: rgba(14, 165, 233, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
   border-radius: $border-radius-lg;
   padding: $spacing-sm $spacing-lg;
   font-weight: 500;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.25);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
+    background: rgba(14, 165, 233, 0.95);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(14, 165, 233, 0.4);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(14, 165, 233, 0.35);
   }
 }

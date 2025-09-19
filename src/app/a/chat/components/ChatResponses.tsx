@@ -392,6 +392,7 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title="Test cases"
+        className="no-scroll-modal"
         content={
           <TestCaseWorkflow data={selectedTestCategory?.testCategories || []} />
         }
