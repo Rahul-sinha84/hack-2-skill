@@ -3,7 +3,7 @@
 
 .test-category-card {
   @include button-base;
-  background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+  background: #1f1f1f; // solid surface
   border-radius: $border-radius-lg;
   padding: $spacing-lg;
   margin-bottom: $spacing-lg;
@@ -14,8 +14,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.3s ease;
-  border: 2px solid;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(255,255,255,0.08);
   cursor: pointer;
   color: white;
   position: relative;
@@ -26,34 +26,13 @@
     padding: $spacing-md;
   }
 
-  // Add subtle color shading overlay
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  // Ensure content is above the overlay
-  > * {
-    position: relative;
-    z-index: 1;
-  }
+  // Remove glass overlay; use plain shadows
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
     z-index: 10;
     position: relative;
-    
-    &::before {
-      opacity: 0.06;
-    }
   }
 
   &:active,
@@ -62,108 +41,84 @@
     position: relative;
   }
 
-  // Border colors and shading for different categories - VIBGYOR inspired with high contrast
+  // Border colors for different categories (no overlay)
   &--functional {
-    border-color: #8b5cf6; // Violet
+    border-color: rgba(139, 92, 246, 0.5); // Violet
     .test-category-card__chart {
       color: #8b5cf6;
     }
     .test-category-card__progress-fill {
       background-color: #8b5cf6;
     }
-    &::before {
-      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-    }
   }
 
   &--performance {
-    border-color: #f59e0b; // Orange
+    border-color: rgba(245, 158, 11, 0.5); // Orange
     .test-category-card__chart {
       color: #f59e0b;
     }
     .test-category-card__progress-fill {
       background-color: #f59e0b;
     }
-    &::before {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-    }
   }
 
   &--security {
-    border-color: #10b981; // Green
+    border-color: rgba(16, 185, 129, 0.5); // Green
     .test-category-card__chart {
       color: #10b981;
     }
     .test-category-card__progress-fill {
       background-color: #10b981;
     }
-    &::before {
-      background: linear-gradient(135deg, #10b981, #059669);
-    }
   }
 
   &--ui-ux {
-    border-color: #ef4444; // Red
+    border-color: rgba(239, 68, 68, 0.5); // Red
     .test-category-card__chart {
       color: #ef4444;
     }
     .test-category-card__progress-fill {
       background-color: #ef4444;
     }
-    &::before {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-    }
   }
 
   &--integration {
-    border-color: #06b6d4; // Cyan/Blue
+    border-color: rgba(6, 182, 212, 0.5); // Cyan/Blue
     .test-category-card__chart {
       color: #06b6d4;
     }
     .test-category-card__progress-fill {
       background-color: #06b6d4;
     }
-    &::before {
-      background: linear-gradient(135deg, #06b6d4, #0891b2);
-    }
   }
 
   &--api {
-    border-color: #eab308; // Yellow
+    border-color: rgba(234, 179, 8, 0.5); // Yellow
     .test-category-card__chart {
       color: #eab308;
     }
     .test-category-card__progress-fill {
       background-color: #eab308;
     }
-    &::before {
-      background: linear-gradient(135deg, #eab308, #ca8a04);
-    }
   }
 
   &--compliance {
-    border-color: #ec4899; // Pink/Magenta
+    border-color: rgba(236, 72, 153, 0.5); // Pink/Magenta
     .test-category-card__chart {
       color: #ec4899;
     }
     .test-category-card__progress-fill {
       background-color: #ec4899;
     }
-    &::before {
-      background: linear-gradient(135deg, #ec4899, #db2777);
-    }
   }
 
   &--default {
-    border-color: #6366f1; // Indigo
+    border-color: rgba(99, 102, 241, 0.5); // Indigo
     .test-category-card__chart {
       color: #6366f1;
     }
     .test-category-card__progress-fill {
       background-color: #6366f1;
-    }
-    &::before {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
     }
   }
 

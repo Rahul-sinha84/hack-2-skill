@@ -253,7 +253,7 @@ const SmoothChatLayout: React.FC = () => {
               <div className="topbar__avatar">
                 {session?.user?.image ? (
                   <img
-                    src={session.user.image}
+                    src={`/api/proxy-image?url=${encodeURIComponent(session.user.image)}`}
                     alt={session.user.name || 'User'}
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
@@ -269,7 +269,7 @@ const SmoothChatLayout: React.FC = () => {
                   <span>{(session?.user?.name?.charAt(0) || 'U').toUpperCase()}</span>
                 )}
               </div>
-              <button className="topbar__logout" onClick={() => signOut({ callbackUrl: '/login' })}>
+              <button className="topbar__logout topbar__logout--gradient" onClick={() => signOut({ callbackUrl: '/login' })}>
                 Sign out
               </button>
             </div>

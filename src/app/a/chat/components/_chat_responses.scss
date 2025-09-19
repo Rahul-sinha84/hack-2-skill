@@ -136,7 +136,23 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       overflow: hidden;
       padding: 0; // default, overridden per bubble
-      
+
+      // Loading ring for the user avatar while assistant is generating
+      &.loading {
+        position: relative;
+      }
+
+      &.loading::after {
+        content: "";
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        border-top-color: #3b82f6;
+        border-right-color: #8b5cf6;
+        animation: spin 1s linear infinite;
+      }
+
       img {
         width: 100%;
         height: 100%;
@@ -210,10 +226,46 @@
 
       .message-meta {
         margin-top: $spacing-xs;
-        margin-bottom: $spacing-sm; // Added bottom margin
-        margin-left: $spacing-sm; // Added left margin
+        margin-bottom: $spacing-sm;
+        margin-left: 0; // align to left in footer row
         font-size: $font-size-sm;
         color: rgba(255,255,255,0.7); // Adjusted for dark background
+      }
+
+      // Footer row: latency left, actions right
+      .message-footer {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: $spacing-sm;
+        margin-top: $spacing-xs;
+      }
+
+      .footer-spacer { min-width: 8px; }
+
+      .response-actions {
+        display: flex;
+        gap: $spacing-sm;
+        align-items: center;
+        padding: $spacing-xs $spacing-sm; // fix: use defined spacing var
+        margin-top: 0;
+        opacity: 0.9;
+
+        .response-action {
+          @include button-base;
+          padding: 6px;
+          height: 32px;
+          width: 32px;
+          border-radius: $border-radius-full;
+          background: transparent;
+          color: rgba(255,255,255,0.75);
+          border: 1px solid rgba(255,255,255,0.15);
+          display: grid;
+          place-items: center;
+
+          &:hover { background: rgba(255,255,255,0.08); }
+          &.active { color: #8b5cf6; border-color: rgba(139,92,246,0.5); }
+        }
       }
 
       .category-chart {
@@ -722,6 +774,10 @@
   }
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 .description-title, .chart-title {
   font-size: $font-size-lg;
   font-weight: 600;

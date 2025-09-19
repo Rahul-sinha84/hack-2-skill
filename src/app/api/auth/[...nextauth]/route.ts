@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import GoogleProvider, { type GoogleProfile } from "next-auth/providers/google";
 
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -7,6 +7,19 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope: "openid email profile",
+        },
+      },
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
     }),
   ],
   debug: process.env.NODE_ENV === "development",
@@ -16,16 +29,21 @@ const handler = NextAuth({
   },
   callbacks: {
     async session({ session, token }) {
-      // Ensure user image is properly passed through
-      if (session?.user) {
-        session.user.image = (session.user.image as string | null | undefined) || (token?.picture as string | undefined) || null;
+      // Pass through the user image from token to session
+      if (session?.user && token?.picture) {
+        session.user.image = token.picture as string;
       }
       return session;
     },
     async jwt({ token, account, profile }) {
-      // Ensure profile image is included in the token
+      // Store the picture from Google profile
       if (account && profile) {
-        token.picture = profile.picture || profile.image;
+        const p = profile as Partial<GoogleProfile> & Record<string, unknown>;
+        const pic = (p.picture as string | undefined) ?? (p.image as string | undefined);
+        
+        if (pic) {
+          token.picture = pic;
+        }
       }
       return token;
     },

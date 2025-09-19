@@ -1,6 +1,9 @@
 @use "../../../../app/styles/variables" as *;
 @use "../../../../app/styles/mixins" as *;
 
+// Brand gradient (reuse from buttons)
+$brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+
 .selected-file {
   display: flex;
   align-items: center;
@@ -70,21 +73,25 @@
 
       .attachment-icon {
         @include button-base;
-        background: none;
-        color: $color-text-light-shade;
+        background: rgba(255,255,255,0.06);
+        color: #fff;
         padding: $spacing-sm;
         border-radius: $border-radius-full;
         display: flex;
         align-items: center;
         justify-content: center;
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 6px 16px rgba(91,33,182,0.25);
 
         &:hover {
-          background-color: $color-primary-light-shade;
+          background-image: $brand-gradient;
+          color: #fff;
         }
 
         svg {
           width: 24px;
           height: 24px;
+          fill: currentColor;
         }
       }
     }
@@ -172,8 +179,8 @@
         width: 56px;
         height: 56px;
         border-radius: $border-radius-full;
-        background-color: $color-secondary;
-        color: $color-primary-dark-shade;
+        background-image: $brand-gradient;
+        color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -185,10 +192,7 @@
           height: 26px;
         }
 
-        &:hover {
-          background-color: lighten($color-secondary, 10%);
-          transform: scale(1.05);
-        }
+        &:hover { transform: scale(1.05); }
 
         &:disabled {
           background-color: $color-primary-light-shade;

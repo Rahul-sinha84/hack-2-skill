@@ -81,9 +81,37 @@
   background: transparent;
   color: $color-text;
   border-color: $color-primary-light-shade-2;
+  border-radius: $border-radius-full;
 
   &:hover {
     background-color: $color-primary-light-shade;
+  }
+}
+
+// Gradient outline variant
+.topbar__logout--gradient {
+  position: relative;
+  color: #ffffff;
+  background: transparent;
+  border-radius: $border-radius-full;
+  border: 1px solid transparent; // real border kept transparent
+
+  // Gradient border with rounded corners via masking
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  &:hover {
+    background-image: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(139,92,246,0.12));
   }
 }
 
