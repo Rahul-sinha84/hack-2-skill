@@ -83,72 +83,29 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
       </div> */}
 
       <div className="test-category-card__footer">
-        <div className="test-category-card__stats">
-          <div className="test-category-card__stat-group">
-            <div className="test-category-card__stat-group__title">Total</div>
-            <div className="test-category-card__stat-group__items">
-              <div className="test-category-card__stat-item test-category-card__stat-item--total">
-                <span className="test-category-card__stat-number">{total}</span>
-                <span className="test-category-card__stat-label">Total</span>
-              </div>
-            </div>
+        <div className="test-category-card__status-list">
+          <div className="test-category-card__status-item test-category-card__status-item--approved">
+            <span className="test-category-card__status-number">
+              {approved}
+            </span>
+            <span className="test-category-card__status-label">Approved</span>
           </div>
-
-          <div className="test-category-card__stat-group">
-            <div className="test-category-card__stat-group__title">Status</div>
-            <div className="test-category-card__stat-group__items">
-              {approved > 0 && (
-                <div className="test-category-card__stat-item test-category-card__stat-item--approved">
-                  <span className="test-category-card__stat-number">
-                    {approved}
-                  </span>
-                  <span className="test-category-card__stat-label">
-                    Approved
-                  </span>
-                </div>
-              )}
-
-              {pending > 0 && (
-                <div className="test-category-card__stat-item test-category-card__stat-item--pending">
-                  <span className="test-category-card__stat-number">
-                    {pending}
-                  </span>
-                  <span className="test-category-card__stat-label">
-                    Pending
-                  </span>
-                </div>
-              )}
-
-              {rejected > 0 && (
-                <div className="test-category-card__stat-item test-category-card__stat-item--rejected">
-                  <span className="test-category-card__stat-number">
-                    {rejected}
-                  </span>
-                  <span className="test-category-card__stat-label">
-                    Rejected
-                  </span>
-                </div>
-              )}
-            </div>
+          <div className="test-category-card__status-item test-category-card__status-item--pending">
+            <span className="test-category-card__status-number">{pending}</span>
+            <span className="test-category-card__status-label">Pending</span>
           </div>
-
-          {exported > 0 && (
-            <div className="test-category-card__stat-group">
-              <div className="test-category-card__stat-group__title">
-                Exported
-              </div>
-              <div className="test-category-card__stat-group__items">
-                <div className="test-category-card__stat-item test-category-card__stat-item--exported">
-                  <span className="test-category-card__stat-number">
-                    {exported}
-                  </span>
-                  <span className="test-category-card__stat-label">
-                    Exported
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="test-category-card__status-item test-category-card__status-item--rejected">
+            <span className="test-category-card__status-number">
+              {rejected}
+            </span>
+            <span className="test-category-card__status-label">Rejected</span>
+          </div>
+          <div className="test-category-card__status-item test-category-card__status-item--exported">
+            <span className="test-category-card__status-number">
+              {exported}
+            </span>
+            <span className="test-category-card__status-label">Exported</span>
+          </div>
         </div>
       </div>
     </button>

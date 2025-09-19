@@ -18,26 +18,14 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 
   &__layout {
     display: grid;
-    grid-template-columns: 350px 1fr;
+    grid-template-columns: 1fr;
     gap: $spacing-xl;
     height: 100%; // Constrain to modal content height
     max-height: 100%;
     overflow: hidden; // Prevent layout from scrolling
 
     @include mobile-only {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
       gap: $spacing-lg;
-    }
-
-    @include tablet-up {
-      grid-template-columns: 320px 1fr;
-      gap: $spacing-lg;
-    }
-
-    @include desktop-up {
-      grid-template-columns: 350px 1fr;
-      gap: $spacing-xl;
     }
   }
 
@@ -64,6 +52,11 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 
     @include mobile-only {
       order: 1;
+    }
+
+    &--full-width {
+      width: 100%;
+      max-width: 100%;
     }
 
     .main-section-header {
@@ -99,18 +92,26 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       overflow-x: hidden;
       padding-right: $spacing-xs;
       height: 0; // Force flex to work properly
+      justify-content: center; // Center the grid items
 
       @include mobile-only {
         grid-template-columns: 1fr;
         gap: $spacing-md;
+        justify-content: stretch;
       }
 
       @include tablet-up {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        // For 2-4 items, use 2 columns; for 5+ items, use 3 columns
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        max-width: 800px; // Limit max width for better balance
+        margin: 0 auto; // Center the grid container
       }
 
       @include desktop-up {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        // For 2-3 items, use 2 columns; for 4+ items, use 3 columns
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        max-width: 1000px; // Limit max width for better balance
+        margin: 0 auto; // Center the grid container
       }
 
       // Compact version for smaller cards
@@ -153,6 +154,45 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
             height: 24px;
             font-size: 10px; // Smaller font
           }
+        }
+      }
+
+      // Specific layouts for different card counts
+      &:has(.test-category-card:nth-child(1):last-child) {
+        // Single card - center it
+        @include tablet-up {
+          grid-template-columns: 1fr;
+          max-width: 400px;
+        }
+      }
+
+      &:has(.test-category-card:nth-child(2):last-child) {
+        // Two cards - side by side
+        @include tablet-up {
+          grid-template-columns: 1fr 1fr;
+          max-width: 700px;
+        }
+      }
+
+      &:has(.test-category-card:nth-child(3):last-child) {
+        // Three cards - 2 on top, 1 centered below
+        @include tablet-up {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto auto;
+        }
+
+        .test-category-card:nth-child(3) {
+          grid-column: 1 / -1;
+          justify-self: center;
+          max-width: 400px;
+        }
+      }
+
+      &:has(.test-category-card:nth-child(4):last-child) {
+        // Four cards - 2x2 grid
+        @include tablet-up {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr 1fr;
         }
       }
     }

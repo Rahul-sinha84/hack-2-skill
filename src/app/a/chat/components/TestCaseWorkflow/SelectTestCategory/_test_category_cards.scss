@@ -3,9 +3,11 @@
 
 .test-category-card {
   @include button-base;
-  background: #1f1f1f; // solid surface
-  border-radius: $border-radius-lg;
-  padding: $spacing-lg;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: $border-radius-xl;
+  padding: $spacing-xl !important;
   margin-bottom: $spacing-lg;
   text-align: left;
   width: 100%;
@@ -15,11 +17,12 @@
   flex-direction: column;
   justify-content: space-between;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   cursor: pointer;
   color: white;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 
   @include mobile-only {
     min-height: 260px;
@@ -29,8 +32,9 @@
   // Remove glass overlay; use plain shadows
 
   &:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: $color-text;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   &:active,
@@ -39,9 +43,16 @@
     position: relative;
   }
 
-  // Border colors for different categories (no overlay)
+  // Border colors for different categories with glass morphism
   &--functional {
-    border-color: rgba(139, 92, 246, 0.5); // Violet
+    border-color: rgba(139, 92, 246, 0.6) !important;
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+
+    &:hover {
+      border-color: rgba(139, 92, 246, 0.8) !important;
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.25);
+    }
+
     .test-category-card__chart {
       color: #8b5cf6;
     }
@@ -51,7 +62,14 @@
   }
 
   &--performance {
-    border-color: rgba(245, 158, 11, 0.5); // Orange
+    border-color: rgba(245, 158, 11, 0.6) !important;
+    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.15);
+
+    &:hover {
+      border-color: rgba(245, 158, 11, 0.8) !important;
+      box-shadow: 0 12px 40px rgba(245, 158, 11, 0.25);
+    }
+
     .test-category-card__chart {
       color: #f59e0b;
     }
@@ -61,27 +79,48 @@
   }
 
   &--security {
-    border-color: rgba(16, 185, 129, 0.5); // Green
+    border-color: rgba(74, 222, 128, 0.6) !important;
+    box-shadow: 0 8px 32px rgba(74, 222, 128, 0.15);
+
+    &:hover {
+      border-color: rgba(74, 222, 128, 0.8) !important;
+      box-shadow: 0 12px 40px rgba(74, 222, 128, 0.25);
+    }
+
     .test-category-card__chart {
-      color: #10b981;
+      color: $color-green;
     }
     .test-category-card__progress-fill {
-      background-color: #10b981;
+      background-color: $color-green;
     }
   }
 
   &--ui-ux {
-    border-color: rgba(239, 68, 68, 0.5); // Red
+    border-color: rgba(248, 113, 113, 0.6) !important;
+    box-shadow: 0 8px 32px rgba(248, 113, 113, 0.15);
+
+    &:hover {
+      border-color: rgba(248, 113, 113, 0.8) !important;
+      box-shadow: 0 12px 40px rgba(248, 113, 113, 0.25);
+    }
+
     .test-category-card__chart {
-      color: #ef4444;
+      color: $color-red;
     }
     .test-category-card__progress-fill {
-      background-color: #ef4444;
+      background-color: $color-red;
     }
   }
 
   &--integration {
-    border-color: rgba(6, 182, 212, 0.5); // Cyan/Blue
+    border-color: rgba(6, 182, 212, 0.6) !important;
+    box-shadow: 0 8px 32px rgba(6, 182, 212, 0.15);
+
+    &:hover {
+      border-color: rgba(6, 182, 212, 0.8) !important;
+      box-shadow: 0 12px 40px rgba(6, 182, 212, 0.25);
+    }
+
     .test-category-card__chart {
       color: #06b6d4;
     }
@@ -91,17 +130,31 @@
   }
 
   &--api {
-    border-color: rgba(234, 179, 8, 0.5); // Yellow
+    border-color: rgba(250, 204, 21, 0.6) !important;
+    box-shadow: 0 8px 32px rgba(250, 204, 21, 0.15);
+
+    &:hover {
+      border-color: rgba(250, 204, 21, 0.8) !important;
+      box-shadow: 0 12px 40px rgba(250, 204, 21, 0.25);
+    }
+
     .test-category-card__chart {
-      color: #eab308;
+      color: $color-yellow;
     }
     .test-category-card__progress-fill {
-      background-color: #eab308;
+      background-color: $color-yellow;
     }
   }
 
   &--compliance {
-    border-color: rgba(236, 72, 153, 0.5); // Pink/Magenta
+    border-color: rgba(236, 72, 153, 0.6) !important;
+    box-shadow: 0 8px 32px rgba(236, 72, 153, 0.15);
+
+    &:hover {
+      border-color: rgba(236, 72, 153, 0.8) !important;
+      box-shadow: 0 12px 40px rgba(236, 72, 153, 0.25);
+    }
+
     .test-category-card__chart {
       color: #ec4899;
     }
@@ -111,12 +164,19 @@
   }
 
   &--default {
-    border-color: rgba(99, 102, 241, 0.5); // Indigo
+    border-color: rgba(37, 100, 236, 0.6) !important;
+    box-shadow: 0 8px 32px rgba(37, 100, 236, 0.15);
+
+    &:hover {
+      border-color: rgba(37, 100, 236, 0.8) !important;
+      box-shadow: 0 12px 40px rgba(37, 100, 236, 0.25);
+    }
+
     .test-category-card__chart {
-      color: #6366f1;
+      color: $color-secondary;
     }
     .test-category-card__progress-fill {
-      background-color: #6366f1;
+      background-color: $color-secondary;
     }
   }
 
@@ -134,8 +194,8 @@
   &__title-badge {
     border-radius: $border-radius-sm;
     padding: 6px 12px;
-    font-size: $font-size-sm;
-    font-weight: 600;
+    font-size: $font-size-lg !important;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: inline-block;
@@ -143,12 +203,12 @@
 
   &__count-badge {
     border-radius: 50%;
-    width: 28px;
-    height: 28px;
+    width: 2rem !important;
+    height: 2rem !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: $font-size-xs;
+    font-size: $font-size-sm !important;
     font-weight: 600;
     flex-shrink: 0;
     margin-left: $spacing-md;
@@ -169,7 +229,7 @@
   }
 
   &__description {
-    font-size: $font-size-sm;
+    font-size: $font-size-base !important;
     color: $color-text;
     line-height: 1.5;
     margin: 0;
@@ -177,9 +237,11 @@
     opacity: 0.8;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center;
 
     @include mobile-only {
       font-size: $font-size-xs;
@@ -210,118 +272,70 @@
     margin-top: auto;
   }
 
-  &__stats {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-md;
-  }
-
-  &__stat-group {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-xs;
-  }
-
-  &__stat-group__title {
-    @include font-nunito;
-    font-size: $font-size-xs;
-    font-weight: 600;
-    color: $color-text-light-shade;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: $spacing-xs;
-  }
-
-  &__stat-group__items {
-    display: flex;
-    flex-wrap: wrap;
+  &__status-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: $spacing-sm;
-    justify-content: center;
   }
 
-  // Make total stat item same size as others
-  &__stat-group:first-child {
-    .test-category-card__stat-item {
-      width: auto;
-      min-width: 60px;
-    }
-  }
-
-  &__stat-item {
+  &__status-item {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: $spacing-sm;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-md $spacing-lg;
+    background: rgba(255, 255, 255, 0.04);
     border-radius: $border-radius-md;
-    border: 2px solid transparent;
-    background-color: $color-primary;
-    min-width: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     transition: all 0.2s ease;
+    min-height: 60px;
 
-    @include mobile-only {
-      min-width: 50px;
-      padding: $spacing-xs;
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.12);
     }
   }
 
-  &__stat-number {
+  &__status-number {
     @include font-nunito;
     font-size: $font-size-lg;
     font-weight: 700;
     color: $color-text;
     line-height: 1;
-    margin-bottom: $spacing-xs;
-
-    @include mobile-only {
-      font-size: $font-size-base;
-    }
-  }
-
-  &__stat-label {
-    @include font-nunito;
-    font-size: $font-size-xs;
-    font-weight: 500;
-    color: $color-text-light-shade;
+    min-width: 30px;
     text-align: center;
+  }
+
+  &__status-label {
+    @include font-nunito;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: $color-text-light-shade;
     line-height: 1;
-
-    @include mobile-only {
-      font-size: 10px;
-    }
+    flex: 1;
   }
 
-  &__stat-item--total {
-    border-color: $color-secondary;
-  }
-
-  &__stat-item--approved {
-    border-color: $color-green;
-
-    .test-category-card__stat-number {
+  &__status-item--approved {
+    .test-category-card__status-number {
       color: $color-green;
     }
   }
 
-  &__stat-item--pending {
-    border-color: $color-yellow;
-
-    .test-category-card__stat-number {
+  &__status-item--pending {
+    .test-category-card__status-number {
       color: $color-yellow;
     }
   }
 
-  &__stat-item--rejected {
-    border-color: $color-red;
-
-    .test-category-card__stat-number {
+  &__status-item--rejected {
+    .test-category-card__status-number {
       color: $color-red;
     }
   }
 
-  &__stat-item--exported {
-    border-color: $color-green;
-
-    .test-category-card__stat-number {
+  &__status-item--exported {
+    .test-category-card__status-number {
       color: $color-green;
     }
   }
