@@ -35,14 +35,14 @@
 
     .welcome-message {
       max-width: 500px;
-      
+
       h2 {
         font-size: $font-size-2xl;
         font-weight: 600;
         color: $color-text;
         margin-bottom: $spacing-md;
       }
-      
+
       p {
         font-size: $font-size-lg;
         color: $color-text-light-shade;
@@ -63,7 +63,11 @@
       flex-direction: row-reverse;
 
       .message-content {
-        background: linear-gradient(90deg, #3b82f6, #8b5cf6); // Blue → Purple gradient
+        background: linear-gradient(
+          90deg,
+          #3b82f6,
+          #8b5cf6
+        ); // Blue → Purple gradient
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.15);
@@ -200,8 +204,13 @@
         margin-bottom: $spacing-sm;
         color: rgba($color-text, 0.8);
 
-        &__icon { font-size: 16px; }
-        &__title { font-size: $font-size-sm; font-weight: 600; }
+        &__icon {
+          font-size: 16px;
+        }
+        &__title {
+          font-size: $font-size-sm;
+          font-weight: 600;
+        }
       }
 
       .message-text {
@@ -214,8 +223,8 @@
       .message-text--no-file {
         margin: $spacing-md $spacing-sm;
         padding: $spacing-md;
-        background: rgba(255,255,255,0.06);
-        border: 1px dashed rgba(255,255,255,0.18);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px dashed rgba(255, 255, 255, 0.18);
         border-radius: $border-radius-lg;
       }
 
@@ -229,7 +238,7 @@
         margin-bottom: $spacing-sm;
         margin-left: 0; // align to left in footer row
         font-size: $font-size-sm;
-        color: rgba(255,255,255,0.7); // Adjusted for dark background
+        color: rgba(255, 255, 255, 0.7); // Adjusted for dark background
       }
 
       // Footer row: latency left, actions right
@@ -241,7 +250,9 @@
         margin-top: $spacing-xs;
       }
 
-      .footer-spacer { min-width: 8px; }
+      .footer-spacer {
+        min-width: 8px;
+      }
 
       .response-actions {
         display: flex;
@@ -258,13 +269,18 @@
           width: 32px;
           border-radius: $border-radius-full;
           background: transparent;
-          color: rgba(255,255,255,0.75);
-          border: 1px solid rgba(255,255,255,0.15);
+          color: rgba(255, 255, 255, 0.75);
+          border: 1px solid rgba(255, 255, 255, 0.15);
           display: grid;
           place-items: center;
 
-          &:hover { background: rgba(255,255,255,0.08); }
-          &.active { color: #8b5cf6; border-color: rgba(139,92,246,0.5); }
+          &:hover {
+            background: rgba(255, 255, 255, 0.08);
+          }
+          &.active {
+            color: #8b5cf6;
+            border-color: rgba(139, 92, 246, 0.5);
+          }
         }
       }
 
@@ -375,7 +391,7 @@
           font-weight: 700;
           fill: #fff;
           pointer-events: none; // Make sure text doesn't interfere with hover on slice
-          text-shadow: 0 1px 2px rgba(0,0,0,0.5); // Add shadow for better visibility
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); // Add shadow for better visibility
           opacity: 0;
           animation: fade-in 0.5s ease-out forwards;
         }
@@ -388,7 +404,7 @@
 
         &__total-label {
           font-size: 10px;
-          fill: rgba(255,255,255,0.7); // Light grey for contrast
+          fill: rgba(255, 255, 255, 0.7); // Light grey for contrast
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
@@ -405,10 +421,15 @@
           display: inline-flex;
           align-items: center;
           gap: $spacing-xs;
-          background: rgba(255,255,255,0.08); // Subtle glassmorphism for chips
+          background: rgba(
+            255,
+            255,
+            255,
+            0.08
+          ); // Subtle glassmorphism for chips
           backdrop-filter: blur(4px);
           -webkit-backdrop-filter: blur(4px);
-          border: 1px solid rgba(255,255,255,0.15);
+          border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 999px;
           padding: 4px 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -420,13 +441,13 @@
           border-radius: 50%;
         }
 
-        &__label { 
-          font-size: $font-size-sm; 
+        &__label {
+          font-size: $font-size-sm;
           font-weight: 500;
         }
-        &__percent { 
-          font-size: $font-size-sm; 
-          color: rgba(255,255,255,0.7); // Light grey for contrast
+        &__percent {
+          font-size: $font-size-sm;
+          color: rgba(255, 255, 255, 0.7); // Light grey for contrast
           font-weight: 600;
         }
       }
@@ -454,7 +475,7 @@
         margin-top: $spacing-md;
 
         // Make sure it works on both user/assistant backgrounds
-        .message-bubble & { 
+        .message-bubble & {
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
@@ -488,7 +509,7 @@
       }
     }
 
-      .file-attachment {
+    .file-attachment {
       display: flex;
       align-items: center;
       gap: $spacing-xs;
@@ -535,9 +556,9 @@
         padding: $spacing-md $spacing-xl;
         font-size: $font-size-base;
         font-weight: 600;
-        border: 1px solid rgba(255,255,255,0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 0 10px 28px rgba(91, 33, 182, 0.3);
-        transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 
         &:hover {
           filter: brightness(1.05);
@@ -647,13 +668,14 @@
   }
 }
 
-.description-title, .chart-title {
+.description-title,
+.chart-title {
   font-size: $font-size-lg;
   font-weight: 600;
   color: #ffffff; // White for contrast
   margin-bottom: $spacing-md;
   padding-bottom: $spacing-xs;
-  border-bottom: 1px solid rgba(255,255,255,0.2); // Lighter border
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2); // Lighter border
 }
 
 .chart-title {
@@ -703,7 +725,9 @@
 }
 
 @keyframes typingDots {
-  0%, 60%, 100% {
+  0%,
+  60%,
+  100% {
     opacity: 0.4;
   }
   30% {
@@ -721,7 +745,6 @@
 }
 
 .skeleton-bubble {
- 
   .message-content {
     background: rgba(45, 50, 61, 0.6); // Glassmorphism for skeleton
     backdrop-filter: blur(8px);
@@ -738,12 +761,17 @@
     gap: $spacing-sm;
 
     padding: $spacing-lg $spacing-md; // Increased padding for the "thinking" text
-    background-color: rgba(255,255,255,0.05); // Subtle background for the header
+    background-color: rgba(
+      255,
+      255,
+      255,
+      0.05
+    ); // Subtle background for the header
     border-radius: $border-radius-lg; // Rounded corners for the header
 
     .processing-text {
       font-style: italic;
-      color: rgba(255,255,255,0.8);
+      color: rgba(255, 255, 255, 0.8);
     }
   }
 
@@ -753,7 +781,7 @@
   }
 
   .skeleton {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: $border-radius-md;
     animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
@@ -766,25 +794,31 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-.description-title, .chart-title {
+.description-title,
+.chart-title {
   font-size: $font-size-lg;
   font-weight: 600;
   color: #ffffff; // White for contrast
   margin-bottom: $spacing-md;
   padding-bottom: $spacing-xs;
-  border-bottom: 1px solid rgba(255,255,255,0.2); // Lighter border
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2); // Lighter border
 }
 
 .chart-title {

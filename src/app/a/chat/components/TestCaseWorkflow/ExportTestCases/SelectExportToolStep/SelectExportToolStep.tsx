@@ -5,6 +5,7 @@ import {
   showToastError,
 } from "../../../../../../../components/ReactToastify/ReactToastify";
 import "./_select_export_tool_step.scss";
+import { IoIosArrowBack } from "react-icons/io";
 
 const SelectExportToolStep: React.FC<CommonProps> = ({
   curStep,
@@ -103,16 +104,23 @@ const SelectExportToolStep: React.FC<CommonProps> = ({
     <section className="select-export-tool-step">
       <div className="select-export-tool-step__container">
         <header className="select-export-tool-step__header">
-          <h3 className="select-export-tool-step__title">
-            Choose Export Destination
-          </h3>
-          <p
-            className="select-export-tool-step__subtitle"
-            role="status"
-            aria-live="polite"
-          >
-            Select the tool where you want to export your test cases
-          </p>
+          <div className="select-export-tool-step__header__back-btn">
+            <button onClick={handleBack}>
+              <IoIosArrowBack />
+            </button>
+          </div>
+          <div className="select-export-tool-step__header__content">
+            <h3 className="select-export-tool-step__title">
+              Choose Export Destination
+            </h3>
+            <p
+              className="select-export-tool-step__subtitle"
+              role="status"
+              aria-live="polite"
+            >
+              Select the tool where you want to export your test cases
+            </p>
+          </div>
         </header>
 
         <main className="select-export-tool-step__main">
@@ -221,16 +229,7 @@ const SelectExportToolStep: React.FC<CommonProps> = ({
           </div>
         </main>
 
-        <footer className="select-export-tool-step__footer">
-          <button
-            className="select-export-tool-step__back-btn"
-            onClick={handleBack}
-            aria-label="Go back to test categories selection"
-            tabIndex={0}
-          >
-            Back to Test Categories
-          </button>
-        </footer>
+        <footer className="select-export-tool-step__footer"></footer>
       </div>
     </section>
   );

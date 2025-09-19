@@ -15,7 +15,7 @@
   flex-direction: column;
   justify-content: space-between;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
   color: white;
   position: relative;
@@ -29,10 +29,8 @@
   // Remove glass overlay; use plain shadows
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-    z-index: 10;
-    position: relative;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: $color-text;
   }
 
   &:active,
@@ -164,110 +162,24 @@
     }
   }
 
-  // Count badge colors for different categories - lighter shades
-  &--functional &__count-badge {
-    background-color: rgba(139, 92, 246, 0.12);
-    border-color: rgba(139, 92, 246, 0.6);
-    color: rgba(139, 92, 246, 0.9);
-  }
-
-  &--performance &__count-badge {
-    background-color: rgba(245, 158, 11, 0.12);
-    border-color: rgba(245, 158, 11, 0.6);
-    color: rgba(245, 158, 11, 0.9);
-  }
-
-  &--security &__count-badge {
-    background-color: rgba(16, 185, 129, 0.12);
-    border-color: rgba(16, 185, 129, 0.6);
-    color: rgba(16, 185, 129, 0.9);
-  }
-
-  &--ui-ux &__count-badge {
-    background-color: rgba(239, 68, 68, 0.12);
-    border-color: rgba(239, 68, 68, 0.6);
-    color: rgba(239, 68, 68, 0.9);
-  }
-
-  &--integration &__count-badge {
-    background-color: rgba(6, 182, 212, 0.12);
-    border-color: rgba(6, 182, 212, 0.6);
-    color: rgba(6, 182, 212, 0.9);
-  }
-
-  &--api &__count-badge {
-    background-color: rgba(234, 179, 8, 0.12);
-    border-color: rgba(234, 179, 8, 0.6);
-    color: rgba(234, 179, 8, 0.9);
-  }
-
-  &--compliance &__count-badge {
-    background-color: rgba(236, 72, 153, 0.12);
-    border-color: rgba(236, 72, 153, 0.6);
-    color: rgba(236, 72, 153, 0.9);
-  }
-
-  &--default &__count-badge {
-    background-color: rgba(99, 102, 241, 0.12);
-    border-color: rgba(99, 102, 241, 0.6);
-    color: rgba(99, 102, 241, 0.9);
-  }
-
-  // Title badge colors for different categories - matching the new VIBGYOR scheme
-  &--functional &__title-badge {
-    background-color: rgba(139, 92, 246, 0.15);
-    border: 1px solid #8b5cf6;
-    color: #8b5cf6;
-  }
-
-  &--performance &__title-badge {
-    background-color: rgba(245, 158, 11, 0.15);
-    border: 1px solid #f59e0b;
-    color: #f59e0b;
-  }
-
-  &--security &__title-badge {
-    background-color: rgba(16, 185, 129, 0.15);
-    border: 1px solid #10b981;
-    color: #10b981;
-  }
-
-  &--ui-ux &__title-badge {
-    background-color: rgba(239, 68, 68, 0.15);
-    border: 1px solid #ef4444;
-    color: #ef4444;
-  }
-
-  &--integration &__title-badge {
-    background-color: rgba(6, 182, 212, 0.15);
-    border: 1px solid #06b6d4;
-    color: #06b6d4;
-  }
-
-  &--api &__title-badge {
-    background-color: rgba(234, 179, 8, 0.15);
-    border: 1px solid #eab308;
-    color: #eab308;
-  }
-
-  &--compliance &__title-badge {
-    background-color: rgba(236, 72, 153, 0.15);
-    border: 1px solid #ec4899;
-    color: #ec4899;
-  }
-
-  &--default &__title-badge {
-    background-color: rgba(99, 102, 241, 0.15);
-    border: 1px solid #6366f1;
-    color: #6366f1;
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   &__description {
     font-size: $font-size-sm;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.6;
-    margin-bottom: $spacing-xl;
-    flex: 1;
+    color: $color-text;
+    line-height: 1.5;
+    margin: 0;
+    margin-bottom: $spacing-sm;
+    opacity: 0.8;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     @include mobile-only {
       font-size: $font-size-xs;
@@ -278,7 +190,7 @@
   &__chart {
     margin-bottom: $spacing-xl;
     opacity: 0.8;
-    
+
     svg {
       width: 100%;
       height: 60px;
@@ -286,7 +198,7 @@
 
     @include mobile-only {
       margin-bottom: $spacing-lg;
-      
+
       svg {
         height: 50px;
       }
@@ -294,40 +206,123 @@
   }
 
   &__footer {
+    flex-shrink: 0;
     margin-top: auto;
-    padding-top: $spacing-sm;
   }
 
-  &__status {
+  &__stats {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: $spacing-sm;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
 
-    &-text {
-      font-size: $font-size-xs;
-      color: rgba(255, 255, 255, 0.7);
-      line-height: 1.4;
+  &__stat-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
 
-      @include mobile-only {
-        font-size: 10px;
-      }
+  &__stat-group__title {
+    @include font-nunito;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    color: $color-text-light-shade;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__stat-group__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    justify-content: center;
+  }
+
+  // Make total stat item same size as others
+  &__stat-group:first-child {
+    .test-category-card__stat-item {
+      width: auto;
+      min-width: 60px;
     }
   }
 
-  &__progress-bar {
-    width: 100%;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: $border-radius-full;
-    overflow: hidden;
-    position: relative;
+  &__stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $spacing-sm;
+    border-radius: $border-radius-md;
+    border: 2px solid transparent;
+    background-color: $color-primary;
+    min-width: 60px;
+    transition: all 0.2s ease;
+
+    @include mobile-only {
+      min-width: 50px;
+      padding: $spacing-xs;
+    }
   }
 
-  &__progress-fill {
-    height: 100%;
-    border-radius: $border-radius-full;
-    transition: width 0.3s ease;
-    position: relative;
+  &__stat-number {
+    @include font-nunito;
+    font-size: $font-size-lg;
+    font-weight: 700;
+    color: $color-text;
+    line-height: 1;
+    margin-bottom: $spacing-xs;
+
+    @include mobile-only {
+      font-size: $font-size-base;
+    }
+  }
+
+  &__stat-label {
+    @include font-nunito;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    color: $color-text-light-shade;
+    text-align: center;
+    line-height: 1;
+
+    @include mobile-only {
+      font-size: 10px;
+    }
+  }
+
+  &__stat-item--total {
+    border-color: $color-secondary;
+  }
+
+  &__stat-item--approved {
+    border-color: $color-green;
+
+    .test-category-card__stat-number {
+      color: $color-green;
+    }
+  }
+
+  &__stat-item--pending {
+    border-color: $color-yellow;
+
+    .test-category-card__stat-number {
+      color: $color-yellow;
+    }
+  }
+
+  &__stat-item--rejected {
+    border-color: $color-red;
+
+    .test-category-card__stat-number {
+      color: $color-red;
+    }
+  }
+
+  &__stat-item--exported {
+    border-color: $color-green;
+
+    .test-category-card__stat-number {
+      color: $color-green;
+    }
   }
 }

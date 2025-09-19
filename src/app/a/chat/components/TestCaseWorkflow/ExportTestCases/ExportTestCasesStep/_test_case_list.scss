@@ -53,6 +53,26 @@
     gap: $spacing-md;
     max-height: 400px;
     overflow-y: auto;
+    padding-right: $spacing-sm;
+
+    // Custom scrollbar styling (matching modal)
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $color-primary;
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $color-primary-light-shade-2;
+      border-radius: 3px;
+
+      &:hover {
+        background: $color-secondary;
+      }
+    }
 
     @include mobile-only {
       max-height: 300px;
@@ -71,7 +91,6 @@
 
   &:hover {
     border-color: $color-secondary;
-    transform: translateY(-1px);
   }
 
   &__number {

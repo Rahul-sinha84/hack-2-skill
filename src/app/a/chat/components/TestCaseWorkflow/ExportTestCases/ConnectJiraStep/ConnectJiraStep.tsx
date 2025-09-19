@@ -5,6 +5,7 @@ import {
   showToastSuccess,
 } from "../../../../../../../components/ReactToastify/ReactToastify";
 import "./_connect_jira_step.scss";
+import { IoIosArrowBack } from "react-icons/io";
 
 const ConnectJiraStep: React.FC<CommonProps> = ({
   curStep,
@@ -183,10 +184,17 @@ const ConnectJiraStep: React.FC<CommonProps> = ({
     <section className="connect-jira-step">
       <div className="connect-jira-step__container">
         <header className="connect-jira-step__header">
-          <h3 className="connect-jira-step__title">Connect to Jira</h3>
-          <p className="connect-jira-step__description">
-            Connect your Jira account to export test cases
-          </p>
+          <div className="connect-jira-step__header__back-btn">
+            <button onClick={handleBack}>
+              <IoIosArrowBack />
+            </button>
+          </div>
+          <div className="connect-jira-step__header__content">
+            <h3 className="connect-jira-step__title">Connect to Jira</h3>
+            <p className="connect-jira-step__description">
+              Connect your Jira account to export test cases
+            </p>
+          </div>
         </header>
 
         <main className="connect-jira-step__main">
@@ -268,15 +276,6 @@ const ConnectJiraStep: React.FC<CommonProps> = ({
         </main>
 
         <footer className="connect-jira-step__footer">
-          <button
-            className="connect-jira-step__back-btn"
-            onClick={handleBack}
-            disabled={isConnecting}
-            aria-label="Go back to export tool selection"
-            tabIndex={0}
-          >
-            Back
-          </button>
           <button
             className="connect-jira-step__connect-btn"
             onClick={handleConnectJira}

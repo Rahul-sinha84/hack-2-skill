@@ -7,6 +7,7 @@ import {
   showToastError,
   showToastSuccess,
 } from "../../../../../../../components/ReactToastify/ReactToastify";
+import { IoIosArrowBack } from "react-icons/io";
 import "./_export_test_cases_step.scss";
 
 const ExportTestCasesStep: React.FC<CommonProps> = ({
@@ -134,10 +135,17 @@ const ExportTestCasesStep: React.FC<CommonProps> = ({
     <section className="export-test-cases-step">
       <div className="export-test-cases-step__container">
         <header className="export-test-cases-step__header">
-          <h3 className="export-test-cases-step__title">Export Test Cases</h3>
-          <p className="export-test-cases-step__description">
-            Review the test cases that will be exported to Jira
-          </p>
+          <div className="export-test-cases-step__header__back-btn">
+            <button onClick={handleBack}>
+              <IoIosArrowBack />
+            </button>
+          </div>
+          <div className="export-test-cases-step__header__content">
+            <h3 className="export-test-cases-step__title">Export Test Cases</h3>
+            <p className="export-test-cases-step__description">
+              Review the test cases that will be exported to Jira
+            </p>
+          </div>
         </header>
 
         <main className="export-test-cases-step__main">
@@ -146,23 +154,45 @@ const ExportTestCasesStep: React.FC<CommonProps> = ({
             selectedProject={exportState?.selectedProject || null}
           />
 
-          {approvedTestCases.length > 0 && (
-            <TestCaseList
-              testCases={approvedTestCases}
-              title="Test Cases to Export"
-              showCategory={true}
-              categories={data.map((cat) => ({ id: cat.id, label: cat.label }))}
-            />
-          )}
+          <div className="export-test-cases-step__content">
+            {exportedTestCases.length > 0 && (
+              <TestCaseList
+                testCases={exportedTestCases}
+                title="Already Exported Test Cases"
+                showCategory={true}
+                categories={data.map((cat) => ({
+                  id: cat.id,
+                  label: cat.label,
+                }))}
+              />
+            )}
 
-          {exportedTestCases.length > 0 && (
-            <TestCaseList
-              testCases={exportedTestCases}
-              title="Already Exported Test Cases"
-              showCategory={true}
-              categories={data.map((cat) => ({ id: cat.id, label: cat.label }))}
-            />
-          )}
+            {approvedTestCases.length > 0 ? (
+              <TestCaseList
+                testCases={approvedTestCases}
+                title="Test Cases to Export"
+                showCategory={true}
+                categories={data.map((cat) => ({
+                  id: cat.id,
+                  label: cat.label,
+                }))}
+              />
+            ) : (
+              <div className="export-test-cases-step__empty">
+                <div className="empty-icon">⚠️</div>
+                <h4>
+                  {exportedTestCases.length > 0
+                    ? "All Test Cases Already Exported"
+                    : "No Approved Test Cases"}
+                </h4>
+                <p>
+                  {exportedTestCases.length > 0
+                    ? "All your approved test cases have already been exported to Jira. You can continue reviewing to approve more test cases."
+                    : "You need to approve some test cases before exporting. Go back to review and approve test cases."}
+                </p>
+              </div>
+            )}
+          </div>
 
           {isExporting && (
             <div className="export-progress">
@@ -183,42 +213,10 @@ const ExportTestCasesStep: React.FC<CommonProps> = ({
               </p>
             </div>
           )}
-
-          {!isExporting && approvedTestCases.length === 0 && (
-            <div className="export-test-cases-step__empty">
-              <div className="empty-icon">⚠️</div>
-              <h4>
-                {exportedTestCases.length > 0
-                  ? "All Test Cases Already Exported"
-                  : "No Approved Test Cases"}
-              </h4>
-              <p>
-                {exportedTestCases.length > 0
-                  ? "All your approved test cases have already been exported to Jira. You can continue reviewing to approve more test cases."
-                  : "You need to approve some test cases before exporting. Go back to review and approve test cases."}
-              </p>
-            </div>
-          )}
         </main>
 
         <footer className="export-test-cases-step__footer">
-          <button
-            className="export-test-cases-step__back-btn"
-            onClick={handleBack}
-            disabled={isExporting}
-          >
-            Back
-          </button>
-
           <div className="export-test-cases-step__actions">
-            <button
-              className="export-test-cases-step__continue-btn"
-              onClick={handleContinueReviewing}
-              disabled={isExporting}
-            >
-              Continue reviewing
-            </button>
-
             {approvedTestCases.length > 0 && (
               <button
                 className="export-test-cases-step__export-btn"
@@ -230,6 +228,14 @@ const ExportTestCasesStep: React.FC<CommonProps> = ({
                   : `Export ${approvedTestCases.length} test cases`}
               </button>
             )}
+
+            <button
+              className="export-test-cases-step__continue-btn"
+              onClick={handleContinueReviewing}
+              disabled={isExporting}
+            >
+              Continue reviewing
+            </button>
           </div>
         </footer>
       </div>
