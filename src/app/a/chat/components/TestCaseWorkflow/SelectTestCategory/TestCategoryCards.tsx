@@ -23,21 +23,25 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
   const { getTestCasesByTestCategoryId } = useChat();
   const testCases = getTestCasesByTestCategoryId(data.id);
 
-  const calculateProgress = (testCases: Array<TestCase>) => {
+  const calculateStats = (testCases: Array<TestCase>) => {
     const total = testCases.length;
     const approved = testCases.filter(
       (testCase) => testCase.status === TestCaseStatus.APPROVED
     ).length;
-    return { approved, total };
-  };
-  const { approved, total } = calculateProgress(testCases);
+    const exported = testCases.filter(
+      (testCase) => testCase.status === TestCaseStatus.EXPORTED
+    ).length;
+    const pending = testCases.filter(
+      (testCase) => testCase.status === TestCaseStatus.PENDING
+    ).length;
+    const rejected = testCases.filter(
+      (testCase) => testCase.status === TestCaseStatus.REJECTED
+    ).length;
 
-  const getProgressPercentage = (approved: number, total: number) => {
-    if (total === 0) return 0;
-    return (approved / total) * 100;
+    return { approved, exported, pending, rejected, total };
   };
-
-  const progressPercentage = getProgressPercentage(approved, total);
+  const { approved, exported, pending, rejected, total } =
+    calculateStats(testCases);
 
   return (
     <button
@@ -57,14 +61,72 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
       </div>
 
       <div className="test-category-card__footer">
-        <div className="test-category-card__progress-text">
-          {approved} of {total} approved
-        </div>
-        <div className="test-category-card__progress-bar">
-          <div
-            className="test-category-card__progress-fill"
-            style={{ width: `${progressPercentage}%` }}
-          />
+        <div className="test-category-card__stats">
+          <div className="test-category-card__stat-group">
+            <div className="test-category-card__stat-group__title">Total</div>
+            <div className="test-category-card__stat-group__items">
+              <div className="test-category-card__stat-item test-category-card__stat-item--total">
+                <span className="test-category-card__stat-number">{total}</span>
+                <span className="test-category-card__stat-label">Total</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="test-category-card__stat-group">
+            <div className="test-category-card__stat-group__title">Status</div>
+            <div className="test-category-card__stat-group__items">
+              {approved > 0 && (
+                <div className="test-category-card__stat-item test-category-card__stat-item--approved">
+                  <span className="test-category-card__stat-number">
+                    {approved}
+                  </span>
+                  <span className="test-category-card__stat-label">
+                    Approved
+                  </span>
+                </div>
+              )}
+
+              {pending > 0 && (
+                <div className="test-category-card__stat-item test-category-card__stat-item--pending">
+                  <span className="test-category-card__stat-number">
+                    {pending}
+                  </span>
+                  <span className="test-category-card__stat-label">
+                    Pending
+                  </span>
+                </div>
+              )}
+
+              {rejected > 0 && (
+                <div className="test-category-card__stat-item test-category-card__stat-item--rejected">
+                  <span className="test-category-card__stat-number">
+                    {rejected}
+                  </span>
+                  <span className="test-category-card__stat-label">
+                    Rejected
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {exported > 0 && (
+            <div className="test-category-card__stat-group">
+              <div className="test-category-card__stat-group__title">
+                Exported
+              </div>
+              <div className="test-category-card__stat-group__items">
+                <div className="test-category-card__stat-item test-category-card__stat-item--exported">
+                  <span className="test-category-card__stat-number">
+                    {exported}
+                  </span>
+                  <span className="test-category-card__stat-label">
+                    Exported
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </button>

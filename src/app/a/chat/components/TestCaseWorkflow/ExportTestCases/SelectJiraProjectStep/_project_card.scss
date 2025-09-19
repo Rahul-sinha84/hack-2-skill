@@ -3,7 +3,7 @@
 
 .project-card {
   @include button-base;
-  background-color: $color-primary-light-shade;
+  background-color: $color-primary-light-shade-2;
   padding: $spacing-lg;
   border: 2px solid transparent;
   transition: all 0.2s ease;
@@ -16,7 +16,6 @@
 
   &:hover {
     border-color: $color-secondary;
-    transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 

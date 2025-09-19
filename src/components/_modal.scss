@@ -141,24 +141,24 @@
   }
 }
 
-.modal__container {
-  @include mobile-only {
-    max-width: 100%;
-    max-height: 95vh;
-    border-radius: $border-radius-md;
-  }
+// .modal__container {
+//   @include mobile-only {
+//     max-width: 100%;
+//     max-height: 95vh;
+//     border-radius: $border-radius-md;
+//   }
 
-  @include tablet-up {
-    max-width: 90vw;
-    max-height: 90vh;
-    border-radius: $border-radius-lg;
-  }
+//   @include tablet-up {
+//     max-width: 90vw;
+//     max-height: 90vh;
+//     border-radius: $border-radius-lg;
+//   }
 
-  @include desktop-up {
-    max-width: 80vw;
-    max-height: 80vh;
-  }
-}
+//   @include desktop-up {
+//     max-width: 80vw;
+//     max-height: 80vh;
+//   }
+// }
 
 .modal__header {
   @include mobile-only {

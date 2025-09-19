@@ -12,12 +12,47 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: $spacing-lg;
+    // padding: $spacing-lg;
   }
 
   &__header {
+    // margin-bottom: $spacing-xl;
+    display: flex;
+    gap: $spacing-sm;
+    flex-shrink: 0;
     margin-bottom: $spacing-xl;
-    text-align: center;
+    justify-content: flex-start;
+    &__back-btn {
+      width: 1.75rem;
+      height: 1.75rem;
+      flex-shrink: 0;
+
+      button {
+        @include button-base;
+        background-color: transparent;
+        border: 1px dashed transparent;
+        width: 1.75rem;
+        height: 1.75rem;
+        padding: 0;
+
+        &:hover {
+          svg {
+            color: $color-text;
+          }
+        }
+
+        &:focus {
+          border-color: $color-text-light-shade;
+        }
+
+        svg {
+          width: 1.75rem;
+          height: 1.75rem;
+          color: $color-text-light-shade;
+          transition: color 0.2s ease;
+        }
+      }
+    }
   }
 
   &__title {
@@ -30,8 +65,8 @@
   &__main {
     flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
 
   &__footer {
@@ -63,7 +98,7 @@
 
 .export-tool-option {
   @include button-base;
-  background-color: $color-primary-light-shade;
+  background-color: $color-primary-light-shade-2;
   padding: $spacing-lg;
   border: 2px solid transparent;
   transition: all 0.2s ease;
@@ -75,7 +110,7 @@
 
   &:hover {
     border-color: $color-secondary;
-    transform: translateY(-2px);
+    // transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 

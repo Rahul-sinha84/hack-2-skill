@@ -24,9 +24,8 @@
   }
 
   &:hover {
-    transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: $color-secondary;
+    border-color: $color-text;
   }
 
   &:focus-within {
@@ -90,9 +89,8 @@
 
   &__content {
     flex: 1;
-    margin-bottom: $spacing-lg;
     display: flex;
-    align-items: center;
+    flex-direction: column;
   }
 
   &__description {
@@ -101,6 +99,7 @@
     color: $color-text;
     line-height: 1.5;
     margin: 0;
+    margin-bottom: $spacing-sm;
     opacity: 0.8;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -116,54 +115,122 @@
 
   &__footer {
     flex-shrink: 0;
+    margin-top: auto;
   }
 
-  &__progress-text {
+  &__stats {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__stat-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &__stat-group__title {
     @include font-nunito;
     font-size: $font-size-xs;
-    color: $color-text;
-    margin-bottom: $spacing-sm;
-    opacity: 0.7;
+    font-weight: 600;
+    color: $color-text-light-shade;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: $spacing-xs;
   }
 
-  &__progress-bar {
-    width: 100%;
-    height: 6px;
-    background-color: $color-primary-light-shade-2;
-    border-radius: $border-radius-sm;
-    overflow: hidden;
-    position: relative;
+  &__stat-group__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    justify-content: center;
+  }
 
-    @include mobile-only {
-      height: 5px;
+  // Make total stat item same size as others
+  &__stat-group:first-child {
+    .test-category-card__stat-item {
+      width: auto;
+      min-width: 60px;
     }
   }
 
-  &__progress-fill {
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      $color-secondary 0%,
-      lighten($color-secondary, 10%) 100%
-    );
-    border-radius: $border-radius-sm;
-    transition: width 0.3s ease;
-    position: relative;
+  &__stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $spacing-sm;
+    border-radius: $border-radius-md;
+    border: 2px solid transparent;
+    background-color: $color-primary;
+    min-width: 60px;
+    transition: all 0.2s ease;
 
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.2) 50%,
-        transparent 100%
-      );
-      animation: shimmer 2s infinite;
+    @include mobile-only {
+      min-width: 50px;
+      padding: $spacing-xs;
+    }
+  }
+
+  &__stat-number {
+    @include font-nunito;
+    font-size: $font-size-lg;
+    font-weight: 700;
+    color: $color-text;
+    line-height: 1;
+    margin-bottom: $spacing-xs;
+
+    @include mobile-only {
+      font-size: $font-size-base;
+    }
+  }
+
+  &__stat-label {
+    @include font-nunito;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    color: $color-text-light-shade;
+    text-align: center;
+    line-height: 1;
+
+    @include mobile-only {
+      font-size: 10px;
+    }
+  }
+
+  &__stat-item--total {
+    border-color: $color-secondary;
+  }
+
+  &__stat-item--approved {
+    border-color: $color-green;
+
+    .test-category-card__stat-number {
+      color: $color-green;
+    }
+  }
+
+  &__stat-item--pending {
+    border-color: $color-yellow;
+
+    .test-category-card__stat-number {
+      color: $color-yellow;
+    }
+  }
+
+  &__stat-item--rejected {
+    border-color: $color-red;
+
+    .test-category-card__stat-number {
+      color: $color-red;
+    }
+  }
+
+  &__stat-item--exported {
+    border-color: $color-green;
+
+    .test-category-card__stat-number {
+      color: $color-green;
     }
   }
 }

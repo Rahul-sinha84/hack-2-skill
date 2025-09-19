@@ -12,12 +12,46 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: $spacing-lg;
   }
 
   &__header {
     margin-bottom: $spacing-xl;
-    text-align: center;
+    display: flex;
+    gap: $spacing-sm;
+    flex-shrink: 0;
+    margin-bottom: $spacing-xl;
+    justify-content: flex-start;
+    &__back-btn {
+      width: 1.75rem;
+      height: 1.75rem;
+      flex-shrink: 0;
+
+      button {
+        @include button-base;
+        background-color: transparent;
+        border: 1px dashed transparent;
+        width: 1.75rem;
+        height: 1.75rem;
+        padding: 0;
+
+        &:hover {
+          svg {
+            color: $color-text;
+          }
+        }
+
+        &:focus {
+          border-color: $color-text-light-shade;
+        }
+
+        svg {
+          width: 1.75rem;
+          height: 1.75rem;
+          color: $color-text-light-shade;
+          transition: color 0.2s ease;
+        }
+      }
+    }
   }
 
   &__title {
@@ -30,15 +64,26 @@
   &__main {
     flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-xl;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+      gap: $spacing-lg;
+    }
   }
 
   &__description {
     font-size: $font-size-base;
     color: $color-text-light-shade;
     margin: 0;
-    text-align: center;
+    text-align: left;
   }
 
   &__empty {
@@ -47,9 +92,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: $spacing-md;
     max-width: 400px;
     margin: 0 auto;
+    height: 100%;
+    min-height: 200px;
   }
 
   .empty-icon {
@@ -109,13 +157,13 @@
   &__footer {
     margin-top: $spacing-xl;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: $spacing-md;
   }
 
   &__actions {
     display: flex;
+    flex-direction: column;
     gap: $spacing-md;
     align-items: center;
   }
@@ -130,10 +178,24 @@
 
   &__continue-btn {
     @include button-base;
-    background-color: $color-primary-light-shade;
+    background-color: transparent;
     color: $color-text;
     padding: $spacing-sm $spacing-lg;
     font-size: $font-size-sm;
+    border: none;
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+    }
+
+    // &:focus {
+    //   outline: 2px solid $color-secondary;
+    //   outline-offset: 2px;
+    // }
   }
 
   &__export-btn {

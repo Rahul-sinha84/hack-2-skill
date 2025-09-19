@@ -5,7 +5,7 @@
   background-color: $color-primary-light-shade;
   border-radius: $border-radius-lg;
   padding: $spacing-lg;
-  margin-bottom: $spacing-xl;
+  padding-top: 0;
 
   &__header {
     margin-bottom: $spacing-lg;
@@ -49,12 +49,17 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: $spacing-md;
     margin-bottom: $spacing-lg;
 
     @include mobile-only {
       grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-sm;
+    }
+
+    @include tablet-up {
+      grid-template-columns: repeat(5, 1fr);
     }
   }
 
