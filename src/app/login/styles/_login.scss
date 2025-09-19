@@ -1,6 +1,9 @@
 @use "../../styles/variables" as *;
 @use "../../styles/mixins" as *;
 
+// Brand gradient for accents
+$brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+
 .login {
   @include center-grid;
   min-height: 100vh;
@@ -68,9 +71,21 @@
     &__overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(58, 61, 72, 0.2), rgba(58, 61, 72, 0.6)),
-        radial-gradient(1000px 500px at -10% -10%, rgba(99,102,241,0.4), transparent 50%),
-        radial-gradient(1000px 500px at 110% 110%, rgba(14,165,233,0.35), transparent 50%);
+      background: 
+        linear-gradient(135deg, rgba(20, 22, 26, 0.55), rgba(20, 22, 26, 0.75)),
+        radial-gradient(900px 480px at -10% -10%, rgba(99,102,241,0.25), transparent 80%),
+        radial-gradient(900px 480px at 110% 110%, rgba(14,165,233,0.25), transparent 80%);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(120%);
+    }
+
+    // Soft vignette on edges for better text focus
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(120% 120% at 50% 50%, transparent 40%, rgba(0,0,0,0.25) 100%);
     }
 
     &__content {
@@ -103,8 +118,8 @@
     margin-bottom: $spacing-md;
 
     .logo-mark {
-      width: 44px;
-      height: 44px;
+      width: 74px;
+      height: 74px;
       display: block;
       border-radius: $border-radius-full;
       background: rgba(255,255,255,0.12);
@@ -130,8 +145,8 @@
 
   &__right {
     background: rgba(255,255,255,0.06);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
     display: grid;
     place-items: center;
     padding: $spacing-2xl;
@@ -139,23 +154,55 @@
 
   .auth-card {
     width: min(420px, 100%);
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid transparent;
     border-radius: $border-radius-2xl;
-    padding: $spacing-2xl;
+    padding: $spacing-2xl $spacing-2xl calc($spacing-2xl + 6px);
     box-shadow: 0 24px 48px rgba(0,0,0,0.25);
     color: $color-text;
     text-align: center;
+    position: relative;
+    display: grid;
+    gap: $spacing-lg;
+
+    // Gradient border outline
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: $brand-gradient;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    &__logo {
+      width: 56px;
+      height: 56px;
+      border-radius: $border-radius-full;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 8px;
+      margin: 0 auto;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    }
 
     &__title {
       font-size: $font-size-2xl;
       font-weight: 800;
       margin-bottom: $spacing-xs;
+      background-image: $brand-gradient;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     &__subtitle {
       color: $color-text-light-shade;
-      margin-bottom: $spacing-xl;
+      margin-bottom: $spacing-md;
     }
 
     &__actions {
@@ -197,27 +244,39 @@
   }
 
   .google-btn {
-    background: rgba(255,255,255,0.10);
-    color: #fff;
+    // bigger pill
+    height: 52px;
+    padding: 0 $spacing-xl;
+    font-size: $font-size-base;
     font-weight: 700;
     letter-spacing: 0.2px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px) saturate(140%);
-    -webkit-backdrop-filter: blur(10px) saturate(140%);
-    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
-    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    border-radius: $border-radius-full;
+
+    // plain white button
+    background: #ffffff;
+    color: #111827; // near-black text for contrast
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease, background .2s ease;
 
     &:hover:not(:disabled) {
       transform: translateY(-2px);
-      background: rgba(255,255,255,0.14);
-      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+      filter: none;
+      background: #f9fafb;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
     }
 
     &:active:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
   }
+
+@keyframes sheen {
+  0% { transform: translateX(-120%) skewX(-20deg); }
+  60% { transform: translateX(120%) skewX(-20deg); }
+  100% { transform: translateX(120%) skewX(-20deg); }
+}
 
   .secondary-btn {
     background: rgba(255, 255, 255, 0.06);

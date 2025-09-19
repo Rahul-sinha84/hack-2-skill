@@ -188,6 +188,22 @@ const CategoryLegend: React.FC<{ categories: Array<TestCategory & { testCases: A
   );
 };
 
+const ResponseActions: React.FC<{ text: string }> = ({ text }) => {
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
+
+  return (
+    <div className="response-actions" aria-label="message actions">
+      <button className={`response-action ${liked ? 'active' : ''}`} onClick={() => { setLiked(!liked); if (!liked) setDisliked(false); }} title="Like" aria-label="Like">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 10h4v10H2V10Zm7 10h6.14c.8 0 1.52-.47 1.83-1.2l2.63-5.9c.65-1.47-.41-3.1-2.03-3.1h-4.5l.7-3.3.02-.22c0-.41-.17-.8-.44-1.07L12.17 4 7.59 8.59C7.22 8.95 7 9.45 7 10v8c0 1.1.9 2 2 2Z" stroke="currentColor" strokeWidth="1.5"/></svg>
+      </button>
+      <button className={`response-action ${disliked ? 'active' : ''}`} onClick={() => { setDisliked(!disliked); if (!disliked) setLiked(false); }} title="Dislike" aria-label="Dislike">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 14h-4V4h4v10ZM15 4H8.86c-.8 0-1.52.47-1.83 1.2L4.4 11.1C3.74 12.57 4.8 14.2 6.42 14.2h4.5l-.7 3.3-.02.22c0 .41.17.8.44 1.07L11.83 20l4.58-4.59c.37-.36.59-.86.59-1.41V6c0-1.1-.9-2-2-2Z" stroke="currentColor" strokeWidth="1.5"/></svg>
+      </button>
+    </div>
+  );
+};
+
 
 const MessageBubble: React.FC<{
   response: ChatResponse & {
@@ -196,7 +212,8 @@ const MessageBubble: React.FC<{
   onOpenModal: (response: ChatResponse & {
     testCategories: Array<TestCategory & { testCases: Array<TestCase> }>;
   }) => void;
-}> = ({ response, onOpenModal }) => {
+  showLoadingRing?: boolean;
+}> = ({ response, onOpenModal, showLoadingRing = false }) => {
   const isUser = response.messageType === MessageType.USER;
   const isProcessing = response.messageType === MessageType.PROCESSING;
   const isAssistant = response.messageType === MessageType.ASSISTANT;
@@ -261,10 +278,14 @@ const MessageBubble: React.FC<{
              </div>
            </div>
         ) : (
-          <div className={`message-text ${(
-              isAssistant && typeof mainText === 'string' &&
-              mainText.toLowerCase().includes('response to a message without a file')
-            ) ? 'message-text--no-file' : ''}`}>
+          <div className={`message-text ${(() => {
+              const t = typeof mainText === 'string' ? mainText.toLowerCase() : '';
+              const isInfo = isAssistant && (
+                t.includes('response to a message without a file') ||
+                t.includes('failed to process document and generate test cases')
+              );
+              return isInfo ? 'message-text--no-file' : '';
+            })()}`}>
             {isProcessing ? (
               <>
                 <span className="processing-text">{response.content}</span>
@@ -276,15 +297,21 @@ const MessageBubble: React.FC<{
           </div>
         )}
 
-        {isAssistant && latencyLine && (
-          <div className="message-meta">
-            <em>{latencyLine}</em>
+        {isAssistant && (
+          <div className="message-footer">
+            {latencyLine && (
+              <div className="message-meta">
+                <em>{latencyLine}</em>
+              </div>
+            )}
+            <div className="footer-spacer" />
+            <ResponseActions text={typeof mainText === 'string' ? mainText : ''} />
           </div>
         )}
       </div>
 
       {isUser && (
-        <div className="avatar user-avatar">
+        <div className={`avatar user-avatar ${showLoadingRing ? 'loading' : ''}`}>
           {(() => {
             console.log('Rendering user avatar, user data:', response.user);
             console.log('Has image?', !!response.user?.image);
@@ -293,7 +320,7 @@ const MessageBubble: React.FC<{
             if (response.user?.image) {
               return (
                 <img 
-                  src={response.user.image} 
+                  src={`/api/proxy-image?url=${encodeURIComponent(response.user.image)}`} 
                   alt={response.user.name || 'User Avatar'}
                   onError={(e) => {
                     console.error('❌ Image failed to load:', response.user?.image);
@@ -374,16 +401,18 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
         <main className="chat__layout__responses__main">
           {responses.length !== 0 ? (
             <div className="messages-container">
-              {responses.map((response) => {
+              {responses.map((response, idx) => {
                 // Hide the original, simple processing bubble
                 if (response.messageType === MessageType.PROCESSING) {
                   return null;
                 }
+                const showLoadingRing = (responses.length >= 2) && (idx === responses.length - 2) && (responses[responses.length - 1].messageType === MessageType.PROCESSING) && (response.messageType === MessageType.USER);
                 return (
                   <MessageBubble
                     key={response.id}
                     response={response}
                     onOpenModal={handleOpenModal}
+                    showLoadingRing={showLoadingRing}
                   />
                 );
               })}

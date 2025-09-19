@@ -12,8 +12,7 @@ const LoginPage = () => {
         <aside
           className="login__left"
           style={{
-            backgroundImage:
-              "url(https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2060&auto=format&fit=crop)",
+            // backgroundImage: "url(/sign-in.png)",
           }}
         >
           <div className="login__left__overlay" />
@@ -21,12 +20,12 @@ const LoginPage = () => {
             <div className="login__logo">
               <img
                 className="logo-mark"
-                src="/next.svg"
+                src="/ai-logo.png"
                 alt="App logo"
-                width={40}
-                height={40}
+                width={94}
+                height={94}
               />
-              <h1 className="logo-text">Test Case Generator</h1>
+
             </div>
             <h2 className="left__headline">
               Ready to take your testing to the next level?
@@ -41,13 +40,11 @@ const LoginPage = () => {
         <main className="login__right">
           <div className="auth-card">
             <h2 className="auth-card__title">Sign In</h2>
-            <p className="auth-card__subtitle">
-              Continue with your Google account to get started
-            </p>
+
             <div className="auth-card__actions">
               <SignIn />
             </div>
-            <p className="auth-card__footer">Secure authentication via Google</p>
+            {/* <p className="auth-card__footer">Secure authentication via Google</p> */}
           </div>
         </main>
       </div>
