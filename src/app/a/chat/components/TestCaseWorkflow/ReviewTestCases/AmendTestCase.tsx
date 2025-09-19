@@ -138,6 +138,9 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
                 >
                   Approve
                 </button>
+                <button className="upload-btn" onClick={uploadTestCase}>
+                  Upload
+                </button>
               </div>
             )
           ) : null}
