@@ -26,14 +26,15 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
   // Get category type for styling
   const getCategoryType = (label: string) => {
     const lowercaseLabel = label.toLowerCase();
-    if (lowercaseLabel.includes('functional')) return 'functional';
-    if (lowercaseLabel.includes('performance')) return 'performance';
-    if (lowercaseLabel.includes('security')) return 'security';
-    if (lowercaseLabel.includes('ui') || lowercaseLabel.includes('ux')) return 'ui-ux';
-    if (lowercaseLabel.includes('integration')) return 'integration';
-    if (lowercaseLabel.includes('api')) return 'api';
-    if (lowercaseLabel.includes('compliance')) return 'compliance';
-    return 'default';
+    if (lowercaseLabel.includes("functional")) return "functional";
+    if (lowercaseLabel.includes("performance")) return "performance";
+    if (lowercaseLabel.includes("security")) return "security";
+    if (lowercaseLabel.includes("ui") || lowercaseLabel.includes("ux"))
+      return "ui-ux";
+    if (lowercaseLabel.includes("integration")) return "integration";
+    if (lowercaseLabel.includes("api")) return "api";
+    if (lowercaseLabel.includes("compliance")) return "compliance";
+    return "default";
   };
 
   const categoryType = getCategoryType(data.label);
@@ -71,21 +72,25 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
       className={`test-category-card test-category-card--${categoryType}`}
     >
       <div className="test-category-card__header">
-        <h3 className="test-category-card__title test-category-card__title--inline">{data.label}</h3>
+        <h3 className="test-category-card__title test-category-card__title--inline">
+          {data.label}
+        </h3>
         <div className="test-category-card__count-badge">{total}</div>
       </div>
 
       <div className="test-category-card__content">
         <p className="test-category-card__description">{data.description}</p>
-        
+
         <div className="test-category-card__progress">
           <div className="test-category-card__progress-header">
             <span className="test-category-card__progress-label">Progress</span>
-            <span className="test-category-card__progress-percentage">{progressPercentage}%</span>
+            <span className="test-category-card__progress-percentage">
+              {progressPercentage}%
+            </span>
           </div>
           <div className="test-category-card__progress-bar">
-            <div 
-              className="test-category-card__progress-fill" 
+            <div
+              className="test-category-card__progress-fill"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
@@ -97,28 +102,36 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
           <div className="test-category-card__status-item test-category-card__status-item--approved">
             <div className="test-category-card__status-dot test-category-card__status-dot--approved"></div>
             <div className="test-category-card__status-info">
-              <span className="test-category-card__status-number">{approved}</span>
+              <span className="test-category-card__status-number">
+                {approved}
+              </span>
               <span className="test-category-card__status-label">Approved</span>
             </div>
           </div>
           <div className="test-category-card__status-item test-category-card__status-item--pending">
             <div className="test-category-card__status-dot test-category-card__status-dot--pending"></div>
             <div className="test-category-card__status-info">
-              <span className="test-category-card__status-number">{pending}</span>
+              <span className="test-category-card__status-number">
+                {pending}
+              </span>
               <span className="test-category-card__status-label">Pending</span>
             </div>
           </div>
           <div className="test-category-card__status-item test-category-card__status-item--rejected">
             <div className="test-category-card__status-dot test-category-card__status-dot--rejected"></div>
             <div className="test-category-card__status-info">
-              <span className="test-category-card__status-number">{rejected}</span>
+              <span className="test-category-card__status-number">
+                {rejected}
+              </span>
               <span className="test-category-card__status-label">Rejected</span>
             </div>
           </div>
           <div className="test-category-card__status-item test-category-card__status-item--exported">
             <div className="test-category-card__status-dot test-category-card__status-dot--exported"></div>
             <div className="test-category-card__status-info">
-              <span className="test-category-card__status-number">{exported}</span>
+              <span className="test-category-card__status-number">
+                {exported}
+              </span>
               <span className="test-category-card__status-label">Exported</span>
             </div>
           </div>

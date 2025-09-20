@@ -3,7 +3,11 @@
 
 .test-category-card {
   @include button-base;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.04));
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.09),
+    rgba(255, 255, 255, 0.04)
+  );
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: 20px;
@@ -20,9 +24,7 @@
   color: white;
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    0 4px 16px rgba(0, 0, 0, 0.08),
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
   @include mobile-only {
@@ -33,21 +35,28 @@
 
   // Subtle gradient overlay for depth
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
   }
 
   &:hover {
     // transform: translateY(-4px) scale(1.02);
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
-    box-shadow: 
-      0 10px 24px rgba(0, 0, 0, 0.12),
-      0 4px 12px rgba(0, 0, 0, 0.08),
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.12),
+      rgba(255, 255, 255, 0.06)
+    );
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08),
       inset 0 1px 0 rgba(255, 255, 255, 0.12);
     border-color: rgba($color-secondary, 0.5);
   }
@@ -66,144 +75,216 @@
     border-color: rgba($color-secondary, 0.35);
     &:hover {
       border-color: rgba($color-secondary, 0.5);
-      box-shadow: 
-        0 10px 24px rgba($color-secondary, 0.35),
-        0 4px 12px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
     .test-category-card__icon-container {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+      background: linear-gradient(
+        135deg,
+        rgba(139, 92, 246, 0.2),
+        rgba(139, 92, 246, 0.1)
+      );
       border: 1px solid rgba(139, 92, 246, 0.3);
     }
-    .test-category-card__icon { color: #a78bfa; }
-    .test-category-card__progress-fill { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
-    .test-category-card__count-badge { background: rgba(139, 92, 246, 0.2); border-color: rgba(139, 92, 246, 0.4); }
+    .test-category-card__icon {
+      color: #a78bfa;
+    }
+    .test-category-card__progress-fill {
+      background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+    }
+    .test-category-card__count-badge {
+      background: rgba(139, 92, 246, 0.2);
+      border-color: rgba(139, 92, 246, 0.4);
+    }
   }
 
   &--performance {
     border-color: rgba($color-secondary, 0.35);
     &:hover {
       border-color: rgba($color-secondary, 0.5);
-      box-shadow: 
-        0 10px 24px rgba($color-secondary, 0.35),
-        0 4px 12px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
     .test-category-card__icon-container {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));
+      background: linear-gradient(
+        135deg,
+        rgba(245, 158, 11, 0.2),
+        rgba(245, 158, 11, 0.1)
+      );
       border: 1px solid rgba(245, 158, 11, 0.3);
     }
-    .test-category-card__icon { color: #fbbf24; }
-    .test-category-card__progress-fill { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-    .test-category-card__count-badge { background: rgba(245, 158, 11, 0.2); border-color: rgba(245, 158, 11, 0.4); }
+    .test-category-card__icon {
+      color: #fbbf24;
+    }
+    .test-category-card__progress-fill {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    }
+    .test-category-card__count-badge {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: rgba(245, 158, 11, 0.4);
+    }
   }
 
   &--security {
     border-color: rgba($color-secondary, 0.35);
     &:hover {
       border-color: rgba($color-secondary, 0.5);
-      box-shadow: 
-        0 10px 24px rgba($color-secondary, 0.35),
-        0 4px 12px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
     .test-category-card__icon-container {
-      background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(74, 222, 128, 0.1));
+      background: linear-gradient(
+        135deg,
+        rgba(74, 222, 128, 0.2),
+        rgba(74, 222, 128, 0.1)
+      );
       border: 1px solid rgba(74, 222, 128, 0.3);
     }
-    .test-category-card__icon { color: #86efac; }
-    .test-category-card__progress-fill { background: linear-gradient(90deg, #4ade80, #86efac); }
-    .test-category-card__count-badge { background: rgba(74, 222, 128, 0.2); border-color: rgba(74, 222, 128, 0.4); }
+    .test-category-card__icon {
+      color: #86efac;
+    }
+    .test-category-card__progress-fill {
+      background: linear-gradient(90deg, #4ade80, #86efac);
+    }
+    .test-category-card__count-badge {
+      background: rgba(74, 222, 128, 0.2);
+      border-color: rgba(74, 222, 128, 0.4);
+    }
   }
 
   &--ui-ux {
     border-color: rgba($color-secondary, 0.35);
     &:hover {
       border-color: rgba($color-secondary, 0.5);
-      box-shadow: 
-        0 10px 24px rgba($color-secondary, 0.35),
-        0 4px 12px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
     .test-category-card__icon-container {
-      background: linear-gradient(135deg, rgba(248, 113, 113, 0.2), rgba(248, 113, 113, 0.1));
+      background: linear-gradient(
+        135deg,
+        rgba(248, 113, 113, 0.2),
+        rgba(248, 113, 113, 0.1)
+      );
       border: 1px solid rgba(248, 113, 113, 0.3);
     }
-    .test-category-card__icon { color: #fca5a5; }
-    .test-category-card__progress-fill { background: linear-gradient(90deg, #f87171, #fca5a5); }
-    .test-category-card__count-badge { background: rgba(248, 113, 113, 0.2); border-color: rgba(248, 113, 113, 0.4); }
+    .test-category-card__icon {
+      color: #fca5a5;
+    }
+    .test-category-card__progress-fill {
+      background: linear-gradient(90deg, #f87171, #fca5a5);
+    }
+    .test-category-card__count-badge {
+      background: rgba(248, 113, 113, 0.2);
+      border-color: rgba(248, 113, 113, 0.4);
+    }
   }
 
   &--integration {
     border-color: rgba($color-secondary, 0.35);
     &:hover {
       border-color: rgba($color-secondary, 0.5);
-      box-shadow: 
-        0 10px 24px rgba($color-secondary, 0.35),
-        0 4px 12px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
     .test-category-card__icon-container {
-      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.1));
+      background: linear-gradient(
+        135deg,
+        rgba(6, 182, 212, 0.2),
+        rgba(6, 182, 212, 0.1)
+      );
       border: 1px solid rgba(6, 182, 212, 0.3);
     }
-    .test-category-card__icon { color: #67e8f9; }
-    .test-category-card__progress-fill { background: linear-gradient(90deg, #06b6d4, #67e8f9); }
-    .test-category-card__count-badge { background: rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.4); }
+    .test-category-card__icon {
+      color: #67e8f9;
+    }
+    .test-category-card__progress-fill {
+      background: linear-gradient(90deg, #06b6d4, #67e8f9);
+    }
+    .test-category-card__count-badge {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: rgba(6, 182, 212, 0.4);
+    }
   }
 
   &--api {
     border-color: rgba($color-secondary, 0.35);
     &:hover {
       border-color: rgba($color-secondary, 0.5);
-      box-shadow: 
-        0 10px 24px rgba($color-secondary, 0.35),
-        0 4px 12px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
     .test-category-card__icon-container {
-      background: linear-gradient(135deg, rgba(250, 204, 21, 0.2), rgba(250, 204, 21, 0.1));
+      background: linear-gradient(
+        135deg,
+        rgba(250, 204, 21, 0.2),
+        rgba(250, 204, 21, 0.1)
+      );
       border: 1px solid rgba(250, 204, 21, 0.3);
     }
-    .test-category-card__icon { color: #fde047; }
-    .test-category-card__progress-fill { background: linear-gradient(90deg, #facc15, #fde047); }
-    .test-category-card__count-badge { background: rgba(250, 204, 21, 0.2); border-color: rgba(250, 204, 21, 0.4); }
+    .test-category-card__icon {
+      color: #fde047;
+    }
+    .test-category-card__progress-fill {
+      background: linear-gradient(90deg, #facc15, #fde047);
+    }
+    .test-category-card__count-badge {
+      background: rgba(250, 204, 21, 0.2);
+      border-color: rgba(250, 204, 21, 0.4);
+    }
   }
 
   &--compliance {
     border-color: rgba($color-secondary, 0.35);
     &:hover {
       border-color: rgba($color-secondary, 0.5);
-      box-shadow: 
-        0 10px 24px rgba($color-secondary, 0.35),
-        0 4px 12px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
     .test-category-card__icon-container {
-      background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(236, 72, 153, 0.1));
+      background: linear-gradient(
+        135deg,
+        rgba(236, 72, 153, 0.2),
+        rgba(236, 72, 153, 0.1)
+      );
       border: 1px solid rgba(236, 72, 153, 0.3);
     }
-    .test-category-card__icon { color: #f9a8d4; }
-    .test-category-card__progress-fill { background: linear-gradient(90deg, #ec4899, #f9a8d4); }
-    .test-category-card__count-badge { background: rgba(236, 72, 153, 0.2); border-color: rgba(236, 72, 153, 0.4); }
+    .test-category-card__icon {
+      color: #f9a8d4;
+    }
+    .test-category-card__progress-fill {
+      background: linear-gradient(90deg, #ec4899, #f9a8d4);
+    }
+    .test-category-card__count-badge {
+      background: rgba(236, 72, 153, 0.2);
+      border-color: rgba(236, 72, 153, 0.4);
+    }
   }
 
   &--default {
     border-color: rgba($color-secondary, 0.35);
     &:hover {
       border-color: rgba($color-secondary, 0.5);
-      box-shadow: 
-        0 10px 24px rgba($color-secondary, 0.35),
-        0 4px 12px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 24px rgba($color-secondary, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
     .test-category-card__icon-container {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+      background: linear-gradient(
+        135deg,
+        rgba(59, 130, 246, 0.2),
+        rgba(59, 130, 246, 0.1)
+      );
       border: 1px solid rgba(59, 130, 246, 0.3);
     }
-    .test-category-card__icon { color: #93c5fd; }
-    .test-category-card__progress-fill { background: linear-gradient(90deg, #3b82f6, #93c5fd); }
-    .test-category-card__count-badge { background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4); }
+    .test-category-card__icon {
+      color: #93c5fd;
+    }
+    .test-category-card__progress-fill {
+      background: linear-gradient(90deg, #3b82f6, #93c5fd);
+    }
+    .test-category-card__count-badge {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
   }
 
   // Header with icon and count badge
@@ -273,6 +354,8 @@
     color: rgba(255, 255, 255, 0.7);
     line-height: 1.5;
     margin: 0;
+    margin-bottom: $spacing-sm;
+    opacity: 0.8;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
@@ -321,13 +404,18 @@
     position: relative;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+      );
       animation: shimmer 2s infinite;
     }
   }
@@ -337,15 +425,20 @@
     border-radius: 3px;
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
       border-radius: inherit;
     }
   }
@@ -387,7 +480,7 @@
     position: relative;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: -2px;
       left: -2px;
@@ -399,10 +492,18 @@
       filter: blur(2px);
     }
 
-    &--approved { background: #4ade80; }
-    &--pending { background: #facc15; }
-    &--rejected { background: #f87171; }
-    &--exported { background: #06b6d4; }
+    &--approved {
+      background: #4ade80;
+    }
+    &--pending {
+      background: #facc15;
+    }
+    &--rejected {
+      background: #f87171;
+    }
+    &--exported {
+      background: #06b6d4;
+    }
   }
 
   &__status-info {
@@ -436,6 +537,10 @@
 
 // Shimmer animation for progress bars
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
