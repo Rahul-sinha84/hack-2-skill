@@ -2,11 +2,11 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { JiraCookieKeys } from "../../utils";
 
-export const GET = async (request: Request) => {
+export const POST = async (request: Request) => {
   try {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get(JiraCookieKeys.ACCESS_TOKEN)?.value;
-
+    const cloudId = cookieStore.get(JiraCookieKeys.CLOUD_ID)?.value;
     if (!accessToken) {
       return NextResponse.json(
         { error: "No access token found" },
@@ -14,7 +14,9 @@ export const GET = async (request: Request) => {
       );
     }
 
-    const uri = `${process.env.JIRA_CLIENT_URL}/rest/api/3/issuetype/project?projectId=10000`;
+    const { projectId } = await request.json();
+
+    const uri = `${process.env.JIRA_CLIENT_URL}/${cloudId}/rest/api/3/issuetype/project?projectId=${projectId}`;
 
     const response = await fetch(uri, {
       method: "GET",
@@ -27,6 +29,7 @@ export const GET = async (request: Request) => {
     const issueTypeData = await response.json();
 
     if (!response.ok) {
+      console.error(issueTypeData);
       throw new Error(
         issueTypeData.errorMessages?.join(", ") ||
           "Failed to get issue type data"

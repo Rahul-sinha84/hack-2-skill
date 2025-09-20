@@ -50,7 +50,7 @@ export const POST = async (req: Request) => {
       });
     }
 
-    const { testCases, projectKey, issueType } = await req.json();
+    const { testCases, projectKey, issueType = "Task" } = await req.json();
 
     if (!testCases || !Array.isArray(testCases) || testCases.length === 0) {
       return NextResponse.json(

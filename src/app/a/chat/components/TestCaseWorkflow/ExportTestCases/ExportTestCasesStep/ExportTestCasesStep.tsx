@@ -132,6 +132,22 @@ const ExportTestCasesStep: React.FC<CommonProps> = ({
     setCurStep(Steps.SELECT_JIRA_PROJECT);
   };
 
+  const handleGetIssueTypes = async () => {
+    const response = await fetch("/api/jira/issue/get-issue-type-of-project", {
+      method: "POST",
+      body: JSON.stringify({
+        projectId: exportState?.selectedProject?.id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+
+    console.log(result);
+  };
+
   return (
     <section className="export-test-cases-step">
       <div className="export-test-cases-step__container">
@@ -238,6 +254,8 @@ const ExportTestCasesStep: React.FC<CommonProps> = ({
               Continue reviewing
             </button>
           </div>
+
+          {/* <button onClick={handleGetIssueTypes}>Get Issue Types</button> */}
         </footer>
       </div>
     </section>
