@@ -42,7 +42,7 @@ export const GET = async () => {
       cookieStore.set({
         name: JiraCookieKeys.CLOUD_ID,
         value: cloudId,
-        expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days
+        expires: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",

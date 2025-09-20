@@ -19,13 +19,13 @@ const SelectTestCategoryStep = ({
   };
 
   // Calculate statistics from the data
-  const totalCategories = data.length;
-  const totalTestCases = data.reduce(
-    (sum, category) => sum + category.testCases.length,
-    0
-  );
-  const avgTestCasesPerCategory =
-    totalCategories > 0 ? Math.round(totalTestCases / totalCategories) : 0;
+  // const totalCategories = data.length;
+  // const totalTestCases = data.reduce(
+  //   (sum, category) => sum + category.testCases.length,
+  //   0
+  // );
+  // const avgTestCasesPerCategory =
+  //   totalCategories > 0 ? Math.round(totalTestCases / totalCategories) : 0;
 
   // const connectJira = async () => {
   //   try {

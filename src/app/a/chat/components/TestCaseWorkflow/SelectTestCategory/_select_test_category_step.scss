@@ -62,12 +62,13 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     .main-section-header {
       flex-shrink: 0; // Header stays fixed
       padding-bottom: $spacing-sm;
+      text-align: center;
     }
 
     .main-section-title {
-      font-size: $font-size-xl;
+      font-size: $font-size-3xl !important;
       font-weight: 800;
-      margin: 0 0 $spacing-xs 0;
+      margin: 0;
       background-image: $brand-gradient;
       -webkit-background-clip: text;
       background-clip: text;
@@ -85,6 +86,7 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     }
 
     .test-category-cards {
+      margin-top: $spacing-2xl !important;
       flex: 1; // Take remaining space
       display: grid;
       gap: $spacing-md;
@@ -189,8 +191,7 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
-    box-shadow: 
-      0 8px 32px rgba(59, 130, 246, 0.3),
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3),
       0 4px 16px rgba(0, 0, 0, 0.1);
 
     @include mobile-only {
@@ -201,21 +202,25 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 
     // Subtle gradient overlay
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.05) 100%
+      );
       opacity: 0;
       transition: opacity 0.3s ease;
     }
 
     &:hover {
       transform: translateY(-2px) scale(1.02);
-      box-shadow: 
-        0 12px 40px rgba(59, 130, 246, 0.4),
+      box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4),
         0 8px 32px rgba(0, 0, 0, 0.15);
 
       &::before {
@@ -225,8 +230,7 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 
     &:active {
       transform: translateY(-1px) scale(1.01);
-      box-shadow: 
-        0 8px 24px rgba(59, 130, 246, 0.35),
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35),
         0 4px 16px rgba(0, 0, 0, 0.12);
     }
 

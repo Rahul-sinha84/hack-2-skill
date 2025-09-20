@@ -6,6 +6,10 @@ import {
 } from "../../../../../../../components/ReactToastify/ReactToastify";
 import "./_select_export_tool_step.scss";
 import { IoIosArrowBack } from "react-icons/io";
+import Image from "next/image";
+import JiraLogo from "@/assets/jira_logo.png";
+import AzureLogo from "@/assets/azure_devops_logo.png";
+import PolarianLogo from "@/assets/polarian_logo.webp";
 
 const SelectExportToolStep: React.FC<CommonProps> = ({
   curStep,
@@ -63,10 +67,13 @@ const SelectExportToolStep: React.FC<CommonProps> = ({
     }
   };
   const handleToolSelection = (
-    tool: "jira" | "azure" | "testrail" | "xray"
+    tool: "jira" | "azure" | "polarian" | "xray"
   ) => {
     if (setExportState) {
-      setExportState((prev) => ({ ...prev, selectedTool: tool }));
+      setExportState((prev) => ({
+        ...prev,
+        selectedTool: tool as "jira" | "azure" | "xray" | "testrail" | null,
+      }));
     }
 
     if (tool === "jira") {
@@ -88,7 +95,7 @@ const SelectExportToolStep: React.FC<CommonProps> = ({
 
   const handleKeyDown = (
     event: React.KeyboardEvent,
-    tool: "jira" | "azure" | "testrail" | "xray"
+    tool: "jira" | "azure" | "polarian" | "xray"
   ) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -124,7 +131,7 @@ const SelectExportToolStep: React.FC<CommonProps> = ({
         </header>
 
         <main className="select-export-tool-step__main">
-          {connectionError && (
+          {/* {connectionError && (
             <div
               className="connection-error"
               role="alert"
@@ -146,7 +153,7 @@ const SelectExportToolStep: React.FC<CommonProps> = ({
                 </button>
               </div>
             </div>
-          )}
+          )} */}
 
           <div className="export-tool-options">
             <button
@@ -158,7 +165,9 @@ const SelectExportToolStep: React.FC<CommonProps> = ({
               aria-describedby="jira-description"
               tabIndex={0}
             >
-              <div className="export-tool-option__icon">🔗</div>
+              <div className="export-tool-option__icon">
+                <Image src={JiraLogo} alt="Jira Logo" width={40} height={40} />
+              </div>
               <div className="export-tool-option__content">
                 <h4>Jira</h4>
                 <p id="jira-description">Export test cases to Jira issues</p>
@@ -187,7 +196,12 @@ const SelectExportToolStep: React.FC<CommonProps> = ({
               tabIndex={0}
             >
               <div className="export-tool-option__icon" aria-hidden="true">
-                🔷
+                <Image
+                  src={AzureLogo}
+                  alt="Azure Logo"
+                  width={40}
+                  height={40}
+                />
               </div>
               <div className="export-tool-option__content">
                 <h4>Azure DevOps</h4>
@@ -196,18 +210,23 @@ const SelectExportToolStep: React.FC<CommonProps> = ({
             </button>
 
             <button
-              className="export-tool-option export-tool-option--testrail"
-              onClick={() => handleToolSelection("testrail")}
-              onKeyDown={(e) => handleKeyDown(e, "testrail")}
+              className="export-tool-option export-tool-option--polarian"
+              onClick={() => handleToolSelection("polarian")}
+              onKeyDown={(e) => handleKeyDown(e, "polarian")}
               aria-label="Export to TestRail (Coming soon)"
               tabIndex={0}
             >
               <div className="export-tool-option__icon" aria-hidden="true">
-                🚂
+                <Image
+                  src={PolarianLogo}
+                  alt="Polarian Logo"
+                  width={40}
+                  height={40}
+                />
               </div>
               <div className="export-tool-option__content">
-                <h4>TestRail</h4>
-                <p>Export to TestRail test cases</p>
+                <h4>Polarian</h4>
+                <p>Export to Polarian test cases</p>
               </div>
             </button>
 

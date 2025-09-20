@@ -23,7 +23,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     >
       <div className="project-card__header">
         <div className="project-card__key">{project.key}</div>
-        <div className="project-card__status">{isSelected ? "✓" : ""}</div>
+        {/* <div className="project-card__status">{isSelected ? "✓" : ""}</div> */}
       </div>
 
       <div className="project-card__content">

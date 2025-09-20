@@ -60,7 +60,9 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
     calculateStats(testCases);
 
   const getProgressPercentage = () => {
-    return total > 0 ? Math.round(((approved + exported) / total) * 100) : 0;
+    return total > 0
+      ? Math.round(((approved + exported + rejected) / total) * 100)
+      : 0;
   };
 
   const progressPercentage = getProgressPercentage();

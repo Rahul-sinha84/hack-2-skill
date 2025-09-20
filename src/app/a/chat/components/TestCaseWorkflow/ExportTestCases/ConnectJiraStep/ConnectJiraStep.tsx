@@ -6,6 +6,8 @@ import {
 } from "../../../../../../../components/ReactToastify/ReactToastify";
 import "./_connect_jira_step.scss";
 import { IoIosArrowBack } from "react-icons/io";
+import Image from "next/image";
+import JiraLogo from "@/assets/jira_logo.png";
 
 const ConnectJiraStep: React.FC<CommonProps> = ({
   curStep,
@@ -198,38 +200,31 @@ const ConnectJiraStep: React.FC<CommonProps> = ({
         </header>
 
         <main className="connect-jira-step__main">
-          {connectionError && (
-            <div
-              className="connect-jira-step__error"
-              role="alert"
-              aria-live="assertive"
-            >
-              <div className="connect-jira-step__error-icon" aria-hidden="true">
-                ⚠️
-              </div>
-              <div className="connect-jira-step__error-content">
-                <h4>Connection Error</h4>
-                <p>{connectionError}</p>
-                <button
-                  className="connect-jira-step__retry-btn"
-                  onClick={handleConnectJira}
-                  disabled={isConnecting}
-                  aria-label="Retry Jira connection"
-                >
-                  {isConnecting ? "Retrying..." : "Try Again"}
-                </button>
-              </div>
-            </div>
-          )}
-
           <div className="connect-jira-step__content">
             <div className="connect-jira-step__icon" aria-hidden="true">
-              🔗
+              <Image src={JiraLogo} alt="Jira Logo" width={40} height={40} />
             </div>
             <p className="connect-jira-step__info">
               You'll be redirected to Jira to authorize the connection. This
               allows us to create test case issues in your Jira project.
             </p>
+            {/* Info message about creating a project */}
+            <div
+              className="connect-jira-step__info-message"
+              role="info"
+              aria-live="polite"
+            >
+              <div className="connect-jira-step__info-icon" aria-hidden="true">
+                ℹ️
+              </div>
+              <div className="connect-jira-step__info-content">
+                <h4>Before You Connect</h4>
+                <p>
+                  Please make sure you have created a project on your Jira
+                  account before connecting.
+                </p>
+              </div>
+            </div>
 
             {isConnecting && (
               <div
@@ -273,6 +268,30 @@ const ConnectJiraStep: React.FC<CommonProps> = ({
               </div>
             )}
           </div>
+
+          {connectionError && (
+            <div
+              className="connect-jira-step__error"
+              role="alert"
+              aria-live="assertive"
+            >
+              <div className="connect-jira-step__error-icon" aria-hidden="true">
+                ⚠️
+              </div>
+              <div className="connect-jira-step__error-content">
+                <h4>Connection Error</h4>
+                <p>{connectionError}</p>
+                <button
+                  className="connect-jira-step__retry-btn"
+                  onClick={handleConnectJira}
+                  disabled={isConnecting}
+                  aria-label="Retry Jira connection"
+                >
+                  {isConnecting ? "Retrying..." : "Try Again"}
+                </button>
+              </div>
+            </div>
+          )}
         </main>
 
         <footer className="connect-jira-step__footer">

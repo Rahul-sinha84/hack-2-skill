@@ -42,7 +42,7 @@ export const POST = async (req: Request) => {
       cookieStore.set({
         name: JiraCookieKeys.CLOUD_ID,
         value: cloudId,
-        expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days
+        expires: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
@@ -50,7 +50,7 @@ export const POST = async (req: Request) => {
       });
     }
 
-    const { testCases, projectKey, issueType = "Task" } = await req.json();
+    const { testCases, projectKey, issueType } = await req.json();
 
     if (!testCases || !Array.isArray(testCases) || testCases.length === 0) {
       return NextResponse.json(
@@ -70,7 +70,7 @@ export const POST = async (req: Request) => {
     const issues = testCases.map((testCase) => ({
       fields: {
         project: {
-          key: projectKey || "DP", // Use provided projectKey or default to "DP"
+          key: projectKey,
         },
         summary: testCase.title,
         description: {

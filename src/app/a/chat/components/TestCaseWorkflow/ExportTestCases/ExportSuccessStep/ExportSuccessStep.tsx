@@ -14,7 +14,6 @@ const ExportSuccessStep: React.FC<CommonProps> = ({
   };
 
   const handleViewInJira = () => {
-    // TODO: Open Jira project in new tab
     if (exportState?.selectedProject) {
       // This would need the actual Jira URL - for now just show a message
       alert(`Would open Jira project: ${exportState.selectedProject.name}`);

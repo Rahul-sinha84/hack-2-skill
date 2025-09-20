@@ -74,6 +74,7 @@ const ExportTestCasesStep: React.FC<CommonProps> = ({
               )?.label || "Unknown Category",
           })),
           projectKey: exportState.selectedProject.key,
+          // ? default issue type is Task
           issueType: "Task",
         }),
       });

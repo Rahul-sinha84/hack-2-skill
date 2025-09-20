@@ -41,5 +41,9 @@ export default withAuth(
 
 // Configure which routes to run middleware on
 export const config = {
-  matcher: ["/a", "/login", "/"],
+  matcher: [
+    "/a/:path*", // Matches /a and all sub-paths like /a/chat, /a/connect, etc.
+    "/login",
+    "/",
+  ],
 };

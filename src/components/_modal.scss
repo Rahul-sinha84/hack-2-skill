@@ -35,12 +35,33 @@
   background-color: $color-primary-light-shade;
   border-radius: 0;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: flex-start;
   animation: modalSlideIn 0.3s ease-out;
   border: 1px solid $color-primary-light-shade-2;
+  overflow: auto;
+
+  // Custom scrollbar styling
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $color-primary;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $color-primary-light-shade-2;
+    border-radius: 3px;
+
+    &:hover {
+      background: $color-secondary;
+    }
+  }
 
   @keyframes modalSlideIn {
     from {
@@ -131,23 +152,23 @@
 }
 
 // Variant: disable modal content scroll for specific workflows
-.no-scroll-modal {
-  // tighter outer padding
-  padding: $spacing-md;
-  .modal__container {
-    // account for backdrop padding
-    max-height: calc(100vh - 2 * $spacing-md);
-    height: auto;
-  }
-  .modal__content {
-    overflow: hidden; // The content inside will manage its own scrolling
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    // tighter inner padding
-    padding: $spacing-sm $spacing-md;
-  }
-}
+// .no-scroll-modal {
+//   // tighter outer padding
+//   padding: $spacing-md;
+//   .modal__container {
+//     // account for backdrop padding
+//     max-height: calc(100vh - 2 * $spacing-md);
+//     height: auto;
+//   }
+//   .modal__content {
+//     overflow: hidden; // The content inside will manage its own scrolling
+//     height: 100%;
+//     display: flex;
+//     flex-direction: column;
+//     // tighter inner padding
+//     padding: $spacing-sm $spacing-md;
+//   }
+// }
 
 // Responsive design - removed padding to maintain full viewport
 

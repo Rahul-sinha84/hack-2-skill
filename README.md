@@ -99,6 +99,15 @@ DOCUMENT_AI_PROCESSOR_ID=your_processor_id
 # Gemini / Vertex AI
 GOOGLE_CLOUD_LOCATION=us-central1
 GEMINI_MODEL=gemini-1.5-pro
+
+# Jira Integration
+JIRA_CLIENT_ID=your_jira_oauth_client_id
+JIRA_CLIENT_SECRET=your_jira_oauth_client_secret
+JIRA_REDIRECT_URI=http://localhost:3000/api/jira/callback
+JIRA_CLIENT_URL=https://your-domain.atlassian.net
+
+# Development
+NEXT_PUBLIC_LIVE=false
 ```
 
 Notes:
@@ -242,6 +251,11 @@ Set the following Environment Variables in Vercel Project Settings → Environme
 - `DOCUMENT_AI_PROCESSOR_ID`
 - `GOOGLE_CLOUD_LOCATION` (e.g., `us-central1`)
 - `GEMINI_MODEL` (e.g., `gemini-1.5-pro`)
+- `JIRA_CLIENT_ID`
+- `JIRA_CLIENT_SECRET`
+- `JIRA_REDIRECT_URI` (e.g., `https://your-app.vercel.app/api/jira/callback`)
+- `JIRA_CLIENT_URL` (e.g., `https://your-domain.atlassian.net`)
+- `NEXT_PUBLIC_LIVE` (set to `true` for production)
 
 Provide Google credentials using ONE of:
 
