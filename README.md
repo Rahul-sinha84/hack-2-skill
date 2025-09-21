@@ -221,4 +221,4 @@ Open `http://localhost:3000`.
 
 ## License
 
-Proprietary – for hackathon/demo use. Update as needed.
+Proprietary – for hackathon use only.
