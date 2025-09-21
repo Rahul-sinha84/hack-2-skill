@@ -1,7 +1,7 @@
 # TestAI — AI Powered Test Case Generator
 
 **Hackathon Submission** for the Gen AI Exchange Hackathon by [Hack-2-Skills](https://vision.hack2skill.com/event/genaiexchangehackathon) \
- [Live demo](https://hack-2-skill.vercel.app/) 
+ [Live demo]((https://test-ai-gcp.vercel.app/)) 
 ## Problem Statement
 #### Automating Test Case Generation with AI (Professional Track):
 Develop an AI-powered system that automatically converts healthcare software requirements into compliant, traceable test cases integrated with enterprise toolchains.
