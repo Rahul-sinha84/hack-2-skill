@@ -27,6 +27,12 @@ export interface ExportWorkflowState {
     name: string;
     id: string;
   } | null;
+  selectedIssueType: {
+    id: string;
+    name: string;
+    description?: string;
+    iconUrl?: string;
+  } | null;
   exportResults: {
     total: number;
     exported: number;

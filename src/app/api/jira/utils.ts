@@ -27,6 +27,7 @@ export const refreshAccessToken = async (
     const data = await response.json();
 
     if (!response.ok) {
+      console.error(response);
       throw new Error("Failed to refresh access token");
     }
 
