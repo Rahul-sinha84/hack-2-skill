@@ -4,8 +4,16 @@ import "@/app/styles/_app.scss";
 import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
-  title: "Knull",
+  title: "TestAI",
   description: "Medical test cases generator",
+  icons: {
+    icon: [
+      { url: "/ai-logo.png", sizes: "32x32", type: "image/png" },
+      { url: "/ai-logo.png", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: "/ai-logo.png",
+    apple: "/ai-logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -28,8 +36,8 @@ export default function RootLayout({
           draggable
           limit={3}
           style={{
-            width: 'auto',
-            maxWidth: '500px',
+            width: "auto",
+            maxWidth: "500px",
           }}
         />
       </body>

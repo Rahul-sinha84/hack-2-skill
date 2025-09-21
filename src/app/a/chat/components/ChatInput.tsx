@@ -4,7 +4,11 @@ import React, { useRef, useState } from "react";
 import "./_chat_input.scss";
 import { IoIosAttach } from "react-icons/io";
 import { BiSolidSend } from "react-icons/bi";
-import { showToastInfo, showToastError, showToastSuccess } from "@/components/ReactToastify/ReactToastify";
+import {
+  showToastInfo,
+  showToastError,
+  showToastSuccess,
+} from "@/components/ReactToastify/ReactToastify";
 
 interface ChatInputProps {
   onSubmit: (message: string, file?: File) => void;
@@ -39,15 +43,19 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
 
   const handleFileSelect = (file: File) => {
     // Validate file type
-    const allowedTypes = ['application/pdf', 'text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const allowedTypes = [
+      "application/pdf",
+      "text/plain",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
     if (!allowedTypes.includes(file.type)) {
-      showToastError('Please upload a PDF, TXT, or DOCX file');
+      showToastError("Please upload a PDF, TXT, or DOCX file");
       return;
     }
 
     // Validate file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
-      showToastError('File size must be less than 10MB');
+      showToastError("File size must be less than 10MB");
       return;
     }
 
@@ -117,8 +125,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
     <article className="chat__input">
       <div className="chat__input__container">
         <div className="prefix">
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="attachment-icon"
             onClick={handleAttachmentClick}
             title="Upload file"
@@ -132,12 +140,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
             type="file"
             accept=".pdf,.txt,.docx"
             onChange={handleFileChange}
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
           />
         </div>
         <main className="main">
           <div
-            className={`drag-drop-area ${isDragOver ? 'drag-over' : ''}`}
+            className={`drag-drop-area ${isDragOver ? "drag-over" : ""}`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -145,7 +153,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
             {selectedFile && (
               <div className="selected-file">
                 <span>{selectedFile.name}</span>
-                <button type="button" onClick={removeFile} className="remove-file">
+                <button
+                  type="button"
+                  onClick={removeFile}
+                  className="remove-file"
+                >
                   ×
                 </button>
               </div>
@@ -156,7 +168,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
                   ref={textareaRef}
                   name="message"
                   value={message}
-                  placeholder={selectedFile ? "Add a message about your file..." : "Type your message..."}
+                  placeholder={
+                    selectedFile
+                      ? "Add a message about your file..."
+                      : "Type your message..."
+                  }
                   className="chat-input__textarea"
                   onKeyDown={handleKeyDown}
                   onInput={handleInput}
@@ -167,8 +183,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
           </div>
         </main>
         <div className="suffix">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="send-button"
             title="Send message"
             disabled={!message.trim() && !selectedFile}

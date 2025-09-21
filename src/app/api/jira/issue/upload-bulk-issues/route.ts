@@ -92,7 +92,7 @@ export const POST = async (req: Request) => {
           name: issueType,
         },
         // Add labels if needed
-        labels: ["Knull"],
+        labels: ["TestAI"],
         // Add priority if needed
         priority: testCase.priority ? { name: testCase.priority } : undefined,
       },
