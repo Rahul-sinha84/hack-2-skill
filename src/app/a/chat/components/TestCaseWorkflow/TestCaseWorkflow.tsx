@@ -36,6 +36,7 @@ const TestCaseWorkflow: React.FC<TestCaseWorkflowProps> = ({
     selectedTool: null,
     isJiraConnected: false,
     selectedProject: null,
+    selectedIssueType: null,
     exportResults: null,
   });
 
