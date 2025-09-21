@@ -1,4 +1,4 @@
-# TestAI — AI Powered Test Case Generator for Healthcare Software specifications
+# TestAI — AI Powered Test Case Generator
 
 **Hackathon Submission** for the Gen AI Exchange Hackathon by [Hack-2-Skills](https://vision.hack2skill.com/event/genaiexchangehackathon) \
  [Live demo](https://hack-2-skill.vercel.app/) 
