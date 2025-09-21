@@ -41,6 +41,14 @@ Develop an AI-powered system that automatically converts healthcare software req
 ![System Architecture Diagram](./final-architecture-diagram.png)
 
 
+## Wireframe Diagram
+
+## <img width="3456" height="2008" alt="image" src="https://github.com/user-attachments/assets/dc75d21b-0a51-4f88-8a69-d44578d69007" />
+
+## <img width="3456" height="1956" alt="image" src="https://github.com/user-attachments/assets/2ac9cca9-b133-452e-987b-4c6260fc91f4" />
+
+<img width="3454" height="1960" alt="image" src="https://github.com/user-attachments/assets/97d94afb-1418-4232-b273-7120e24e2ae4" />
+
 
 ## Project Structure
 
