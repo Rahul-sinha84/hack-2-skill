@@ -17,6 +17,7 @@ import {
   showToastError,
   showToastInfo,
 } from "@/components/ReactToastify/ReactToastify";
+import { GenerateUITestsResponse } from "@/types/generate-ui-tests";
 import "./_chat_layout.scss";
 
 const SmoothChatLayout: React.FC = () => {
@@ -73,7 +74,8 @@ const SmoothChatLayout: React.FC = () => {
     file: File,
     userQuery: string,
     chatId: string,
-    processingMessageId: string
+    processingMessageId: string,
+    gdprMode: boolean = true
   ) => {
     try {
       if (process.env.NEXT_PUBLIC_LIVE === "false") {
@@ -102,126 +104,164 @@ const SmoothChatLayout: React.FC = () => {
 
       setIsProcessing(true);
 
-      // Step 1: Scanning document
+      // Step 1: Document AI Processing
       updateProcessingMessage(
         processingMessageId,
-        "📄 Scanning PRD document..."
+        "📄 Processing document with Document AI..."
       );
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Small delay for UX
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      // Step 2: DLP Analysis
+      updateProcessingMessage(
+        processingMessageId,
+        "🔒 Analyzing document for sensitive data..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // Step 3: RAG Enhancement
+      updateProcessingMessage(
+        processingMessageId,
+        "🧠 Enhancing with RAG context..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Step 4: Knowledge Graph Generation
+      updateProcessingMessage(
+        processingMessageId,
+        "🕸️ Building knowledge graph..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // Step 5: Gemini AI Generation
+      updateProcessingMessage(
+        processingMessageId,
+        "⚡ Generating comprehensive test cases with Gemini AI..."
+      );
+      const generationStart =
+        typeof performance !== "undefined" ? performance.now() : Date.now();
+
+      // Use the external API endpoint
       const formData = new FormData();
       formData.append("file", file);
 
-      const documentResponse = await fetch("/api/document-ai", {
+        const testCaseResponse = await fetch(`http://localhost:8080/generate-ui-tests?gdpr_mode=${gdprMode}`, {
         method: "POST",
         body: formData,
       });
 
-      if (!documentResponse.ok) {
-        throw new Error("Failed to process document");
-      }
-
-      // Step 2: Reading document
-      updateProcessingMessage(
-        processingMessageId,
-        "🔍 Reading document content..."
-      );
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      const documentData = await documentResponse.json();
-      let documentText = documentData.data.fullText;
-      let tables = documentData.data.tables || [];
-
-      // Optimize: Truncate very long documents to speed up Gemini processing
-      const MAX_CHARS = 50000; // ~12,500 words limit for faster processing
-      if (documentText.length > MAX_CHARS) {
-        documentText =
-          documentText.substring(0, MAX_CHARS) +
-          "\n\n[Document truncated for faster processing...]";
-        console.log(
-          `Document truncated from ${documentData.data.fullText.length} to ${documentText.length} characters`
-        );
-      }
-
-      // Step 2.5: Show input document stats before generation
-      const characterCount = documentText.length;
-      const wordCount = documentText.trim().split(/\s+/).filter(Boolean).length;
-      updateProcessingMessage(
-        processingMessageId,
-        `📊 Analyzing a document with ${wordCount.toLocaleString()} words (~${characterCount.toLocaleString()} characters)...`
-      );
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-
-      // Step 3: Understanding context
-      updateProcessingMessage(
-        processingMessageId,
-        "🧠 Understanding context and requirements..."
-      );
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // Step 4: Generating test cases
-      updateProcessingMessage(
-        processingMessageId,
-        "⚡ Generating comprehensive test cases..."
-      );
-      const generationStart =
-        typeof performance !== "undefined" ? performance.now() : Date.now();
-      const testCaseResponse = await fetch("/api/gemini/generate-test-cases", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          documentText,
-          tables,
-          userQuery,
-          fileName: file.name,
-        }),
-      });
-
       if (!testCaseResponse.ok) {
-        throw new Error("Failed to generate test cases");
+        const errorText = await testCaseResponse.text();
+        console.error("API Error:", errorText);
+        throw new Error(`Failed to generate test cases: ${testCaseResponse.status} ${testCaseResponse.statusText}`);
       }
 
-      const testCaseData = await testCaseResponse.json();
+      const uiTestData: GenerateUITestsResponse = await testCaseResponse.json();
+      
+      // Debug: Check if each test case has unique traceability data
+      console.log("🔍 Debugging traceability data from API:");
+      uiTestData.test_suite.test_categories.forEach((category, catIndex) => {
+        console.log(`Category ${catIndex + 1} (${category.category_name}):`);
+        category.test_cases.forEach((testCase, tcIndex) => {
+          console.log(`  Test Case ${tcIndex + 1} (${testCase.title}):`, {
+            requirement_id: testCase.traceability?.requirement_id,
+            requirement_text: testCase.traceability?.requirement_text?.substring(0, 50) + "...",
+            pdf_locations_count: testCase.traceability?.pdf_locations?.length || 0
+          });
+        });
+      });
+      
       const generationEnd =
         typeof performance !== "undefined" ? performance.now() : Date.now();
       const generationSeconds = (generationEnd - generationStart) / 1000;
 
-      // Step 5: Complete processing
-      const documentSummary =
-        testCaseData.metadata?.documentSummary ||
-        `PRD document "${file.name}" processed successfully`;
-      const latencyInfo = `✨ Generated in ${generationSeconds.toFixed(
-        1
-      )} seconds.`;
-      const finalContent = `${documentSummary}. Generated ${
-        testCaseData.data.categories?.length || 0
-      } test categories with comprehensive test cases.\n${latencyInfo}`;
+      // Step 6: UI Enrichment
+      updateProcessingMessage(
+        processingMessageId,
+        "🎨 Enriching UI data..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
+      // Transform the response to match the existing structure
+      const transformedData = transformUITestResponse(uiTestData);
+
+      // Step 7: Complete processing
+      const documentSummary = `Document "${file.name}" processed with enhanced AI pipeline`;
+      const latencyInfo = `✨ Generated in ${generationSeconds.toFixed(1)} seconds.`;
+      const statsInfo = `📊 ${uiTestData.test_suite.statistics.total_tests} test cases across ${uiTestData.test_suite.statistics.total_categories} categories`;
+      const complianceInfo = `🛡️ ${uiTestData.test_suite.statistics.compliance_coverage}% compliance coverage`;
+      const finalContent = `${documentSummary}. ${statsInfo}. ${complianceInfo}.\n${latencyInfo}`;
+      
       completeProcessingMessage(
         processingMessageId,
         finalContent,
-        testCaseData.data
+        transformedData
       );
 
       return {
-        documentText,
-        testCases: testCaseData.data,
+        documentText: `Enhanced document processing with ${uiTestData.test_suite.pdf_outline.total_pages} pages`,
+        testCases: transformedData,
         fileName: file.name,
+        enhancedData: uiTestData, // Store the full enhanced data
       };
     } catch (error) {
       console.error("Error processing file:", error);
-      completeProcessingMessage(
-        processingMessageId,
-        "❌ Failed to process document and generate test cases. Please try again."
-      );
+      
+      // Check if it's a connection error to the external API
+      if (error instanceof Error && error.message.includes("Failed to fetch")) {
+        completeProcessingMessage(
+          processingMessageId,
+          "❌ Cannot connect to the test generation API. Please check your internet connection and try again."
+        );
+      } else {
+        completeProcessingMessage(
+          processingMessageId,
+          "❌ Failed to process document and generate test cases. Please try again."
+        );
+      }
       throw error;
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const handleMessageSubmit = async (message: string, file?: File) => {
+  // Transform the new response format to match existing structure
+  const transformUITestResponse = (uiTestData: GenerateUITestsResponse) => {
+    console.log("🔄 Transforming UI test response...");
+    
+    const categories = uiTestData.test_suite.test_categories.map((category, categoryIndex) => ({
+      id: `category_${categoryIndex + 1}`,
+      label: category.category_name,
+      description: `Enhanced ${category.category_name} with ${category.total_tests} test cases`,
+      testCases: category.test_cases.map((testCase, testCaseIndex) => {
+        console.log(`📝 Mapping test case: ${testCase.title}`, {
+          original_traceability: testCase.traceability,
+          requirement_id: testCase.traceability?.requirement_id
+        });
+        
+        return {
+          id: testCase.test_id,
+          title: testCase.title,
+          content: `${testCase.description}\n\nExpected Result: ${testCase.expected_result}\n\nSteps:\n${testCase.steps.map((step, i) => `${i + 1}. ${step}`).join('\n')}`,
+          priority: testCase.priority,
+          status: testCase.status,
+          traceability: testCase.traceability,
+          compliance_tags: testCase.compliance_tags,
+          tooltip: testCase.tooltip,
+          metadata: testCase.metadata,
+        };
+      }),
+    }));
+
+    return {
+      documentSummary: `Enhanced test generation for ${uiTestData.filename}`,
+      categories,
+      statistics: uiTestData.test_suite.statistics,
+      knowledge_graph: uiTestData.knowledge_graph,
+      pipeline_metadata: uiTestData.pipeline_metadata,
+    };
+  };
+
+  const handleMessageSubmit = async (message: string, file?: File, gdprMode?: boolean) => {
     try {
       const currentChatId = chatId || generateUniqueId("chat_");
 
@@ -245,7 +285,8 @@ const SmoothChatLayout: React.FC = () => {
           file,
           message,
           currentChatId,
-          processingMessage.id
+          processingMessage.id,
+          gdprMode || true
         );
       } else {
         // For text-only messages, just add a simple response
