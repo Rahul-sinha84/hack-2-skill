@@ -14,7 +14,9 @@
     flex-direction: column;
   }
 
-  &__header { display: none; }
+  &__header {
+    display: none;
+  }
 }
 
 // Dedicated topbar spanning full width, overlayed at very top
@@ -24,7 +26,11 @@
   left: 0;
   right: 0;
   z-index: 50;
-  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.10) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
   backdrop-filter: blur(6px);
   border-bottom: 1px solid rgba($color-text, 0.06);
 }
@@ -70,6 +76,12 @@
     font-size: $font-size-sm;
     font-weight: 700;
     color: $color-text;
+
+    &.guest-avatar {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: rgba(99, 102, 241, 0.9);
+    }
   }
 }
 
@@ -104,98 +116,103 @@
     border-radius: inherit;
     padding: 1.5px;
     background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask: linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-            mask-composite: exclude;
+    mask-composite: exclude;
     pointer-events: none;
   }
 
   &:hover {
-    background-image: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(139,92,246,0.12));
+    background-image: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.12),
+      rgba(139, 92, 246, 0.12)
+    );
   }
 }
 
 .chat__layout__main {
-    flex: 1;
-    overflow-y: auto;
-    padding-bottom: 120px; // Space for fixed input
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 120px; // Space for fixed input
 
-    @include tablet-up {
-      padding-bottom: 140px;
-    }
+  @include tablet-up {
+    padding-bottom: 140px;
+  }
 }
 
 .chat__layout__footer {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 .chat__layout__chats {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 0 $spacing-md;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-    height: 100%;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  height: 100%;
 
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
 
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-    &::-webkit-scrollbar-thumb {
-      background: rgba($color-text, 0.2);
-      border-radius: 3px;
-    }
+  &::-webkit-scrollbar-thumb {
+    background: rgba($color-text, 0.2);
+    border-radius: 3px;
+  }
 
-    &::-webkit-scrollbar-thumb:hover {
-      background: rgba($color-text, 0.3);
-    }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba($color-text, 0.3);
+  }
 
-    @include tablet-up {
-      max-width: 768px;
-      padding: 0 $spacing-lg;
-    }
+  @include tablet-up {
+    max-width: 768px;
+    padding: 0 $spacing-lg;
+  }
 
-    @include desktop-up {
-      max-width: 1024px;
-      padding: 0 $spacing-xl;
-    }
+  @include desktop-up {
+    max-width: 1024px;
+    padding: 0 $spacing-xl;
+  }
 }
 
 .chat__layout__input {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    padding: $spacing-md;
-    background-color: $color-primary;
-    border-top: 1px solid $color-primary-light-shade-2;
-    z-index: 10;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: $spacing-md;
+  background-color: $color-primary;
+  border-top: 1px solid $color-primary-light-shade-2;
+  z-index: 10;
 
-    @include tablet-up {
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 768px;
-      border-top: none;
-      border-top-left-radius: $border-radius-2xl;
-      border-top-right-radius: $border-radius-2xl;
-      padding: $spacing-lg;
-    }
+  @include tablet-up {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 768px;
+    border-top: none;
+    border-top-left-radius: $border-radius-2xl;
+    border-top-right-radius: $border-radius-2xl;
+    padding: $spacing-lg;
+  }
 
-    @include desktop-up {
-      max-width: 1024px;
-    }
+  @include desktop-up {
+    max-width: 1024px;
+  }
 }
 
 .chat__layout__input-new-chat {
-    margin-top: $spacing-lg;
+  margin-top: $spacing-lg;
 
-    @include mobile-only {
-      margin-top: $spacing-md;
-    }
+  @include mobile-only {
+    margin-top: $spacing-md;
+  }
 }
