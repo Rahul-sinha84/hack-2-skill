@@ -15,6 +15,26 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // webpack: (config, { isServer }) => {
+  //   if (!isServer) {
+  //     config.resolve.fallback = {
+  //       ...(config.resolve.fallback || {}),
+  //       canvas: false,
+  //     };
+  //     config.resolve.alias = {
+  //       ...(config.resolve.alias || {}),
+  //       canvas: false,
+  //     };
+  //   }
+  //   return config;
+  // },
+  webpack: (config) => {
+    config.externals.push({
+      canvas: "commonjs canvas",
+    });
+
+    return config;
+  },
 };
 
 export default nextConfig;

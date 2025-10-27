@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import generateUniqueId from "@/utils/generateUniqueId";
+import { TraceabilityData } from "../../../../types/pdf-highlighter";
 
 export enum TestCaseStatus {
   PENDING = "pending",
@@ -39,6 +40,7 @@ export interface ChatResponse {
     type: string;
     size: number;
   };
+  uploadedPDF?: File; // Store the original PDF file for highlighting
   user?: {
     name?: string | null;
     image?: string | null;
@@ -60,6 +62,7 @@ export interface TestCase {
   title: string;
   content: string;
   status: TestCaseStatus;
+  traceability?: TraceabilityData; // Include traceability data for PDF highlighting
 }
 
 export interface ChatContextType {
@@ -148,6 +151,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
             size: file.size,
           }
         : undefined,
+      uploadedPDF: file?.type === "application/pdf" ? file : undefined, // Store PDF file for highlighting
       user,
     };
     setChatResponses((prev) => [...prev, newChatResponse]);
