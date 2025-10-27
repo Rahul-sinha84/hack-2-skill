@@ -17,6 +17,7 @@ import {
   showToastError,
   showToastInfo,
 } from "@/components/ReactToastify/ReactToastify";
+import { VertexAgentResponse } from "@/types/vertex-agent-response";
 import "./_chat_layout.scss";
 
 const SmoothChatLayout: React.FC = () => {
@@ -73,10 +74,15 @@ const SmoothChatLayout: React.FC = () => {
     file: File,
     userQuery: string,
     chatId: string,
-    processingMessageId: string
+    processingMessageId: string,
+    gdprMode: boolean = true
   ) => {
     try {
-      if (process.env.NEXT_PUBLIC_LIVE === "false") {
+      // Only use mock tests if explicitly disabled via NEXT_PUBLIC_LIVE=false
+      // This allows testing the real API in development
+      const useMockTests = process.env.NEXT_PUBLIC_LIVE === "false";
+      
+      if (useMockTests) {
         const testCaseResponse = await fetch("/api/auth/get-mock-test-cases", {
           method: "GET",
         });
@@ -102,126 +108,127 @@ const SmoothChatLayout: React.FC = () => {
 
       setIsProcessing(true);
 
-      // Step 1: Scanning document
+      // Step 1: Document AI Processing
       updateProcessingMessage(
         processingMessageId,
-        "📄 Scanning PRD document..."
+        "📄 Processing document with Document AI..."
       );
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Small delay for UX
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      // Step 2: DLP Analysis
+      updateProcessingMessage(
+        processingMessageId,
+        "🔒 Analyzing document for sensitive data..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // Step 3: RAG Enhancement
+      updateProcessingMessage(
+        processingMessageId,
+        "🧠 Enhancing with RAG context..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Step 4: Knowledge Graph Generation
+      updateProcessingMessage(
+        processingMessageId,
+        "🕸️ Building knowledge graph..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // Step 5: Gemini AI Generation
+      updateProcessingMessage(
+        processingMessageId,
+        "⚡ Generating comprehensive test cases with Gemini AI..."
+      );
+      const generationStart =
+        typeof performance !== "undefined" ? performance.now() : Date.now();
+
+      // Use the secure PDF processor endpoint
       const formData = new FormData();
       formData.append("file", file);
 
-      const documentResponse = await fetch("/api/document-ai", {
+      const testCaseResponse = await fetch(`/api/generate-ui-tests`, {
         method: "POST",
         body: formData,
       });
 
-      if (!documentResponse.ok) {
-        throw new Error("Failed to process document");
-      }
-
-      // Step 2: Reading document
-      updateProcessingMessage(
-        processingMessageId,
-        "🔍 Reading document content..."
-      );
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      const documentData = await documentResponse.json();
-      let documentText = documentData.data.fullText;
-      let tables = documentData.data.tables || [];
-
-      // Optimize: Truncate very long documents to speed up Gemini processing
-      const MAX_CHARS = 50000; // ~12,500 words limit for faster processing
-      if (documentText.length > MAX_CHARS) {
-        documentText =
-          documentText.substring(0, MAX_CHARS) +
-          "\n\n[Document truncated for faster processing...]";
-        console.log(
-          `Document truncated from ${documentData.data.fullText.length} to ${documentText.length} characters`
-        );
-      }
-
-      // Step 2.5: Show input document stats before generation
-      const characterCount = documentText.length;
-      const wordCount = documentText.trim().split(/\s+/).filter(Boolean).length;
-      updateProcessingMessage(
-        processingMessageId,
-        `📊 Analyzing a document with ${wordCount.toLocaleString()} words (~${characterCount.toLocaleString()} characters)...`
-      );
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-
-      // Step 3: Understanding context
-      updateProcessingMessage(
-        processingMessageId,
-        "🧠 Understanding context and requirements..."
-      );
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // Step 4: Generating test cases
-      updateProcessingMessage(
-        processingMessageId,
-        "⚡ Generating comprehensive test cases..."
-      );
-      const generationStart =
-        typeof performance !== "undefined" ? performance.now() : Date.now();
-      const testCaseResponse = await fetch("/api/gemini/generate-test-cases", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          documentText,
-          tables,
-          userQuery,
-          fileName: file.name,
-        }),
-      });
-
       if (!testCaseResponse.ok) {
-        throw new Error("Failed to generate test cases");
+        const errorText = await testCaseResponse.text();
+        console.error("API Error:", errorText);
+        throw new Error(`Failed to generate test cases: ${testCaseResponse.status} ${testCaseResponse.statusText}`);
       }
 
-      const testCaseData = await testCaseResponse.json();
+      const responseData = await testCaseResponse.json();
+      
+      if (!responseData.success) {
+        throw new Error(responseData.error || 'Failed to generate test cases');
+      }
+
+      const apiResponse: VertexAgentResponse = responseData.metadata.enhancedData;
+      const transformedData = responseData.data;
+      
+      // Debug: Check the new response structure
+      console.log("🔍 Debugging response from Vertex Agent API:");
+      console.log("Response structure:", apiResponse);
+      console.log(`Total tests: ${apiResponse.test_suite.statistics.total_tests}`);
+      console.log(`Categories: ${apiResponse.test_suite.test_categories?.length || 0}`);
+      console.log(`Knowledge graph nodes: ${apiResponse.knowledge_graph.metadata.total_nodes || 0}`);
+      console.log(`Coverage score: ${apiResponse.coverage_analysis?.coverage_score || 0}`);
+      
       const generationEnd =
         typeof performance !== "undefined" ? performance.now() : Date.now();
       const generationSeconds = (generationEnd - generationStart) / 1000;
 
-      // Step 5: Complete processing
-      const documentSummary =
-        testCaseData.metadata?.documentSummary ||
-        `PRD document "${file.name}" processed successfully`;
-      const latencyInfo = `✨ Generated in ${generationSeconds.toFixed(
-        1
-      )} seconds.`;
-      const finalContent = `${documentSummary}. Generated ${
-        testCaseData.data.categories?.length || 0
-      } test categories with comprehensive test cases.\n${latencyInfo}`;
+      // Step 6: UI Enrichment
+      updateProcessingMessage(
+        processingMessageId,
+        "🎨 Enriching UI data..."
+      );
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
+      // Step 7: Complete processing
+      const documentSummary = `Document "${file.name}" processed with Vertex Agent AI pipeline`;
+      const latencyInfo = `✨ Generated in ${generationSeconds.toFixed(1)} seconds.`;
+      const statsInfo = `📊 ${apiResponse.test_suite.statistics.total_tests} test cases across ${apiResponse.test_suite.test_categories?.length || 0} categories`;
+      const coverageInfo = `🎯 ${(apiResponse.coverage_analysis?.coverage_score || 0).toFixed(1)}% coverage score`;
+      const finalContent = `${documentSummary}. ${statsInfo}. ${coverageInfo}.\n${latencyInfo}`;
+      
       completeProcessingMessage(
         processingMessageId,
         finalContent,
-        testCaseData.data
+        transformedData
       );
 
       return {
-        documentText,
-        testCases: testCaseData.data,
+        documentText: `Enhanced document processing completed`,
+        testCases: transformedData,
         fileName: file.name,
+        enhancedData: apiResponse, // Store the full enhanced data
       };
     } catch (error) {
       console.error("Error processing file:", error);
-      completeProcessingMessage(
-        processingMessageId,
-        "❌ Failed to process document and generate test cases. Please try again."
-      );
+      
+      // Check if it's a connection error to the external API
+      if (error instanceof Error && error.message.includes("Failed to fetch")) {
+        completeProcessingMessage(
+          processingMessageId,
+          "❌ Cannot connect to the test generation API. Please check your internet connection and try again."
+        );
+      } else {
+        completeProcessingMessage(
+          processingMessageId,
+          "❌ Failed to process document and generate test cases. Please try again."
+        );
+      }
       throw error;
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const handleMessageSubmit = async (message: string, file?: File) => {
+
+  const handleMessageSubmit = async (message: string, file?: File, gdprMode?: boolean) => {
     try {
       const currentChatId = chatId || generateUniqueId("chat_");
 
@@ -245,7 +252,8 @@ const SmoothChatLayout: React.FC = () => {
           file,
           message,
           currentChatId,
-          processingMessage.id
+          processingMessage.id,
+          gdprMode || true
         );
       } else {
         // For text-only messages, just add a simple response

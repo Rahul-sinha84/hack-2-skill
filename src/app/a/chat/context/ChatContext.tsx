@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import generateUniqueId from "@/utils/generateUniqueId";
+import { EnhancedTestCategory, EnhancedTestCase } from "@/types/generate-ui-tests";
 
 export enum TestCaseStatus {
   PENDING = "pending",
@@ -60,6 +61,25 @@ export interface TestCase {
   title: string;
   content: string;
   status: TestCaseStatus;
+  // Enhanced fields from new endpoint
+  priority?: "Critical" | "High" | "Medium" | "Low";
+  expected_result?: string;
+  steps?: string[];
+  traceability?: {
+    requirement_id: string;
+    requirement_text: string;
+    pdf_locations: any[];
+    linked_edges: string[];
+    compliance_references: string[];
+  };
+  compliance_tags?: any[];
+  tooltip?: string;
+  metadata?: {
+    created_by: string;
+    confidence: number;
+    auto_generated: boolean;
+    rag_enhanced: boolean;
+  };
 }
 
 export interface ChatContextType {
@@ -240,6 +260,14 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
                   title: testCase.title || `Test Case ${testCaseIndex + 1}`,
                   content: testCase.content || "Generated test case content",
                   status: TestCaseStatus.PENDING,
+                  // Enhanced fields from new endpoint
+                  priority: testCase.priority,
+                  expected_result: testCase.expected_result,
+                  steps: testCase.steps,
+                  traceability: testCase.traceability,
+                  compliance_tags: testCase.compliance_tags,
+                  tooltip: testCase.tooltip,
+                  metadata: testCase.metadata,
                 };
                 newTestCases.push(newTestCase);
               }
@@ -329,6 +357,14 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
                   title: testCase.title || `Test Case ${testCaseIndex + 1}`,
                   content: testCase.content || "Generated test case content",
                   status: TestCaseStatus.PENDING,
+                  // Enhanced fields from new endpoint
+                  priority: testCase.priority,
+                  expected_result: testCase.expected_result,
+                  steps: testCase.steps,
+                  traceability: testCase.traceability,
+                  compliance_tags: testCase.compliance_tags,
+                  tooltip: testCase.tooltip,
+                  metadata: testCase.metadata,
                 };
                 newTestCases.push(newTestCase);
               }

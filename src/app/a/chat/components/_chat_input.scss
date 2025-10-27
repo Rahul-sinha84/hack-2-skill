@@ -49,6 +49,41 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   }
 }
 
+.gdpr-toggle {
+  display: flex;
+  align-items: center;
+  margin-right: $spacing-sm;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    color: $color-text;
+    user-select: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &__input {
+    width: 16px;
+    height: 16px;
+    accent-color: $color-primary;
+    cursor: pointer;
+  }
+
+  &__text {
+    font-weight: 500;
+    font-size: $font-size-xs;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }

@@ -11,7 +11,7 @@ import {
 } from "@/components/ReactToastify/ReactToastify";
 
 interface ChatInputProps {
-  onSubmit: (message: string, file?: File) => void;
+  onSubmit: (message: string, file?: File, gdprMode?: boolean) => void;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
@@ -20,6 +20,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
   const [message, setMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [gdprMode, setGdprMode] = useState(true);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +32,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
       return;
     }
 
-    onSubmit(message, selectedFile || undefined);
+    onSubmit(message, selectedFile || undefined, gdprMode);
     // Clear the form after submission
     setMessage("");
     setSelectedFile(null);
@@ -183,6 +184,17 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
           </div>
         </main>
         <div className="suffix">
+          <div className="gdpr-toggle">
+            <label className="gdpr-toggle__label" title="GDPR Compliance Mode">
+              <input
+                type="checkbox"
+                checked={gdprMode}
+                onChange={(e) => setGdprMode(e.target.checked)}
+                className="gdpr-toggle__input"
+              />
+              <span className="gdpr-toggle__text">GDPR</span>
+            </label>
+          </div>
           <button
             type="submit"
             className="send-button"
