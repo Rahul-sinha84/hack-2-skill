@@ -17,7 +17,7 @@ import {
   showToastError,
   showToastInfo,
 } from "@/components/ReactToastify/ReactToastify";
-import { GenerateUITestsResponse } from "@/types/generate-ui-tests";
+import { VertexAgentResponse } from "@/types/vertex-agent-response";
 import "./_chat_layout.scss";
 
 const SmoothChatLayout: React.FC = () => {
@@ -78,7 +78,11 @@ const SmoothChatLayout: React.FC = () => {
     gdprMode: boolean = true
   ) => {
     try {
-      if (process.env.NEXT_PUBLIC_LIVE === "false") {
+      // Only use mock tests if explicitly disabled via NEXT_PUBLIC_LIVE=false
+      // This allows testing the real API in development
+      const useMockTests = process.env.NEXT_PUBLIC_LIVE === "false";
+      
+      if (useMockTests) {
         const testCaseResponse = await fetch("/api/auth/get-mock-test-cases", {
           method: "GET",
         });
@@ -140,11 +144,11 @@ const SmoothChatLayout: React.FC = () => {
       const generationStart =
         typeof performance !== "undefined" ? performance.now() : Date.now();
 
-      // Use the external API endpoint
+      // Use the secure PDF processor endpoint
       const formData = new FormData();
       formData.append("file", file);
 
-        const testCaseResponse = await fetch(`http://localhost:8080/generate-ui-tests?gdpr_mode=${gdprMode}`, {
+      const testCaseResponse = await fetch(`/api/generate-ui-tests`, {
         method: "POST",
         body: formData,
       });
@@ -155,20 +159,22 @@ const SmoothChatLayout: React.FC = () => {
         throw new Error(`Failed to generate test cases: ${testCaseResponse.status} ${testCaseResponse.statusText}`);
       }
 
-      const uiTestData: GenerateUITestsResponse = await testCaseResponse.json();
+      const responseData = await testCaseResponse.json();
       
-      // Debug: Check if each test case has unique traceability data
-      console.log("🔍 Debugging traceability data from API:");
-      uiTestData.test_suite.test_categories.forEach((category, catIndex) => {
-        console.log(`Category ${catIndex + 1} (${category.category_name}):`);
-        category.test_cases.forEach((testCase, tcIndex) => {
-          console.log(`  Test Case ${tcIndex + 1} (${testCase.title}):`, {
-            requirement_id: testCase.traceability?.requirement_id,
-            requirement_text: testCase.traceability?.requirement_text?.substring(0, 50) + "...",
-            pdf_locations_count: testCase.traceability?.pdf_locations?.length || 0
-          });
-        });
-      });
+      if (!responseData.success) {
+        throw new Error(responseData.error || 'Failed to generate test cases');
+      }
+
+      const apiResponse: VertexAgentResponse = responseData.metadata.enhancedData;
+      const transformedData = responseData.data;
+      
+      // Debug: Check the new response structure
+      console.log("🔍 Debugging response from Vertex Agent API:");
+      console.log("Response structure:", apiResponse);
+      console.log(`Total tests: ${apiResponse.test_suite.statistics.total_tests}`);
+      console.log(`Categories: ${apiResponse.test_suite.test_categories?.length || 0}`);
+      console.log(`Knowledge graph nodes: ${apiResponse.knowledge_graph.metadata.total_nodes || 0}`);
+      console.log(`Coverage score: ${apiResponse.coverage_analysis?.coverage_score || 0}`);
       
       const generationEnd =
         typeof performance !== "undefined" ? performance.now() : Date.now();
@@ -181,15 +187,12 @@ const SmoothChatLayout: React.FC = () => {
       );
       await new Promise((resolve) => setTimeout(resolve, 600));
 
-      // Transform the response to match the existing structure
-      const transformedData = transformUITestResponse(uiTestData);
-
       // Step 7: Complete processing
-      const documentSummary = `Document "${file.name}" processed with enhanced AI pipeline`;
+      const documentSummary = `Document "${file.name}" processed with Vertex Agent AI pipeline`;
       const latencyInfo = `✨ Generated in ${generationSeconds.toFixed(1)} seconds.`;
-      const statsInfo = `📊 ${uiTestData.test_suite.statistics.total_tests} test cases across ${uiTestData.test_suite.statistics.total_categories} categories`;
-      const complianceInfo = `🛡️ ${uiTestData.test_suite.statistics.compliance_coverage}% compliance coverage`;
-      const finalContent = `${documentSummary}. ${statsInfo}. ${complianceInfo}.\n${latencyInfo}`;
+      const statsInfo = `📊 ${apiResponse.test_suite.statistics.total_tests} test cases across ${apiResponse.test_suite.test_categories?.length || 0} categories`;
+      const coverageInfo = `🎯 ${(apiResponse.coverage_analysis?.coverage_score || 0).toFixed(1)}% coverage score`;
+      const finalContent = `${documentSummary}. ${statsInfo}. ${coverageInfo}.\n${latencyInfo}`;
       
       completeProcessingMessage(
         processingMessageId,
@@ -198,10 +201,10 @@ const SmoothChatLayout: React.FC = () => {
       );
 
       return {
-        documentText: `Enhanced document processing with ${uiTestData.test_suite.pdf_outline.total_pages} pages`,
+        documentText: `Enhanced document processing completed`,
         testCases: transformedData,
         fileName: file.name,
-        enhancedData: uiTestData, // Store the full enhanced data
+        enhancedData: apiResponse, // Store the full enhanced data
       };
     } catch (error) {
       console.error("Error processing file:", error);
@@ -224,42 +227,6 @@ const SmoothChatLayout: React.FC = () => {
     }
   };
 
-  // Transform the new response format to match existing structure
-  const transformUITestResponse = (uiTestData: GenerateUITestsResponse) => {
-    console.log("🔄 Transforming UI test response...");
-    
-    const categories = uiTestData.test_suite.test_categories.map((category, categoryIndex) => ({
-      id: `category_${categoryIndex + 1}`,
-      label: category.category_name,
-      description: `Enhanced ${category.category_name} with ${category.total_tests} test cases`,
-      testCases: category.test_cases.map((testCase, testCaseIndex) => {
-        console.log(`📝 Mapping test case: ${testCase.title}`, {
-          original_traceability: testCase.traceability,
-          requirement_id: testCase.traceability?.requirement_id
-        });
-        
-        return {
-          id: testCase.test_id,
-          title: testCase.title,
-          content: `${testCase.description}\n\nExpected Result: ${testCase.expected_result}\n\nSteps:\n${testCase.steps.map((step, i) => `${i + 1}. ${step}`).join('\n')}`,
-          priority: testCase.priority,
-          status: testCase.status,
-          traceability: testCase.traceability,
-          compliance_tags: testCase.compliance_tags,
-          tooltip: testCase.tooltip,
-          metadata: testCase.metadata,
-        };
-      }),
-    }));
-
-    return {
-      documentSummary: `Enhanced test generation for ${uiTestData.filename}`,
-      categories,
-      statistics: uiTestData.test_suite.statistics,
-      knowledge_graph: uiTestData.knowledge_graph,
-      pipeline_metadata: uiTestData.pipeline_metadata,
-    };
-  };
 
   const handleMessageSubmit = async (message: string, file?: File, gdprMode?: boolean) => {
     try {

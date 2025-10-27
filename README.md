@@ -166,6 +166,7 @@ sequenceDiagram
   - `GEMINI_MODEL` (e.g., "gemini-1.5-pro")
   - `JIRA_CLIENT_ID`, `JIRA_CLIENT_SECRET`, `JIRA_REDIRECT_URI`
   - `JIRA_CLIENT_URL` (Atlassian Cloud URL)
+  - `VERTEX_AGENT_API_URL` (Vertex Agent API endpoint)
   - `NEXTAUTH_SECRET` (NextAuth session secret)
 
 ## Environment Variables
@@ -202,6 +203,9 @@ JIRA_CLIENT_ID=your_jira_oauth_client_id
 JIRA_CLIENT_SECRET=your_jira_oauth_client_secret
 JIRA_REDIRECT_URI=http://localhost:3000/api/jira/callback
 JIRA_CLIENT_URL=https://your-domain.atlassian.net
+
+# Vertex Agent API
+VERTEX_AGENT_API_URL=https://vertex-agent-api-lhvgyyfwuq-uc.a.run.app
 
 # Development
 NEXT_PUBLIC_LIVE=false
