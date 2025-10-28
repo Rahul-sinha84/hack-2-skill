@@ -3,7 +3,7 @@
 
 .chat__layout {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   padding-top: 54px; // space for fixed TopBar
@@ -12,6 +12,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0; // Allow flex item to shrink below content size
   }
 
   &__header { display: none; }
@@ -47,6 +48,49 @@
   display: flex;
   align-items: center;
   gap: $spacing-md;
+}
+
+.topbar__theme-toggle {
+  @include button-base;
+  width: 28px;
+  height: 28px;
+  border-radius: $border-radius-full;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.7) !important;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  svg {
+    width: 18px !important;
+    height: 18px !important;
+    fill: rgba(255, 255, 255, 0.7) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    transition: all 0.3s ease;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.95) !important;
+
+    svg {
+      transform: rotate(20deg);
+      fill: rgba(255, 255, 255, 0.95) !important;
+      color: rgba(255, 255, 255, 0.95) !important;
+    }
+  }
+
+  &:active {
+    svg {
+      transform: rotate(0deg);
+    }
+  }
 }
 
 .topbar__avatar {
@@ -117,12 +161,10 @@
 
 .chat__layout__main {
     flex: 1;
-    overflow-y: auto;
-    padding-bottom: 120px; // Space for fixed input
-
-    @include tablet-up {
-      padding-bottom: 140px;
-    }
+    min-height: 0; // Allow flex item to shrink
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .chat__layout__footer {
@@ -133,10 +175,11 @@
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 $spacing-md;
+    padding: 0 $spacing-md 120px $spacing-md; // Added bottom padding for fixed input
     overflow-y: auto;
     scroll-behavior: smooth;
-    height: 100%;
+    flex: 1;
+    min-height: 0; // Allow flex item to shrink
 
     &::-webkit-scrollbar {
       width: 6px;
@@ -157,12 +200,12 @@
 
     @include tablet-up {
       max-width: 768px;
-      padding: 0 $spacing-lg;
+      padding: 0 $spacing-lg 140px $spacing-lg;
     }
 
     @include desktop-up {
       max-width: 1024px;
-      padding: 0 $spacing-xl;
+      padding: 0 $spacing-xl 140px $spacing-xl;
     }
 }
 

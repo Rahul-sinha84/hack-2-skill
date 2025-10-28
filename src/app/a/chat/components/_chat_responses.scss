@@ -41,6 +41,14 @@
         font-weight: 600;
         color: $color-text;
         margin-bottom: $spacing-md;
+
+        .brand-text {
+          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          font-weight: 700;
+        }
       }
 
       p {

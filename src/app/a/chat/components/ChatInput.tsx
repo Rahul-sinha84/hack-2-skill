@@ -20,7 +20,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
   const [message, setMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [gdprMode, setGdprMode] = useState(true);
+  const [gdprMode, setGdprMode] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,7 +124,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
 
   return (
     <article className="chat__input">
-      <div className="chat__input__container">
+      <div className={`chat__input__container ${gdprMode ? 'gdpr-active' : ''}`}>
         <div className="prefix">
           <button
             type="button"
@@ -172,7 +172,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
                   placeholder={
                     selectedFile
                       ? "Add a message about your file..."
-                      : "Type your message..."
+                      : "Upload PRD document"
                   }
                   className="chat-input__textarea"
                   onKeyDown={handleKeyDown}
@@ -185,14 +185,24 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
         </main>
         <div className="suffix">
           <div className="gdpr-toggle">
-            <label className="gdpr-toggle__label" title="GDPR Compliance Mode">
+            <label className="gdpr-toggle__label" title={gdprMode ? "GDPR Mode: ON - Sensitive data protection enabled" : "GDPR Mode: OFF"}>
               <input
                 type="checkbox"
                 checked={gdprMode}
                 onChange={(e) => setGdprMode(e.target.checked)}
                 className="gdpr-toggle__input"
               />
-              <span className="gdpr-toggle__text">GDPR</span>
+              <span className="gdpr-toggle__switch">
+                <span className="gdpr-toggle__slider"></span>
+              </span>
+              <span className="gdpr-toggle__text">
+                <img
+                  src={gdprMode ? "/shield.png" : "/shield-off.png"}
+                  alt="Privacy Shield"
+                  className="gdpr-toggle__icon"
+                />
+                <span className="gdpr-toggle__label-text">GDPR</span>
+              </span>
             </label>
           </div>
           <button
@@ -206,6 +216,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
           </button>
         </div>
       </div>
+      {gdprMode && (
+        <div className="gdpr-info">
+          <span>All uploaded documents are processed securely and anonymized in compliance with GDPR</span>
+        </div>
+      )}
     </article>
   );
 };
