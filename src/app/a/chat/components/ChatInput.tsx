@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react";
 import "./_chat_input.scss";
 import { IoIosAttach } from "react-icons/io";
 import { BiSolidSend } from "react-icons/bi";
+import { IoDocument } from "react-icons/io5";
 import {
   showToastInfo,
   showToastError,
@@ -151,20 +152,21 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSubmit }) => {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            {selectedFile && (
-              <div className="selected-file">
-                <span>{selectedFile.name}</span>
-                <button
-                  type="button"
-                  onClick={removeFile}
-                  className="remove-file"
-                >
-                  ×
-                </button>
-              </div>
-            )}
             <form onSubmit={handleSubmit} className="" id="chat-form">
               <div className="input-wrapper">
+                {selectedFile && (
+                  <div className="selected-file">
+                    <IoDocument className="file-icon" />
+                    <span>{selectedFile.name}</span>
+                    <button
+                      type="button"
+                      onClick={removeFile}
+                      className="remove-file"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
                 <textarea
                   ref={textareaRef}
                   name="message"

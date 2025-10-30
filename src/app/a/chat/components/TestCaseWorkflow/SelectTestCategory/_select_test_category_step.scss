@@ -17,15 +17,15 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   }
 
   &__layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: $spacing-xl;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
     height: 100%; // Constrain to modal content height
     max-height: 100%;
     overflow: hidden; // Prevent layout from scrolling
 
     @include mobile-only {
-      gap: $spacing-lg;
+      gap: $spacing-sm;
     }
   }
 
@@ -61,12 +61,12 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 
     .main-section-header {
       flex-shrink: 0; // Header stays fixed
-      padding-bottom: $spacing-sm;
+      padding-bottom: 8px;
       text-align: center;
     }
 
     .main-section-title {
-      font-size: $font-size-3xl !important;
+      font-size: $font-size-2xl !important;
       font-weight: 800;
       margin: 0;
       background-image: $brand-gradient;
@@ -80,38 +80,40 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     }
 
     .main-section-subtitle {
-      font-size: $font-size-sm;
+      font-size: $font-size-xs;
       color: $color-text-light-shade;
       margin: 0;
+      margin-top: 2px;
     }
 
     .test-category-cards {
-      margin-top: $spacing-2xl !important;
+      margin-top: $spacing-md !important;
       flex: 1; // Take remaining space
       display: grid;
-      gap: $spacing-md;
-      overflow-y: auto; // ONLY this scrolls
-      overflow-x: hidden;
-      padding-right: $spacing-sm;
+      gap: $spacing-sm;
+      overflow: hidden;
+      padding: 8px;
       height: 0; // Force flex to work properly
       justify-content: start; // Left align for consistency
+      align-content: start;
 
       @include mobile-only {
         grid-template-columns: 1fr;
-        gap: $spacing-md;
+        gap: $spacing-xs;
         justify-content: stretch;
+        padding: 8px;
       }
 
       @include tablet-up {
         // Stable responsive grid regardless of item count
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         max-width: none;
         margin: 0;
       }
 
       @include desktop-up {
         // Stable responsive grid regardless of item count
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         max-width: none;
         margin: 0;
       }
@@ -119,43 +121,8 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       // Compact version for smaller cards
       &--compact {
         .test-category-card {
-          min-height: 200px; // Further reduced from 240px to 200px
-
-          @include mobile-only {
-            min-height: 180px; // Reduced from 220px to 180px
-          }
-
-          // Adjust internal spacing for smaller cards
-          padding: $spacing-md; // Reduced padding
-
-          .test-category-card__header {
-            margin-bottom: $spacing-md; // Reduced from $spacing-lg
-          }
-
-          .test-category-card__description {
-            margin-bottom: $spacing-md; // Reduced from $spacing-xl
-            font-size: $font-size-xs; // Smaller font size
-            line-height: 1.4; // Tighter line height
-          }
-
-          .test-category-card__chart {
-            margin-bottom: $spacing-md; // Reduced from $spacing-xl
-
-            svg {
-              height: 50px; // Reduced from 60px
-            }
-          }
-
-          .test-category-card__title-badge {
-            padding: 4px 8px; // Reduced padding
-            font-size: 10px; // Smaller font
-          }
-
-          .test-category-card__count-badge {
-            width: 24px; // Reduced from 28px
-            height: 24px;
-            font-size: 10px; // Smaller font
-          }
+          // Heights are already set in the main card styles
+          // No need to override here as we've optimized the base card
         }
       }
 
@@ -165,15 +132,15 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 
   &__footer {
     flex-shrink: 0;
-    padding: $spacing-lg 0 0;
-    margin-top: $spacing-lg;
+    padding: $spacing-sm 0 0;
+    margin-top: $spacing-sm;
     display: flex;
     justify-content: center;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 
     @include mobile-only {
-      padding: $spacing-md 0 0;
-      margin-top: $spacing-md;
+      padding: $spacing-xs 0 0;
+      margin-top: $spacing-xs;
     }
   }
 
@@ -181,23 +148,23 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     @include button-base;
     background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 35%, #ec4899 100%);
     color: white;
-    padding: 16px 32px;
-    font-size: $font-size-base;
+    padding: 12px 28px;
+    font-size: $font-size-sm;
     font-weight: 600;
-    min-width: 200px;
-    border-radius: 16px;
+    min-width: 180px;
+    border-radius: 12px;
     border: none;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3),
-      0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 24px rgba(59, 130, 246, 0.3),
+      0 3px 12px rgba(0, 0, 0, 0.1);
 
     @include mobile-only {
-      min-width: 180px;
-      padding: 14px 28px;
-      font-size: $font-size-sm;
+      min-width: 160px;
+      padding: 10px 24px;
+      font-size: $font-size-xs;
     }
 
     // Subtle gradient overlay
