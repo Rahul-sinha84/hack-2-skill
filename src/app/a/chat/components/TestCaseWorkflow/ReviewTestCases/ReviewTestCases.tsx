@@ -40,6 +40,20 @@ const ReviewTestCases = ({
           </h3>
         </header>
         <main className="review-test-cases__main">
+          <div className="review-test-cases__main__test-case-container">
+            <TestCasesContainer
+              testCategoryId={selectedTestCategory!.id}
+              onSelect={selectTestCase}
+            />
+          </div>
+          {/* <div className="review-test-cases__main__left">
+              <AmendTestCase
+                data={selectedTestCase}
+                testCategory={selectedTestCategory!}
+              />
+            </div>
+            <div className="review-test-cases__main__right">
+            </div> */}
           <div className="review-test-cases__main__pdf-container">
             {currentFile?.file ? (
               <PDFViewer
@@ -63,20 +77,6 @@ const ReviewTestCases = ({
               />
             ) : null}
           </div>
-          <div className="review-test-cases__main__test-case-container">
-            <TestCasesContainer
-              testCategoryId={selectedTestCategory!.id}
-              onSelect={selectTestCase}
-            />
-          </div>
-          {/* <div className="review-test-cases__main__left">
-            <AmendTestCase
-              data={selectedTestCase}
-              testCategory={selectedTestCategory!}
-            />
-          </div>
-          <div className="review-test-cases__main__right">
-          </div> */}
         </main>
         <footer className="review-test-cases__footer"></footer>
       </div>
