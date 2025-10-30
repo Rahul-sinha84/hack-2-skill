@@ -554,7 +554,7 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
           ) : (
             <div className="empty-chat">
               <div className="welcome-message">
-                <h2>Welcome to Test Case Generator</h2>
+                <h2>Welcome to <span className="brand-text">TestAI</span></h2>
                 <p>
                   Upload a PRD document and I'll help you generate comprehensive
                   test cases.

@@ -67,76 +67,80 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
 
   const progressPercentage = getProgressPercentage();
 
+  // Get icon based on category type
+  const getCategoryIcon = (type: string) => {
+    const iconMap: Record<string, string> = {
+      functional: "/neural.png",
+      performance: "/cpu.png",
+      security: "/cyber-security.png",
+      "ui-ux": "/shapes.png",
+      integration: "/settings.png",
+      api: "/abstract-shape.png",
+      compliance: "/abstract-shape.png",
+      default: "/abstract-shape.png",
+    };
+
+    const iconSrc = iconMap[type] || iconMap.default;
+
+    return (
+      <img
+        src={iconSrc}
+        alt={`${type} icon`}
+        className="test-category-card__icon-image"
+      />
+    );
+  };
+
   return (
     <button
       onClick={() => onSelect({ ...data, testCases })}
       key={data.id}
       className={`test-category-card test-category-card--${categoryType}`}
     >
+      {/* Header with Icon + Title */}
       <div className="test-category-card__header">
-        <h3 className="test-category-card__title test-category-card__title--inline">
-          {data.label}
-        </h3>
-        <div className="test-category-card__count-badge">{total}</div>
+        <div className="test-category-card__header-left">
+          <div className="test-category-card__icon-wrapper">
+            {getCategoryIcon(categoryType)}
+          </div>
+          <h2 className="test-category-card__title">{data.label}</h2>
+        </div>
       </div>
 
-      <div className="test-category-card__content">
-        <p className="test-category-card__description">{data.description}</p>
+      {/* Total Count Badge */}
+      <div className="test-category-card__count-section">
+        <span className="test-category-card__count-label">Total Cases</span>
+        <p className="test-category-card__count-value">{total}</p>
+      </div>
 
-        <div className="test-category-card__progress">
-          <div className="test-category-card__progress-header">
-            <span className="test-category-card__progress-label">Progress</span>
-            <span className="test-category-card__progress-percentage">
-              {progressPercentage}%
-            </span>
-          </div>
+      {/* Stats Grid */}
+      <div className="test-category-card__stats-grid">
+        <div className="test-category-card__stat test-category-card__stat--approved">
+          <span className="test-category-card__stat-label">Approved</span>
+          <p className="test-category-card__stat-value">{approved}</p>
+        </div>
+        <div className="test-category-card__stat test-category-card__stat--rejected">
+          <span className="test-category-card__stat-label">Rejected</span>
+          <p className="test-category-card__stat-value">{rejected}</p>
+        </div>
+        <div className="test-category-card__stat test-category-card__stat--pending">
+          <span className="test-category-card__stat-label">Pending</span>
+          <p className="test-category-card__stat-value">{pending}</p>
+        </div>
+      </div>
+
+      {/* Progress Section */}
+      <div className="test-category-card__progress-section">
+        <div className="test-category-card__progress-wrapper">
           <div className="test-category-card__progress-bar">
             <div
               className="test-category-card__progress-fill"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
-        </div>
-      </div>
-
-      <div className="test-category-card__footer">
-        <div className="test-category-card__status-grid">
-          <div className="test-category-card__status-item test-category-card__status-item--approved">
-            <div className="test-category-card__status-dot test-category-card__status-dot--approved"></div>
-            <div className="test-category-card__status-info">
-              <span className="test-category-card__status-number">
-                {approved}
-              </span>
-              <span className="test-category-card__status-label">Approved</span>
-            </div>
-          </div>
-          <div className="test-category-card__status-item test-category-card__status-item--pending">
-            <div className="test-category-card__status-dot test-category-card__status-dot--pending"></div>
-            <div className="test-category-card__status-info">
-              <span className="test-category-card__status-number">
-                {pending}
-              </span>
-              <span className="test-category-card__status-label">Pending</span>
-            </div>
-          </div>
-          <div className="test-category-card__status-item test-category-card__status-item--rejected">
-            <div className="test-category-card__status-dot test-category-card__status-dot--rejected"></div>
-            <div className="test-category-card__status-info">
-              <span className="test-category-card__status-number">
-                {rejected}
-              </span>
-              <span className="test-category-card__status-label">Rejected</span>
-            </div>
-          </div>
-          <div className="test-category-card__status-item test-category-card__status-item--exported">
-            <div className="test-category-card__status-dot test-category-card__status-dot--exported"></div>
-            <div className="test-category-card__status-info">
-              <span className="test-category-card__status-number">
-                {exported}
-              </span>
-              <span className="test-category-card__status-label">Exported</span>
-            </div>
-          </div>
+          <span className="test-category-card__progress-percentage">
+            {progressPercentage}<span className="test-category-card__progress-percentage-symbol">%</span>
+          </span>
         </div>
       </div>
     </button>
