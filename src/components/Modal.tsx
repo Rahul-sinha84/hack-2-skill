@@ -10,6 +10,7 @@ interface ModalProps {
   title: string;
   content: React.ReactNode;
   className?: string;
+  notice?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -18,6 +19,7 @@ const Modal: React.FC<ModalProps> = ({
   title,
   content,
   className = "",
+  notice,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -87,9 +89,14 @@ const Modal: React.FC<ModalProps> = ({
         role="document"
       >
         <div className="modal__header">
-          <h2 id="modal-title" className="modal__title">
-            {title}
-          </h2>
+          <div className="modal__header-content">
+            <h2 id="modal-title" className="modal__title">
+              {title}
+            </h2>
+            {notice && (
+              <p className="modal__notice">{notice}</p>
+            )}
+          </div>
           <button
             className="modal__close-button"
             onClick={onClose}

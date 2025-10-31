@@ -139,12 +139,6 @@ const SelectTestCategoryStep = ({
         <div className="select-test-category-step__layout">
           {/* Cards Section - Full Width */}
           <main className="select-test-category-step__main select-test-category-step__main--full-width">
-            <div className="main-section-header">
-              <h3 className="main-section-title">Test Categories</h3>
-              <p className="main-section-subtitle">
-                Click on any category to explore detailed test cases
-              </p>
-            </div>
             <div className="test-category-cards test-category-cards--compact">
               {data.map((category) => (
                 <TestCategoryCards

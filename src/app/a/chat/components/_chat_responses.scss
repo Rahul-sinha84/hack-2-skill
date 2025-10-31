@@ -12,7 +12,7 @@
   }
 
   &__main {
-    flex: 1;
+    width: 100%;
   }
 
   &__footer {
@@ -98,6 +98,22 @@
         padding: 0; // Remove padding to allow layout to control it
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         overflow: hidden; // Ensure layout respects border radius
+
+        @media (max-width: 768px) {
+          width: 100%; // Full width on mobile
+          max-width: 100%; // Override any max-width
+        }
+      }
+
+      // Override for skeleton bubble - remove all backgrounds
+      &.skeleton-bubble .message-content {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: $spacing-md $spacing-sm !important;
+        border-radius: 0 !important;
       }
 
       &.processing .message-content {
@@ -242,20 +258,38 @@
       }
 
       .message-meta {
-        margin-top: $spacing-xs;
-        margin-bottom: $spacing-sm;
-        margin-left: $spacing-sm; // add left offset for better separation
         font-size: $font-size-sm;
         color: rgba(255, 255, 255, 0.7); // Adjusted for dark background
+        white-space: nowrap;
       }
 
-      // Footer row: latency left, actions right
+      // Footer row: latency and tags left, actions right
       .message-footer {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
+        display: flex;
+        justify-content: space-between;
         align-items: center;
         gap: $spacing-sm;
         margin-top: $spacing-xs;
+        flex-wrap: wrap;
+
+        @media (max-width: 768px) {
+          justify-content: space-between; // Keep time on left, actions on right
+          gap: $spacing-xs;
+        }
+
+        &__left {
+          display: flex;
+          align-items: center;
+          gap: $spacing-sm;
+          flex-wrap: wrap;
+          flex: 1;
+          min-width: 0;
+
+          @media (max-width: 768px) {
+            flex: 0; // Don't take extra space on mobile
+            gap: $spacing-xs;
+          }
+        }
       }
 
       .footer-spacer {
@@ -379,8 +413,16 @@
         }
       }
 
+      .chart-container {
+        display: flex;
+        align-items: center;
+        gap: $spacing-md;
+        justify-content: center;
+      }
+
       .category-pie {
         margin-top: 0; // Reset margin
+        flex-shrink: 0;
 
         &__chart {
           display: flex;
@@ -420,43 +462,47 @@
 
       .category-legend {
         display: flex;
-        flex-wrap: wrap;
-        gap: $spacing-sm;
-        justify-content: center;
-        margin-top: $spacing-md;
+        flex-direction: column;
+        gap: $spacing-xs;
+        align-items: flex-start;
+        margin-top: 0;
+
+        @media (max-width: 768px) {
+          width: 100%; // Full width on mobile
+          align-items: center; // Center on mobile
+        }
 
         &__chip {
           display: inline-flex;
           align-items: center;
           gap: $spacing-xs;
-          background: rgba(
-            255,
-            255,
-            255,
-            0.08
-          ); // Subtle glassmorphism for chips
-          backdrop-filter: blur(4px);
-          -webkit-backdrop-filter: blur(4px);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          border-radius: 999px;
-          padding: 4px 8px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          background: transparent;
+          border: none;
+          padding: 0;
+          box-shadow: none;
         }
 
         &__dot {
-          width: 8px;
-          height: 8px;
+          width: 6px;
+          height: 6px;
           border-radius: 50%;
+          flex-shrink: 0;
         }
 
         &__label {
-          font-size: $font-size-sm;
-          font-weight: 500;
+          font-size: $font-size-xs;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 0.8);
+          white-space: nowrap; // Prevent wrapping on mobile
+          
+          @media (max-width: 768px) {
+            font-size: $font-size-sm; // Slightly larger on mobile for readability
+          }
         }
         &__percent {
-          font-size: $font-size-sm;
-          color: rgba(255, 255, 255, 0.7); // Light grey for contrast
-          font-weight: 600;
+          font-size: $font-size-xs;
+          color: rgba(255, 255, 255, 0.6);
+          font-weight: 400;
         }
       }
 
@@ -595,8 +641,8 @@
         width: 6px;
         height: 6px;
         border-radius: 50%;
-        background-color: currentColor;
-        opacity: 0.4;
+        background-color: rgba(147, 197, 253, 0.9); // Match main heading color (blue-300)
+        opacity: 0.6;
         animation: typingDots 1.5s infinite;
 
         &:nth-child(1) {
@@ -633,23 +679,51 @@
 
 .assistant-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: $spacing-md;
+  grid-template-columns: 380px 1fr; // Fixed width for description, flex for chart
+  gap: $spacing-xl;
   padding: $spacing-md;
+  align-items: start;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: $spacing-sm;
-    padding: $spacing-sm;
+    grid-template-columns: 1fr; // Single column on mobile
+    gap: $spacing-lg; // More gap on mobile for separation
+    padding: $spacing-sm; // Less padding on mobile
+  }
+
+  &__header {
+    display: none; // Hide the header row since we're moving headings inside columns
+  }
+
+  &__content {
+    display: contents; // Make content part of parent grid
   }
 
   &__left {
     display: flex;
     flex-direction: column;
+    width: 100%; // Use full column width
+    max-width: 380px; // Match column width
+    padding-right: $spacing-lg;
+
+    @media (max-width: 768px) {
+      max-width: 100%; // Full width on mobile
+      padding-right: 0; // Remove right padding on mobile
+    }
+
+    .description-title {
+      margin-top: 0;
+      margin-bottom: $spacing-md; // Match chart-title margin
+      padding-bottom: $spacing-md; // Space between text and divider
+    }
 
     .message-text {
       flex-grow: 1;
       line-height: 1.6;
+      max-width: 100%;
+      margin-bottom: $spacing-md;
+      overflow-wrap: break-word; // Break long words
+      word-wrap: break-word;
+      hyphens: auto; // Add hyphenation for better mobile text wrapping
     }
 
     .test-cases-action {
@@ -660,8 +734,61 @@
   &__right {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      margin-top: $spacing-md; // Add spacing from description section
+    }
+
+    .chart-dashboard {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 0;
+      padding-top: 0;
+      box-shadow: none;
+      margin-top: 0;
+
+      @media (max-width: 768px) {
+        padding: 0 $spacing-xs; // Small padding on mobile for better spacing
+      }
+
+      &:hover {
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .chart-title {
+        margin-top: 0;
+        margin-bottom: $spacing-md;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 0;
+        padding-bottom: $spacing-md; // Match description-title padding
+        
+        @media (max-width: 768px) {
+          font-size: $font-size-base; // Adjust font size on mobile
+        }
+      }
+
+      .chart-container {
+        align-self: center;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: $spacing-md;
+        margin-top: $spacing-md;
+
+        @media (max-width: 768px) {
+          flex-direction: column; // Stack vertically on mobile
+          gap: $spacing-lg;
+          align-items: center;
+        }
+      }
+    }
   }
 }
 
@@ -678,20 +805,27 @@
   }
 }
 
-.description-title,
-.chart-title {
+.description-title {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: #ffffff; // White for contrast
+  margin-top: 0;
+  margin-bottom: $spacing-lg;
+  padding-top: 0;
+  padding-bottom: $spacing-lg; // Increased space between text and divider
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2); // Lighter border
+}
+
+// Chart title inside dashboard box
+.chart-dashboard .chart-title {
   font-size: $font-size-lg;
   font-weight: 600;
   color: #ffffff; // White for contrast
   margin-bottom: $spacing-md;
-  padding-bottom: $spacing-xs;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2); // Lighter border
-}
-
-.chart-title {
-  text-align: center;
-  border-bottom: none;
-  margin-bottom: $spacing-sm;
+  margin-top: 0;
+  padding-bottom: $spacing-md; // Match description-title padding
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: left;
 }
 
 .view-test-cases-btn {
@@ -756,34 +890,69 @@
 
 .skeleton-bubble {
   .message-content {
-    background: rgba(45, 50, 61, 0.6); // Glassmorphism for skeleton
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: $spacing-xl;
-    border-radius: $border-radius-lg;
+    background: transparent; // Remove background box entirely
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none; // Remove border
+    box-shadow: none; // Remove shadow
+    padding: $spacing-md $spacing-sm;
+    border-radius: 0;
   }
 
   .processing-header {
     display: flex;
-    align-items: center;
-    gap: $spacing-sm;
-
-    padding: $spacing-lg $spacing-md; // Increased padding for the "thinking" text
-    background-color: rgba(
-      255,
-      255,
-      255,
-      0.05
-    ); // Subtle background for the header
-    border-radius: $border-radius-lg; // Rounded corners for the header
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-xs;
+    padding: 0;
+    background: transparent; // Remove outside box entirely
+    border: none;
 
     .processing-text {
       font-style: italic;
       color: rgba(255, 255, 255, 0.8);
+      display: none; // Hide the main processing text
+    }
+
+    .processing-estimate {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: none;
+      position: relative;
+      
+      .estimate-text {
+        font-size: $font-size-sm;
+        color: rgba(147, 197, 253, 0.9); // blue-300 with slight transparency
+        font-weight: 500;
+        padding: $spacing-xs $spacing-sm;
+        border: 1px solid rgba(147, 197, 253, 0.3); // Sleek light border
+        border-radius: $border-radius-md;
+        display: inline-block;
+        animation: thinkingPulse 2s ease-in-out infinite;
+        position: relative;
+      }
+    }
+
+    .processing-rotating-text {
+      margin: 0;
+      padding: 0;
+      margin-top: -$spacing-xs;
+      position: relative;
+
+      .rotating-text {
+        font-size: $font-size-xs; // Smaller text as subheading
+        color: rgba(255, 255, 255, 0.5); // Lighter color for subheading
+        font-style: italic;
+        display: inline-block;
+        padding: $spacing-xs 0; // Remove horizontal padding, keep vertical
+        border: none; // Remove border
+        border-radius: 0;
+        animation: fadeInOut 2s ease-in-out infinite;
+      }
     }
   }
+
 
   // Override assistant-layout padding when inside a skeleton
   .assistant-layout {
@@ -796,10 +965,40 @@
     animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
     &-line {
-      height: 16px;
-      width: 100%;
-      margin-top: $spacing-sm;
+      display: none; // Hide shimmer line
     }
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes thinkingPulse {
+  0%, 100% {
+    border-color: rgba(147, 197, 253, 0.3);
+    box-shadow: 0 0 0 0 rgba(147, 197, 253, 0);
+  }
+  50% {
+    border-color: rgba(147, 197, 253, 0.5);
+    box-shadow: 0 0 8px 2px rgba(147, 197, 253, 0.2);
+  }
+}
+
+
+@keyframes thinkingGlow {
+  0%, 100% {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.1);
   }
 }
 

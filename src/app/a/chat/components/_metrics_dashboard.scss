@@ -1,0 +1,53 @@
+@use "../../../../app/styles/variables" as *;
+@use "../../../../app/styles/mixins" as *;
+
+.document-analysis-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    display: none; // Hide on mobile screens
+  }
+
+  .analysis-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: $border-radius-full;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    &.tag-requirements {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+    }
+
+    &.tag-compliance {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+
+    &.tag-pii {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+  }
+}
+

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { VertexAgentResponse } from '@/types/vertex-agent-response';
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,9 +22,12 @@ export async function POST(request: NextRequest) {
       throw new Error('Vertex Agent API URL is not configured. Please set VERTEX_AGENT_API_URL environment variable.');
     }
 
+    // http://localhost:8080/generate-ui-tests?gdpr_mode=true
+    // const url = `http://localhost:8080/generate-ui-tests?gdpr_mode=${gdprMode}`;
+    const url = `${vertexAgentApiUrl}/generate-ui-tests?gdpr_mode=${gdprMode}`;
     // Call the Vertex Agent API
     const vertexAgentResponse = await fetch(
-      `${vertexAgentApiUrl}/generate-ui-tests?gdpr_mode=${gdprMode}`,
+      url,
       {
         method: 'POST',
         body: formData,
@@ -37,6 +42,27 @@ export async function POST(request: NextRequest) {
 
     const apiResponse: VertexAgentResponse = await vertexAgentResponse.json();
 
+    // Debug: Log the raw response structure
+    console.log('🔍 Raw API Response:', JSON.stringify(apiResponse, null, 2));
+    console.log('📊 Response Summary:', {
+      totalCategories: apiResponse.test_suite?.test_categories?.length || 0,
+      totalTests: apiResponse.test_suite?.statistics?.total_tests || 0,
+      categories: apiResponse.test_suite?.test_categories?.map(cat => ({
+        name: cat.category_name,
+        testCount: cat.test_cases?.length || 0
+      })) || []
+    });
+
+    // Save response to file for inspection (debug only)
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const logFile = join(process.cwd(), `api-response-${timestamp}.json`);
+      await writeFile(logFile, JSON.stringify(apiResponse, null, 2));
+      console.log(`💾 Saved raw API response to: ${logFile}`);
+    } catch (fileError) {
+      console.warn('⚠️ Could not save response to file:', fileError);
+    }
+
     // Validate the response structure
     if (!apiResponse.test_suite || !apiResponse.test_suite.test_categories) {
       throw new Error('Invalid response structure from Vertex Agent API');
@@ -46,6 +72,20 @@ export async function POST(request: NextRequest) {
 
     // Transform the response to match the existing frontend structure
     const transformedData = transformVertexAgentResponse(apiResponse);
+
+    // Debug: Log transformed data summary
+    const totalTransformedTests = transformedData.categories?.reduce(
+      (sum, cat) => sum + (cat.testCases?.length || 0), 
+      0
+    ) || 0;
+    console.log('✅ Transformed Data Summary:', {
+      totalCategories: transformedData.categories?.length || 0,
+      totalTestCases: totalTransformedTests,
+      categories: transformedData.categories?.map(cat => ({
+        label: cat.label,
+        testCount: cat.testCases?.length || 0
+      })) || []
+    });
 
     return NextResponse.json({
       success: true,
@@ -125,8 +165,21 @@ function transformVertexAgentResponse(apiResponse: VertexAgentResponse) {
     }),
   }));
 
+  // Create a descriptive summary based on the actual document analysis
+  const stats = apiResponse.test_suite.statistics;
+  const pdfOutline = apiResponse.test_suite.pdf_outline;
+  
+  // Filter out "UNKNOWN" and empty compliance standards
+  const complianceTypes = Object.keys(apiResponse.knowledge_graph.metadata.compliance_by_type || {})
+    .filter(standard => standard && standard.toUpperCase() !== 'UNKNOWN');
+  
+  // Use requirements_covered for the actual count of requirements found
+  const requirementsCount = stats.requirements_covered || 0;
+  
+  const documentSummary = `Analyzed ${pdfOutline.total_pages} pages from "${apiResponse.filename}" and generated a comprehensive test suite with ${stats.total_tests} test cases across ${stats.total_categories} categories.${requirementsCount > 0 ? ` Found ${requirementsCount} requirements` : ''}${complianceTypes.length > 0 ? ` and covers ${complianceTypes.length} compliance standards (${complianceTypes.join(', ')})` : ''}.`;
+
   return {
-    documentSummary: `Enhanced test generation for ${apiResponse.filename}`,
+    documentSummary,
     categories,
     enhancedMetadata: {
       coverageScore: apiResponse.coverage_analysis?.coverage_score || 0,

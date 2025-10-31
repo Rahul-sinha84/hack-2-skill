@@ -44,6 +44,26 @@ export interface ChatResponse {
     name?: string | null;
     image?: string | null;
   };
+  enhancedMetadata?: {
+    coverageScore?: number;
+    complianceStandards?: Array<{
+      standard_name: string;
+      coverage: number;
+      status?: string;
+    }>;
+    totalPages?: number;
+    requirementsCount?: number;
+    pagesWithCompliance?: number;
+    pagesWithPII?: number;
+    pdfOutline?: {
+      pages: Array<{
+        page_number: number;
+        has_requirements?: boolean;
+        has_compliance?: boolean;
+        has_pii?: boolean;
+      }>;
+    };
+  };
 }
 
 export interface TestCategory {
@@ -110,7 +130,8 @@ export interface ChatContextType {
   completeProcessingMessage: (
     responseId: string,
     finalContent: string,
-    testCaseData?: any
+    testCaseData?: any,
+    enhancedMetadata?: ChatResponse['enhancedMetadata']
   ) => void;
   updateTestCaseStatus: (testCaseId: string, status: TestCaseStatus) => void;
   updateTestCaseDetails: (
@@ -210,7 +231,8 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const completeProcessingMessage = (
     responseId: string,
     finalContent: string,
-    testCaseData?: any
+    testCaseData?: any,
+    enhancedMetadata?: ChatResponse['enhancedMetadata']
   ): void => {
     setChatResponses((prev) =>
       prev.map((response) =>
@@ -221,6 +243,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
               messageType: MessageType.ASSISTANT,
               isProcessing: false,
               processingStatus: undefined,
+              enhancedMetadata: enhancedMetadata,
             }
           : response
       )
