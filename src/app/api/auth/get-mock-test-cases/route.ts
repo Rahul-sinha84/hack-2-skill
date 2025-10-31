@@ -121,5 +121,30 @@ const mockResponse = {
     totalCategories: 4,
     totalTestCases: 10,
     usingVertexAI: true,
+    enhancedData: {
+      test_suite: {
+        statistics: {
+          requirements_covered: 25
+        },
+        pdf_outline: {
+          total_pages: 15,
+          summary: {
+            pages_with_requirements: 8,
+            pages_with_compliance: 3,
+            pages_with_pii: 2,
+          }
+        }
+      },
+      coverage_analysis: {
+        coverage_score: 85
+      },
+      compliance_dashboard: {
+        standards_coverage: [
+          { standard: "HIPAA", coverage: 92 },
+          { standard: "GDPR", coverage: 88 },
+          { standard: "FDA", coverage: 75 }
+        ]
+      }
+    }
   },
 };

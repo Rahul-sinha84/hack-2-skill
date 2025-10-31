@@ -10,7 +10,6 @@
 html {
   font-size: 16px;
   height: 100%;
-  overflow: hidden;
 
   @include mobile-only {
     font-size: 14px;
@@ -21,7 +20,6 @@ body {
   @include font-nunito;
   background-color: $color-primary;
   height: 100%;
-  overflow: hidden;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -81,4 +79,45 @@ img {
 *:focus-visible {
   outline: 2px solid $color-secondary;
   outline-offset: 2px;
+}
+
+// Landing page styles
+.landing-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: $spacing-md;
+  text-align: center;
+
+  &__container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .welcome-message {
+    max-width: 500px;
+    margin: 0 auto;
+
+    h2 {
+      font-size: $font-size-2xl;
+      font-weight: 600;
+      color: $color-text;
+      margin-bottom: $spacing-md;
+
+      .brand-text {
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+      }
+    }
+
+    p {
+      font-size: $font-size-lg;
+      color: $color-text-light-shade;
+      line-height: 1.6;
+    }
+  }
 }

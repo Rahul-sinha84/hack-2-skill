@@ -10,6 +10,7 @@ import {
 import "./_chat_responses.scss";
 import Modal from "@/components/Modal";
 import TestCaseWorkflow from "./TestCaseWorkflow/TestCaseWorkflow";
+import DocumentAnalysisTags from "./MetricsDashboard";
 
 interface ChatResponsesProps {
   responses: Array<
@@ -209,27 +210,22 @@ const CategoryLegend: React.FC<{
     label: c.label,
     count: c.testCases.length,
   }));
-  const total = data.reduce((sum, d) => sum + d.count, 0);
   // Use the shared high-contrast palette
   const palette = HIGH_CONTRAST_PALETTE;
 
   return (
     <div className="category-legend">
-      {data.map((d, idx) => {
-        const percent = total === 0 ? 0 : Math.round((d.count / total) * 100);
-        return (
-          <div className="category-legend__chip" key={`${d.label}-chip-${idx}`}>
-            <span
-              className="category-legend__dot"
-              style={{ backgroundColor: palette[idx % palette.length] }}
-            />
-            <span className="category-legend__label" title={d.label}>
-              {d.label}
-            </span>
-            <span className="category-legend__percent">{percent}%</span>
-          </div>
-        );
-      })}
+      {data.map((d, idx) => (
+        <div className="category-legend__chip" key={`${d.label}-chip-${idx}`}>
+          <span
+            className="category-legend__dot"
+            style={{ backgroundColor: palette[idx % palette.length] }}
+          />
+          <span className="category-legend__label" title={d.label}>
+            {d.label}
+          </span>
+        </div>
+      ))}
     </div>
   );
 };
@@ -372,9 +368,13 @@ const MessageBubble: React.FC<{
               </div>
             </div>
             <div className="assistant-layout__right">
-              <h3 className="chart-title">Test Case Categories</h3>
-              <CategoryPieChart categories={response.testCategories} />
-              <CategoryLegend categories={response.testCategories} />
+              <div className="chart-dashboard">
+                <h3 className="chart-title">Test Case Categories</h3>
+                <div className="chart-container">
+                  <CategoryPieChart categories={response.testCategories} />
+                  <CategoryLegend categories={response.testCategories} />
+                </div>
+              </div>
             </div>
           </div>
         ) : (
@@ -404,12 +404,21 @@ const MessageBubble: React.FC<{
 
         {isAssistant && (
           <div className="message-footer">
-            {latencyLine && (
-              <div className="message-meta">
-                <em>{latencyLine}</em>
-              </div>
-            )}
-            <div className="footer-spacer" />
+            <div className="message-footer__left">
+              {latencyLine && (
+                <div className="message-meta">
+                  <em>{latencyLine}</em>
+                </div>
+              )}
+              {response.enhancedMetadata && (
+                <DocumentAnalysisTags
+                  totalPages={response.enhancedMetadata.totalPages}
+                  requirementsCount={response.enhancedMetadata.requirementsCount}
+                  pagesWithCompliance={response.enhancedMetadata.pagesWithCompliance}
+                  pagesWithPII={response.enhancedMetadata.pagesWithPII}
+                />
+              )}
+            </div>
             <ResponseActions
               text={typeof mainText === "string" ? mainText : ""}
             />
@@ -476,18 +485,39 @@ const MessageBubble: React.FC<{
   );
 };
 
-const ResponseSkeleton: React.FC<{ content: string }> = ({ content }) => (
-  <div className="message-bubble assistant skeleton-bubble">
-    <div className="avatar">🤖</div>
-    <div className="message-content">
-      <div className="processing-header">
-        <span className="processing-text">{content}</span>
-        <TypingIndicator />
+// Removed RotatingText - now showing actual processing stages from updateProcessingMessage
+
+const ResponseSkeleton: React.FC<{ content: string }> = ({ content }) => {
+  return (
+    <div className="message-bubble assistant skeleton-bubble">
+      <div className="avatar">
+        <img
+          src="/ai-orb.png"
+          alt="AI"
+          width={28}
+          height={28}
+          onError={(e) => {
+            // Fallback to a simple sparkle emoji if image missing
+            (e.target as HTMLImageElement).style.display = "none";
+            const parent = (e.target as HTMLImageElement).parentElement;
+            if (parent) parent.textContent = "✨";
+          }}
+        />
       </div>
-      <div className="skeleton skeleton-line" />
+      <div className="message-content">
+        <div className="processing-header">
+          <div className="processing-estimate">
+            <span className="estimate-text">This usually takes 2 minutes</span>
+          </div>
+          <div className="processing-rotating-text">
+            <span className="rotating-text">{content}</span>
+          </div>
+          <TypingIndicator />
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -569,7 +599,7 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        title="Test cases"
+        title="Test Categories"
         // className="no-scroll-modal"
         content={
           <TestCaseWorkflow data={selectedTestCategory?.testCategories || []} />

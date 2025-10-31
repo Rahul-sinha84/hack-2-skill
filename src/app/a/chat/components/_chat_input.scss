@@ -181,26 +181,27 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       border-color: $color-primary-light-shade-2;
     }
 
-    &.gdpr-active {
-      border: 2px solid #8b5cf6;
-      box-shadow:
-        0 0 0 3px rgba(139, 92, 246, 0.15),
-        0 0 20px rgba(139, 92, 246, 0.2),
-        inset 0 1px 0 rgba(139, 92, 246, 0.1);
-      background: linear-gradient(
-        to bottom,
-        $color-primary-dark-shade,
-        rgba(139, 92, 246, 0.03) 100%
-      );
+    // GDPR active highlight - Commented out, not used anymore
+    // &.gdpr-active {
+    //   border: 2px solid #8b5cf6;
+    //   box-shadow:
+    //     0 0 0 3px rgba(139, 92, 246, 0.15),
+    //     0 0 20px rgba(139, 92, 246, 0.2),
+    //     inset 0 1px 0 rgba(139, 92, 246, 0.1);
+    //   background: linear-gradient(
+    //     to bottom,
+    //     $color-primary-dark-shade,
+    //     rgba(139, 92, 246, 0.03) 100%
+    //   );
 
-      &:focus-within {
-        border-color: #8b5cf6;
-        box-shadow:
-          0 0 0 4px rgba(139, 92, 246, 0.2),
-          0 0 28px rgba(139, 92, 246, 0.3),
-          inset 0 1px 0 rgba(139, 92, 246, 0.15);
-      }
-    }
+    //   &:focus-within {
+    //     border-color: #8b5cf6;
+    //     box-shadow:
+    //       0 0 0 4px rgba(139, 92, 246, 0.2),
+    //       0 0 28px rgba(139, 92, 246, 0.3),
+    //       inset 0 1px 0 rgba(139, 92, 246, 0.15);
+    //   }
+    // }
 
     .prefix {
       flex-shrink: 0;

@@ -3,16 +3,37 @@
 
 .chat__layout {
   position: relative;
-  height: 100vh;
+  min-height: 100vh; // Changed from height to min-height
   display: flex;
   flex-direction: column;
   padding-top: 54px; // space for fixed TopBar
+  overflow-y: auto; // Page-level scroll
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+
+  // Scrollbar styles for page-level scroll
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba($color-text, 0.2);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba($color-text, 0.3);
+  }
 
   &__container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 0; // Allow flex item to shrink below content size
   }
 
   &__header { display: none; }
@@ -161,10 +182,11 @@
 
 .chat__layout__main {
     flex: 1;
-    min-height: 0; // Allow flex item to shrink
-    display: flex;
-    flex-direction: column;
     position: relative;
+    display: flex;
+    justify-content: center; // Center the content
+    overflow: visible; // No scroll on inner container
+    width: 100%;
 }
 
 .chat__layout__footer {
@@ -174,29 +196,8 @@
 .chat__layout__chats {
     width: 100%;
     max-width: 100%;
-    margin: 0 auto;
     padding: 0 $spacing-md 120px $spacing-md; // Added bottom padding for fixed input
-    overflow-y: auto;
-    scroll-behavior: smooth;
-    flex: 1;
-    min-height: 0; // Allow flex item to shrink
-
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: rgba($color-text, 0.2);
-      border-radius: 3px;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      background: rgba($color-text, 0.3);
-    }
+    overflow: visible; // Never trap scroll
 
     @include tablet-up {
       max-width: 768px;

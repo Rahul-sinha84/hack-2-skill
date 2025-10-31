@@ -48,26 +48,33 @@ const SmoothChatLayout: React.FC = () => {
   >([]);
 
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const chatLayoutRef = useRef<HTMLElement>(null);
 
   const scrollToBottom = () => {
-    if (chatContainerRef.current) {
-      const container = chatContainerRef.current;
-      container.scrollTo({
-        top: container.scrollHeight,
-        behavior: "smooth",
-      });
-    }
+    // Scroll the window/document instead of a container
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    });
   };
 
-  // Force scroll to bottom with a slight delay
+  // Force scroll to bottom with multiple delays to catch rendering
   const forceScrollToBottom = () => {
-    setTimeout(() => {
-      if (chatContainerRef.current) {
-        const container = chatContainerRef.current;
-        container.scrollTop = container.scrollHeight;
-      }
-    }, 100);
+    const scrollToEnd = () => {
+      // Scroll the window/document to the bottom
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "auto", // Use auto for instant scroll in delayed calls
+      });
+    };
+    
+    // Multiple delayed scrolls to catch different rendering phases
+    setTimeout(scrollToEnd, 0);
+    setTimeout(scrollToEnd, 100);
+    setTimeout(scrollToEnd, 300);
+    setTimeout(scrollToEnd, 500);
+    setTimeout(scrollToEnd, 800);
+    setTimeout(scrollToEnd, 1200);
   };
 
   const processFileAndGenerateTestCases = async (
@@ -93,11 +100,29 @@ const SmoothChatLayout: React.FC = () => {
 
         const testCaseData = await testCaseResponse.json();
 
+        // Extract enhanced metadata from mock response
+        const mockEnhancedMetadata = {
+          coverageScore: testCaseData.metadata?.enhancedData?.coverage_analysis?.coverage_score || 0,
+          complianceStandards: testCaseData.metadata?.enhancedData?.compliance_dashboard?.standards_coverage || [],
+          totalPages: testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline?.total_pages || 0,
+          requirementsCount: testCaseData.metadata?.enhancedData?.test_suite?.statistics?.requirements_covered || 0,
+          pagesWithCompliance: testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline?.summary?.pages_with_compliance || 0,
+          pagesWithPII: testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline?.summary?.pages_with_pii || 0,
+          pdfOutline: testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline || null,
+        };
+
         completeProcessingMessage(
           processingMessageId,
           testCaseData.data.documentSummary,
-          testCaseData.data
+          testCaseData.data,
+          mockEnhancedMetadata
         );
+
+        // Scroll after completing mock response
+        setTimeout(() => {
+          scrollToBottom();
+          forceScrollToBottom();
+        }, 100);
 
         return {
           documentText: testCaseData.data.documentText,
@@ -108,50 +133,49 @@ const SmoothChatLayout: React.FC = () => {
 
       setIsProcessing(true);
 
-      // Step 1: Document AI Processing
-      updateProcessingMessage(
-        processingMessageId,
-        "📄 Processing document with Document AI..."
-      );
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Step 2: DLP Analysis
-      updateProcessingMessage(
-        processingMessageId,
-        "🔒 Analyzing document for sensitive data..."
-      );
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // Step 3: RAG Enhancement
-      updateProcessingMessage(
-        processingMessageId,
-        "🧠 Enhancing with RAG context..."
-      );
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Step 4: Knowledge Graph Generation
-      updateProcessingMessage(
-        processingMessageId,
-        "🕸️ Building knowledge graph..."
-      );
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // Step 5: Gemini AI Generation
-      updateProcessingMessage(
-        processingMessageId,
-        "⚡ Generating comprehensive test cases with Gemini AI..."
-      );
+      // Start the actual API call immediately
       const generationStart =
         typeof performance !== "undefined" ? performance.now() : Date.now();
 
       // Use the secure PDF processor endpoint
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("gdpr_mode", gdprMode.toString());
 
+      // Show progression stages while API is processing
+      const stages = [
+        "Processing document with Document AI...",
+        "Analyzing document for sensitive data...",
+        "Enhancing with RAG context...",
+        "Building knowledge graph...",
+        "Generating comprehensive test cases with Gemini AI...",
+      ];
+
+      let currentStage = 0;
+      
+      // Initial stage
+      updateProcessingMessage(
+        processingMessageId,
+        stages[currentStage]
+      );
+
+      // Update stage every 5 seconds while API is processing
+      const stageInterval = setInterval(() => {
+        currentStage = (currentStage + 1) % stages.length;
+        updateProcessingMessage(
+          processingMessageId,
+          stages[currentStage]
+        );
+      }, 5000); // Change stage every 5 seconds
+
+      // Make the API call (this will take 30+ seconds)
       const testCaseResponse = await fetch(`/api/generate-ui-tests`, {
         method: "POST",
         body: formData,
       });
+
+      // Clear the interval once API responds
+      clearInterval(stageInterval);
 
       if (!testCaseResponse.ok) {
         const errorText = await testCaseResponse.text();
@@ -180,25 +204,57 @@ const SmoothChatLayout: React.FC = () => {
         typeof performance !== "undefined" ? performance.now() : Date.now();
       const generationSeconds = (generationEnd - generationStart) / 1000;
 
-      // Step 6: UI Enrichment
+      // Step 6: Show real metrics from the response
+      const totalPages = apiResponse.test_suite.pdf_outline?.total_pages || 0;
+      const pagesWithReqs = apiResponse.test_suite.pdf_outline?.summary?.pages_with_requirements || 0;
+      const pagesWithPII = apiResponse.test_suite.pdf_outline?.summary?.pages_with_pii || 0;
+      const totalTests = apiResponse.test_suite.statistics.total_tests;
+      
       updateProcessingMessage(
         processingMessageId,
-        "🎨 Enriching UI data..."
+        `Analyzed ${totalPages} pages | Found ${pagesWithReqs} requirements | Detected ${pagesWithPII} PII instances | Generated ${totalTests} test cases`
       );
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      await new Promise((resolve) => setTimeout(resolve, 1500)); // Consistent with other stages
 
       // Step 7: Complete processing
-      const documentSummary = `Document "${file.name}" processed with Vertex Agent AI pipeline`;
-      const latencyInfo = `✨ Generated in ${generationSeconds.toFixed(1)} seconds.`;
-      const statsInfo = `📊 ${apiResponse.test_suite.statistics.total_tests} test cases across ${apiResponse.test_suite.test_categories?.length || 0} categories`;
-      const coverageInfo = `🎯 ${(apiResponse.coverage_analysis?.coverage_score || 0).toFixed(1)}% coverage score`;
-      const finalContent = `${documentSummary}. ${statsInfo}. ${coverageInfo}.\n${latencyInfo}`;
+      // Use the documentSummary from the transformed data (which includes real PDF analysis)
+      const latencyInfo = `Generated in ${generationSeconds.toFixed(1)} seconds.`;
+      const finalContent = `${transformedData.documentSummary}\n${latencyInfo}`;
+      
+      // Extract enhanced metadata for dashboard
+      const enhancedMetadata = {
+        coverageScore: apiResponse.coverage_analysis?.coverage_score || 0,
+        complianceStandards: apiResponse.compliance_dashboard?.standards_coverage?.map((standard) => ({
+          standard_name: standard.standard_name,
+          coverage: standard.coverage,
+          status: standard.status,
+        })) || [],
+        totalPages: apiResponse.test_suite.pdf_outline?.total_pages || 0,
+        requirementsCount: apiResponse.test_suite.statistics?.requirements_covered || 0,
+        pagesWithCompliance: apiResponse.test_suite.pdf_outline?.summary?.pages_with_compliance || 0,
+        pagesWithPII: apiResponse.test_suite.pdf_outline?.summary?.pages_with_pii || 0,
+        pdfOutline: apiResponse.test_suite.pdf_outline ? {
+          pages: apiResponse.test_suite.pdf_outline.pages?.map((page) => ({
+            page_number: page.page_number,
+            has_requirements: page.has_requirements,
+            has_compliance: page.has_compliance,
+            has_pii: page.has_pii,
+          })) || [],
+        } : undefined,
+      };
       
       completeProcessingMessage(
         processingMessageId,
         finalContent,
-        transformedData
+        transformedData,
+        enhancedMetadata
       );
+
+      // Scroll after completing the response
+      setTimeout(() => {
+        scrollToBottom();
+        forceScrollToBottom();
+      }, 100);
 
       return {
         documentText: `Enhanced document processing completed`,
@@ -237,7 +293,7 @@ const SmoothChatLayout: React.FC = () => {
       addUserMessage(currentChatId, message, file, session?.user);
 
       // Immediately scroll after adding the user message
-      setTimeout(scrollToBottom, 0);
+      scrollToBottom();
       forceScrollToBottom();
 
       if (file) {
@@ -301,11 +357,9 @@ const SmoothChatLayout: React.FC = () => {
 
       // Auto-scroll to bottom when new messages are added
       setTimeout(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop =
-            chatContainerRef.current.scrollHeight;
-        }
-      }, 100);
+        scrollToBottom();
+        forceScrollToBottom();
+      }, 200);
     }
   }, [
     chatId,
@@ -317,12 +371,11 @@ const SmoothChatLayout: React.FC = () => {
 
   // Multiple scroll triggers to ensure it works
   useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
-    scrollToBottom();
-    forceScrollToBottom();
+    // Scroll when chat responses change
+    setTimeout(() => {
+      scrollToBottom();
+      forceScrollToBottom();
+    }, 100);
   }, [curChatResponses]);
 
   // Also scroll when chat ID changes (new conversation)
@@ -332,7 +385,7 @@ const SmoothChatLayout: React.FC = () => {
   }, [chatId]);
 
   return (
-    <section className="chat__layout">
+    <section className="chat__layout" ref={chatLayoutRef}>
       <div className="chat__layout__container">
         <header className="chat__layout__header">
           <div className="chat__layout__topbar">
@@ -377,11 +430,11 @@ const SmoothChatLayout: React.FC = () => {
         </header>
         <main className="chat__layout__main">
           {chatId ? (
-            <div className="chat__layout__chats" ref={chatContainerRef}>
+            <div className="chat__layout__chats">
               <ChatResponses responses={curChatResponses} chatId={chatId} />
             </div>
           ) : (
-            <div className="chat__layout__chats" ref={chatContainerRef}></div>
+            <div className="chat__layout__chats"></div>
           )}
 
           <div className={`chat__layout__input`}>
