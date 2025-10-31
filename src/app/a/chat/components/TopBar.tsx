@@ -14,9 +14,10 @@ const TopBar: React.FC = () => {
     // You can add theme switching logic here later
   };
 
+  const initial = session?.user?.isGuest
+    ? "G"
+    : (session?.user?.name?.charAt(0) || "U").toUpperCase();
 
-  const initial = (session?.user?.name?.charAt(0) || "U").toUpperCase();
-  
   // Create proxy URL for Google profile images
   const getProxyImageUrl = (originalUrl: string) => {
     if (!originalUrl) return null;
@@ -39,19 +40,21 @@ const TopBar: React.FC = () => {
             {isDarkMode ? <IoSunny /> : <IoMoon />}
           </button>
           <div className="topbar__avatar">
-            {session?.user?.image && !avatarError ? (
+            {session?.user?.image && !session?.user?.isGuest && !avatarError ? (
               <img
                 src={getProxyImageUrl(session.user.image) || session.user.image}
                 alt={session.user.name || "User"}
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
                 }}
                 onError={() => setAvatarError(true)}
               />
             ) : (
-              <span>{initial}</span>
+              <span className={session?.user?.isGuest ? "guest-avatar" : ""}>
+                {initial}
+              </span>
             )}
           </div>
           <button
@@ -67,5 +70,3 @@ const TopBar: React.FC = () => {
 };
 
 export default TopBar;
-
-

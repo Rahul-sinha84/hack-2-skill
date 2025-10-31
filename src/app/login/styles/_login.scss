@@ -11,8 +11,11 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   position: relative;
   overflow: hidden;
   // Minimalist soft gradient background
-  background:
-    radial-gradient(1200px 700px at 120% 110%, rgba(99, 102, 241, 0.12), transparent 60%),
+  background: radial-gradient(
+      1200px 700px at 120% 110%,
+      rgba(99, 102, 241, 0.12),
+      transparent 60%
+    ),
     linear-gradient(180deg, lighten($color-primary, 3%), $color-primary);
 
   // Decorative aurora blobs
@@ -32,7 +35,11 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     height: 520px;
     left: -140px;
     top: -120px;
-    background: radial-gradient(closest-side, rgba(99,102,241,0.55), transparent 70%);
+    background: radial-gradient(
+      closest-side,
+      rgba(99, 102, 241, 0.55),
+      transparent 70%
+    );
   }
 
   &::after {
@@ -40,7 +47,11 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     height: 520px;
     right: -160px;
     bottom: -140px;
-    background: radial-gradient(closest-side, rgba(14,165,233,0.55), transparent 70%);
+    background: radial-gradient(
+      closest-side,
+      rgba(14, 165, 233, 0.55),
+      transparent 70%
+    );
   }
 
   &__split {
@@ -53,7 +64,7 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     display: grid;
     grid-template-columns: 1.2fr 1fr;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
 
     @include mobile-only {
       grid-template-columns: 1fr;
@@ -71,10 +82,21 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     &__overlay {
       position: absolute;
       inset: 0;
-      background: 
-        linear-gradient(135deg, rgba(20, 22, 26, 0.55), rgba(20, 22, 26, 0.75)),
-        radial-gradient(900px 480px at -10% -10%, rgba(99,102,241,0.25), transparent 80%),
-        radial-gradient(900px 480px at 110% 110%, rgba(14,165,233,0.25), transparent 80%);
+      background: linear-gradient(
+          135deg,
+          rgba(20, 22, 26, 0.55),
+          rgba(20, 22, 26, 0.75)
+        ),
+        radial-gradient(
+          900px 480px at -10% -10%,
+          rgba(99, 102, 241, 0.25),
+          transparent 80%
+        ),
+        radial-gradient(
+          900px 480px at 110% 110%,
+          rgba(14, 165, 233, 0.25),
+          transparent 80%
+        );
       backdrop-filter: blur(16px) saturate(140%);
       -webkit-backdrop-filter: blur(14px) saturate(120%);
     }
@@ -85,7 +107,11 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: radial-gradient(120% 120% at 50% 50%, transparent 40%, rgba(0,0,0,0.25) 100%);
+      background: radial-gradient(
+        120% 120% at 50% 50%,
+        transparent 40%,
+        rgba(0, 0, 0, 0.25) 100%
+      );
     }
 
     &__content {
@@ -109,7 +135,7 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 
   .left__subtext {
     font-size: $font-size-lg;
-    color: rgba(255,255,255,0.9);
+    color: rgba(255, 255, 255, 0.9);
   }
 
   &__logo {
@@ -122,12 +148,12 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       height: 74px;
       display: block;
       border-radius: $border-radius-full;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       padding: 8px;
-      border: 1px solid rgba(255,255,255,0.2);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
     }
 
     .logo-text {
@@ -144,7 +170,7 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   }
 
   &__right {
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     display: grid;
@@ -158,7 +184,7 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     border: 1px solid transparent;
     border-radius: $border-radius-2xl;
     padding: $spacing-2xl $spacing-2xl calc($spacing-2xl + 6px);
-    box-shadow: 0 24px 48px rgba(0,0,0,0.25);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
     color: $color-text;
     text-align: center;
     position: relative;
@@ -173,9 +199,10 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       border-radius: inherit;
       padding: 1px;
       background: $brand-gradient;
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask: linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
       -webkit-mask-composite: xor;
-              mask-composite: exclude;
+      mask-composite: exclude;
       pointer-events: none;
     }
 
@@ -183,11 +210,11 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       width: 56px;
       height: 56px;
       border-radius: $border-radius-full;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       padding: 8px;
       margin: 0 auto;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
     }
 
     &__title {
@@ -209,13 +236,18 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       display: grid;
       gap: $spacing-md;
     }
+  }
 
-    &__footer {
-      margin-top: $spacing-lg;
-      font-size: $font-size-sm;
-      color: $color-text-light-shade;
-      opacity: 0.85;
-    }
+  .signin__buttons {
+    display: grid;
+    gap: $spacing-md;
+  }
+
+  &__footer {
+    margin-top: $spacing-lg;
+    font-size: $font-size-sm;
+    color: $color-text-light-shade;
+    opacity: 0.85;
   }
 
   .card__title {
@@ -235,12 +267,17 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   }
 
   // Buttons inside SignIn component
-  .google-btn, .secondary-btn {
+  .google-btn,
+  .guest-btn,
+  .secondary-btn {
     @include button-base;
     width: 100%;
     height: 44px;
     gap: $spacing-sm;
-    .google-icon { display: inline-flex; }
+    .google-icon,
+    .guest-icon {
+      display: inline-flex;
+    }
   }
 
   .google-btn {
@@ -255,28 +292,65 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     // plain white button
     background: #ffffff;
     color: #111827; // near-black text for contrast
-    border: 1px solid rgba(0,0,0,0.08);
-    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
-    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease, background .2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease,
+      background 0.2s ease;
 
     &:hover:not(:disabled) {
       transform: translateY(-2px);
       filter: none;
       background: #f9fafb;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
     }
 
     &:active:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
   }
 
-@keyframes sheen {
-  0% { transform: translateX(-120%) skewX(-20deg); }
-  60% { transform: translateX(120%) skewX(-20deg); }
-  100% { transform: translateX(120%) skewX(-20deg); }
-}
+  @keyframes sheen {
+    0% {
+      transform: translateX(-120%) skewX(-20deg);
+    }
+    60% {
+      transform: translateX(120%) skewX(-20deg);
+    }
+    100% {
+      transform: translateX(120%) skewX(-20deg);
+    }
+  }
+
+  .guest-btn {
+    // outlined style for secondary action
+    height: 52px;
+    padding: 0 $spacing-xl;
+    font-size: $font-size-base;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    border-radius: $border-radius-full;
+
+    background: transparent;
+    color: $color-text;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+      border-color 0.2s ease, background 0.2s ease;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+  }
 
   .secondary-btn {
     background: rgba(255, 255, 255, 0.06);
@@ -307,6 +381,17 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       border-radius: $border-radius-full;
       object-fit: cover;
       border: 2px solid $color-primary-light-shade-2;
+
+      &--guest {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: rgba(99, 102, 241, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: rgba(99, 102, 241, 0.9);
+        font-size: $font-size-lg;
+      }
     }
 
     .profile__greeting {
@@ -347,4 +432,3 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     transform: rotate(360deg);
   }
 }
-
