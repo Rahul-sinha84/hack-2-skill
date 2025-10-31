@@ -26,14 +26,6 @@ export const convertToHighlight = async (
 
   const { x_min, y_min, x_max, y_max } = data.bounding_box;
 
-  // Convert normalized coordinates to PDF points
-  // NOTE: PDF coordinates have origin at BOTTOM-LEFT
-  // So we need to invert Y coordinates
-  const x1 = x_min * pageWidth;
-  const y1 = (1 - y_max) * pageHeight; // Inverted Y!
-  const x2 = x_max * pageWidth;
-  const y2 = (1 - y_min) * pageHeight; // Inverted Y!
-
   return {
     id: data.chunk_id,
     type: "area" as HighlightType,

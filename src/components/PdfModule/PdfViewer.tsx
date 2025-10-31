@@ -20,16 +20,16 @@ interface PDFViewerProps {
 export default function PDFViewer({
   pdfUrl,
   highlightData = [
-    {
-      page_number: 2,
-      bounding_box: {
-        x_min: 0.17633675038814545,
-        y_min: 0.7723076939582825,
-        x_max: 0.8435722589492798,
-        y_max: 0.8039560317993164,
-      },
-      chunk_id: "kg_node_REQ-008",
-    },
+    // {
+    //   page_number: 2,
+    //   bounding_box: {
+    //     x_min: 0.17633675038814545,
+    //     y_min: 0.7723076939582825,
+    //     x_max: 0.8435722589492798,
+    //     y_max: 0.8039560317993164,
+    //   },
+    //   chunk_id: "kg_node_REQ-008",
+    // },
   ],
   scrollToHighlightId = "kg_node_REQ-008",
 }: PDFViewerProps) {
@@ -66,10 +66,11 @@ export default function PDFViewer({
         const highlights = await Promise.all(
           highlightData.map((data) => convertToHighlight(data, pdfDocument))
         );
+        console.log("highlights from useEffect ", { highlights });
         setHighlights(highlights);
       })();
     }
-  }, [pdfDocument]);
+  }, [pdfDocument, scrollToHighlightId]);
 
   // scrolling to the highlights once the pdf and highlights are loaded
   // TODO check and make sure to load this every time when the highlights are changing

@@ -1,3 +1,4 @@
+import "@/utils/promisePolyfill"; // Import polyfill first
 import Providers from "@/components/Provider";
 import type { Metadata } from "next";
 import "@/app/styles/_app.scss";

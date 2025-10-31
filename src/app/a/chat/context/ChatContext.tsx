@@ -2,7 +2,10 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import generateUniqueId from "@/utils/generateUniqueId";
-import { EnhancedTestCategory, EnhancedTestCase } from "@/types/generate-ui-tests";
+import {
+  EnhancedTestCategory,
+  EnhancedTestCase,
+} from "@/types/generate-ui-tests";
 
 export enum TestCaseStatus {
   PENDING = "pending",
@@ -85,12 +88,21 @@ export interface TestCase {
   priority?: "Critical" | "High" | "Medium" | "Low";
   expected_result?: string;
   steps?: string[];
-  traceability?: {
+  traceability: {
     requirement_id: string;
     requirement_text: string;
     pdf_locations: any[];
     linked_edges: string[];
     compliance_references: string[];
+    chunk_id: string;
+    page_number: number;
+    confidence_score: number;
+    bounding_box: {
+      x_min: number;
+      y_min: number;
+      x_max: number;
+      y_max: number;
+    };
   };
   compliance_tags?: any[];
   tooltip?: string;

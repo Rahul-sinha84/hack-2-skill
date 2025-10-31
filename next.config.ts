@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -14,6 +15,17 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  webpack: (config) => {
+    // Add polyfill for Promise.withResolvers
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "promise-polyfill": path.resolve(
+        __dirname,
+        "src/utils/promisePolyfill.ts"
+      ),
+    };
+    return config;
   },
 };
 

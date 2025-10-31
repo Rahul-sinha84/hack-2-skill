@@ -20,6 +20,8 @@ const ReviewTestCases = ({
     null
   );
 
+  console.log("selectedTestCase ", selectedTestCase);
+
   const selectTestCase = (testcase: TestCase) => {
     setSelectedTestCase(testcase);
   };
@@ -40,7 +42,25 @@ const ReviewTestCases = ({
         <main className="review-test-cases__main">
           <div className="review-test-cases__main__pdf-container">
             {currentFile?.file ? (
-              <PDFViewer pdfUrl={URL.createObjectURL(currentFile.file)} />
+              <PDFViewer
+                pdfUrl={URL.createObjectURL(currentFile.file)}
+                highlightData={
+                  selectedTestCase
+                    ? [
+                        {
+                          page_number:
+                            selectedTestCase.traceability.page_number,
+                          bounding_box:
+                            selectedTestCase.traceability?.bounding_box,
+                          chunk_id: selectedTestCase.traceability?.chunk_id,
+                        },
+                      ]
+                    : []
+                }
+                scrollToHighlightId={
+                  selectedTestCase?.traceability?.chunk_id ?? ""
+                }
+              />
             ) : null}
           </div>
           <div className="review-test-cases__main__test-case-container">
