@@ -183,7 +183,7 @@ const CategoryPieChart: React.FC<{
           {/* Total count in the center */}
           <text
             x={cx}
-            y={cy - 8}
+            y={cy - 6}
             textAnchor="middle"
             className="category-pie__total-value"
           >
@@ -191,7 +191,7 @@ const CategoryPieChart: React.FC<{
           </text>
           <text
             x={cx}
-            y={cy + 18}
+            y={cy + 16}
             textAnchor="middle"
             className="category-pie__total-label"
           >
@@ -346,6 +346,18 @@ const MessageBubble: React.FC<{
       )}
 
       <div className="message-content">
+        {isAssistant && (
+          <div className="privacy-icon">
+            <img
+              src="/shield.png"
+              alt="Privacy Protected"
+              width={20}
+              height={20}
+              title="Privacy Protected - GDPR Compliant"
+            />
+          </div>
+        )}
+        
         {isUser && response.attachedFile && (
           <FileAttachment file={response.attachedFile} />
         )}
