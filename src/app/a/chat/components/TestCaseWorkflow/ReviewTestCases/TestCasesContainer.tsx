@@ -11,11 +11,13 @@ import { TestCaseCard } from ".";
 interface TestCasesContainerProps {
   testCategoryId: string;
   onSelect: (testcase: TestCase) => void;
+  selectedTestCase: TestCase | null;
 }
 
 const TestCasesContainer = ({
   testCategoryId,
   onSelect,
+  selectedTestCase,
 }: TestCasesContainerProps) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -54,7 +56,15 @@ const TestCasesContainer = ({
                   <label
                     htmlFor={testcase.id}
                     tabIndex={isExported ? -1 : 0}
-                    className={isExported ? "test-case-card--disabled" : ""}
+                    className={`test-case-status-${
+                      testcase.status === TestCaseStatus.APPROVED
+                        ? "approved"
+                        : testcase.status === TestCaseStatus.PENDING
+                        ? "pending"
+                        : testcase.status === TestCaseStatus.EXPORTED
+                        ? "exported"
+                        : "rejected"
+                    }`}
                     onClick={() => handleSelection(testcase)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
@@ -63,7 +73,10 @@ const TestCasesContainer = ({
                       }
                     }}
                   >
-                    <TestCaseCard data={testcase} />
+                    <TestCaseCard
+                      data={testcase}
+                      selectedTestCase={selectedTestCase}
+                    />
                   </label>
                 </li>
               );

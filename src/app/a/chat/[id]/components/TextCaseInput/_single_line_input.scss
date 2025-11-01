@@ -6,12 +6,12 @@
 
   &__input {
     @include input-base;
-    padding: $spacing-md;
+    padding: $spacing-sm;
     min-height: 44px; // Minimum touch target size
     font-size: $font-size-base;
     line-height: 1.5;
     resize: none;
-    border-radius: $border-radius-md;
+    border-radius: $border-radius-sm;
 
     @include mobile-only {
       padding: $spacing-sm $spacing-md;
@@ -20,7 +20,7 @@
     }
 
     @include tablet-up {
-      padding: $spacing-md;
+      // padding: $spacing-sm;
       font-size: $font-size-base;
       min-height: 44px;
     }

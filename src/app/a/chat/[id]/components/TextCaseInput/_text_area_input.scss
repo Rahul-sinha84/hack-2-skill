@@ -7,9 +7,9 @@
   &__textarea {
     @include input-base;
     width: 100%;
-    padding: $spacing-md;
+    padding: $spacing-sm;
     min-height: 120px;
-    border-radius: $border-radius-md;
+    border-radius: $border-radius-sm;
     resize: vertical;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     font-size: $font-size-base;
@@ -23,7 +23,7 @@
     }
 
     @include tablet-up {
-      padding: $spacing-md;
+      // padding: $spacing-sm;
       font-size: $font-size-base;
       min-height: 120px;
       line-height: 1.6;

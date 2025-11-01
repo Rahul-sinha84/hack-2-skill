@@ -51,4 +51,5 @@ export interface CommonProps {
   >;
   exportState?: ExportWorkflowState;
   setExportState?: Dispatch<SetStateAction<ExportWorkflowState>>;
+  setModalTitleComponent: Dispatch<SetStateAction<React.ReactNode | null>>;
 }

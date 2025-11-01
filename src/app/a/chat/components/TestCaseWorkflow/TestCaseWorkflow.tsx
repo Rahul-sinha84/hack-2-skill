@@ -1,4 +1,11 @@
-import React, { JSX, useState, useMemo } from "react";
+import React, {
+  JSX,
+  useState,
+  useMemo,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+} from "react";
 import { TestCase, TestCategory, useChat } from "../../context/ChatContext";
 import "./_test_case_workflow.scss";
 import { CommonProps, Steps, ExportWorkflowState } from ".";
@@ -11,13 +18,16 @@ import {
   ExportTestCasesStep,
   ExportSuccessStep,
 } from "./ExportTestCases";
+import { IoIosArrowBack } from "react-icons/io";
 
 interface TestCaseWorkflowProps {
   data: Array<TestCategory & { testCases: Array<TestCase> }>;
+  setModalTitleComponent: Dispatch<SetStateAction<React.ReactNode | null>>;
 }
 
 const TestCaseWorkflow: React.FC<TestCaseWorkflowProps> = ({
   data: initialData,
+  setModalTitleComponent,
 }) => {
   const { testCategories, testCases } = useChat();
 
@@ -48,6 +58,7 @@ const TestCaseWorkflow: React.FC<TestCaseWorkflowProps> = ({
     setSelectedTestCategory,
     exportState,
     setExportState,
+    setModalTitleComponent,
   };
 
   const renderSteps = (_curStep: Steps): JSX.Element => {
@@ -80,6 +91,25 @@ const TestCaseWorkflow: React.FC<TestCaseWorkflowProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    if (curStep === Steps.REVIEW_TEST_CASES) {
+      setModalTitleComponent(
+        <header className="review-test-cases__header">
+          <div className="review-test-cases__header__back-btn">
+            <button onClick={() => setCurStep(Steps.SELECT_TEST_CATEGORY)}>
+              <IoIosArrowBack />
+            </button>
+          </div>
+          <h3 className="review-test-cases__header__title">
+            {selectedTestCategory?.label}
+          </h3>
+        </header>
+      );
+    } else {
+      setModalTitleComponent(null);
+    }
+  }, [curStep]);
 
   return (
     <section className="test-case-workflow">

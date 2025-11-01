@@ -1,0 +1,89 @@
+@use "../app/styles/variables" as *;
+@use "../app/styles/mixins" as *;
+
+.tooltip__wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip__content {
+  position: fixed;
+  z-index: 9999;
+  padding: $spacing-sm;
+  background-color: $color-primary-light-shade;
+  color: $color-text;
+  font-size: $font-size-sm;
+  line-height: 1.4;
+  border-radius: $border-radius-md;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  max-width: 250px;
+  white-space: normal;
+  word-wrap: break-word;
+
+  // Arrow styling
+  &::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+}
+
+// Bottom positioning (default)
+.tooltip__content--bottom {
+  &::before {
+    bottom: 100%;
+    border-width: 0 6px 6px 6px;
+    border-color: transparent transparent $color-primary-light-shade transparent;
+  }
+
+  animation: tooltipFadeInBottom 0.2s ease-out forwards;
+
+  @keyframes tooltipFadeInBottom {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+}
+
+// Top positioning
+.tooltip__content--top {
+  &::before {
+    top: 100%;
+    border-width: 6px 6px 0 6px;
+    border-color: $color-primary-light-shade transparent transparent transparent;
+  }
+
+  animation: tooltipFadeInTop 0.2s ease-out forwards;
+
+  @keyframes tooltipFadeInTop {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+}
+
+// Responsive adjustments
+@include mobile-only {
+  .tooltip__content {
+    font-size: $font-size-xs;
+    padding: $spacing-xs $spacing-sm;
+    max-width: 200px;
+  }
+}

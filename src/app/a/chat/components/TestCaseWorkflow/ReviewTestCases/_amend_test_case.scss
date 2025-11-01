@@ -2,6 +2,7 @@
 @use "../../../../../../app/styles/mixins" as *;
 
 .amend-test-case {
+  margin-top: 1rem;
   height: 100%;
   width: 100%;
 
@@ -9,19 +10,19 @@
     border: 1px solid $color-primary-light-shade-2;
     height: 100%;
     background-color: $color-primary-dark-shade;
-    padding: $spacing-md;
+    padding: $spacing-sm;
     border-radius: $border-radius-lg;
     display: flex;
     flex-direction: column;
 
     @include tablet-up {
-      padding: $spacing-lg;
+      padding: $spacing-md;
     }
   }
 
   &__header {
     flex-shrink: 0;
-    margin-bottom: $spacing-md;
+    margin-bottom: $spacing-sm;
   }
 
   &__main {

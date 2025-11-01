@@ -425,8 +425,12 @@ const MessageBubble: React.FC<{
               {response.enhancedMetadata && (
                 <DocumentAnalysisTags
                   totalPages={response.enhancedMetadata.totalPages}
-                  requirementsCount={response.enhancedMetadata.requirementsCount}
-                  pagesWithCompliance={response.enhancedMetadata.pagesWithCompliance}
+                  requirementsCount={
+                    response.enhancedMetadata.requirementsCount
+                  }
+                  pagesWithCompliance={
+                    response.enhancedMetadata.pagesWithCompliance
+                  }
                   pagesWithPII={response.enhancedMetadata.pagesWithPII}
                 />
               )}
@@ -536,6 +540,10 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
     | null
   >(null);
 
+  // for the modal title in view test category step
+  const [modalTitleComponent, setModalTitleComponent] =
+    useState<React.ReactNode | null>(null);
+
   const isProcessing =
     responses.length > 0 &&
     responses[responses.length - 1].messageType === MessageType.PROCESSING;
@@ -592,7 +600,9 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
           ) : (
             <div className="empty-chat">
               <div className="welcome-message">
-                <h2>Welcome to <span className="brand-text">TestAI</span></h2>
+                <h2>
+                  Welcome to <span className="brand-text">TestAI</span>
+                </h2>
                 <p>
                   Upload a PRD document and I'll help you generate comprehensive
                   test cases.
@@ -608,9 +618,13 @@ const ChatResponses: React.FC<ChatResponsesProps> = ({ responses, chatId }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title="Test Categories"
+        titleComponent={modalTitleComponent}
         // className="no-scroll-modal"
         content={
-          <TestCaseWorkflow data={selectedTestCategory?.testCategories || []} />
+          <TestCaseWorkflow
+            data={selectedTestCategory?.testCategories || []}
+            setModalTitleComponent={setModalTitleComponent}
+          />
         }
       />
     </section>

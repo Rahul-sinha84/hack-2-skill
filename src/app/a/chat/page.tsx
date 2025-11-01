@@ -1,8 +1,13 @@
+"use client";
+
 import React from "react";
 import SmoothChatLayout from "./components/SmoothChatLayout";
 import TopBar from "./components/TopBar";
+import { useReloadWarning } from "@/hooks/useReloadWarning";
 
 const ChatPage = () => {
+  useReloadWarning();
+
   return (
     <>
       <TopBar />

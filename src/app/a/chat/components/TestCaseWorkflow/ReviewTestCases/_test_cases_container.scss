@@ -23,7 +23,6 @@
 
   &__main {
     flex: 1;
-    overflow-y: auto;
 
     ul.test-cases-card-container {
       list-style: none;
@@ -34,21 +33,17 @@
 
       li {
         width: 100%;
-        margin-bottom: $spacing-md;
+        // margin-bottom: $spacing-md;
 
         @include mobile-only {
-          margin-bottom: $spacing-sm;
-        }
-
-        &:last-child {
-          margin-bottom: 0;
+          // margin-bottom: $spacing-sm;
         }
 
         input[type="radio"] {
           display: none;
 
           &:checked + label {
-            border-color: $color-secondary;
+            border-left-color: $color-secondary;
             background-color: rgba($color-secondary, 0.05);
             box-shadow: 0 0 0 1px rgba($color-secondary, 0.2);
           }
@@ -56,13 +51,15 @@
 
         label {
           display: block;
-          border-radius: $border-radius-lg;
+          // border-radius: $border-radius-lg;
           cursor: pointer;
-          border: 2px solid $color-primary-light-shade-2;
+          // border: 1.5px solid $color-primary-light-shade-2;
+          border-bottom: 1.5px solid $color-primary-light-shade-2;
+          border-left: 1.5px solid $color-primary-light-shade-2;
           transition: all 0.2s ease;
           outline: none;
           width: 100%;
-          min-height: 60px; // Ensure minimum touch target
+          // min-height: 60px; // Ensure minimum touch target
 
           @include mobile-only {
             min-height: 50px;
@@ -71,12 +68,12 @@
 
           &:hover {
             background-color: rgba($color-secondary, 0.05);
-            border-color: rgba($color-secondary, 0.3);
-            transform: translateY(-1px);
+            border-left-color: rgba($color-secondary, 0.3);
+            // transform: translateY(-1px);
           }
 
           &:focus {
-            border-color: $color-secondary;
+            border-left-color: $color-secondary;
             box-shadow: 0 0 0 2px rgba($color-secondary, 0.2);
           }
 
@@ -84,22 +81,33 @@
             transform: translateY(0);
           }
 
-          &.test-case-card--disabled {
+          &.test-case-status-exported {
             cursor: not-allowed;
             opacity: 0.6;
             background-color: rgba($color-text-light-shade, 0.05);
-            border-color: rgba($color-text-light-shade, 0.3);
+            border-left-color: rgba($color-text-light-shade, 0.3);
 
             &:hover {
               background-color: rgba($color-text-light-shade, 0.05);
-              border-color: rgba($color-text-light-shade, 0.3);
+              border-left-color: rgba($color-text-light-shade, 0.3);
               transform: none;
             }
 
             &:focus {
-              border-color: rgba($color-text-light-shade, 0.3);
+              border-left-color: rgba($color-text-light-shade, 0.3);
               box-shadow: none;
             }
+          }
+
+          &.test-case-status-approved {
+            border-bottom-color: transparent;
+            border-left-color: $color-green;
+            background-color: $color-green-light-shade !important;
+          }
+          &.test-case-status-rejected {
+            border-bottom-color: transparent;
+            background-color: $color-red-light-shade !important;
+            border-left-color: $color-red;
           }
         }
       }

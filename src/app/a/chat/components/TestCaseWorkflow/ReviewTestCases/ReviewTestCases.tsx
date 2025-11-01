@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CommonProps, Steps } from "..";
 import { IoIosArrowBack } from "react-icons/io";
 import { AmendTestCase, TestCasesContainer } from ".";
@@ -13,14 +13,13 @@ const ReviewTestCases = ({
   setCurStep,
   selectedTestCategory,
   setSelectedTestCategory,
+  setModalTitleComponent,
 }: CommonProps) => {
   const { currentFile } = useChat();
 
   const [selectedTestCase, setSelectedTestCase] = useState<TestCase | null>(
     null
   );
-
-  console.log("selectedTestCase ", selectedTestCase);
 
   const selectTestCase = (testcase: TestCase) => {
     setSelectedTestCase(testcase);
@@ -29,7 +28,7 @@ const ReviewTestCases = ({
   return (
     <section className="review-test-cases">
       <div className="review-test-cases__container">
-        <header className="review-test-cases__header">
+        {/* <header className="review-test-cases__header">
           <div className="review-test-cases__header__back-btn">
             <button onClick={() => setCurStep(Steps.SELECT_TEST_CATEGORY)}>
               <IoIosArrowBack />
@@ -38,22 +37,25 @@ const ReviewTestCases = ({
           <h3 className="review-test-cases__header__title">
             {selectedTestCategory?.label}
           </h3>
-        </header>
+        </header> */}
         <main className="review-test-cases__main">
           <div className="review-test-cases__main__test-case-container">
-            <TestCasesContainer
-              testCategoryId={selectedTestCategory!.id}
-              onSelect={selectTestCase}
-            />
-          </div>
-          {/* <div className="review-test-cases__main__left">
-              <AmendTestCase
-                data={selectedTestCase}
-                testCategory={selectedTestCategory!}
+            <div className="test-cases-list">
+              <TestCasesContainer
+                testCategoryId={selectedTestCategory!.id}
+                onSelect={selectTestCase}
+                selectedTestCase={selectedTestCase}
               />
             </div>
-            <div className="review-test-cases__main__right">
-            </div> */}
+            {selectedTestCase ? (
+              <div className="test-case-container">
+                <AmendTestCase
+                  data={selectedTestCase}
+                  testCategory={selectedTestCategory!}
+                />
+              </div>
+            ) : null}
+          </div>
           <div className="review-test-cases__main__pdf-container">
             {currentFile?.file ? (
               <PDFViewer

@@ -5,6 +5,8 @@
   width: 100%;
   max-width: 100%;
   height: 100%;
+  // padding-left: 1rem;
+  // padding-top: 1rem;
 
   &__container {
     width: 100%;
@@ -17,7 +19,7 @@
     @include flex-center;
     gap: $spacing-sm;
     flex-shrink: 0;
-    margin-bottom: $spacing-xl;
+    margin-bottom: $spacing-sm;
     justify-content: flex-start;
 
     &__back-btn {
@@ -81,16 +83,30 @@
       flex-direction: row;
     }
 
+    &__test-case-container {
+      flex: 6;
+      display: flex;
+      gap: 1rem;
+
+      @include mobile-only {
+        flex-direction: column;
+      }
+      .test-cases-list {
+        flex: 2;
+      }
+      .test-case-container {
+        flex: 3;
+        // max-width: 45rem;
+        text-align: center;
+      }
+    }
+
     &__pdf-container {
-      flex: 1;
+      flex: 4;
       height: 800px; // Fixed height
       width: 100%; // Can be 100% or fixed
       overflow: auto; // Enable scrolling
       position: relative;
-    }
-
-    &__test-case-container {
-      flex: 1;
     }
 
     // &__left {

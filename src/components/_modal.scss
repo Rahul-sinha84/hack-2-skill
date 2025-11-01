@@ -147,7 +147,7 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 }
 
 .modal__content {
-  padding: 16px 16px 20px;
+  // padding: 16px 16px 20px;
   overflow-y: auto;
   flex: 1;
   min-height: 0;
@@ -258,11 +258,11 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 
 .modal__content {
   @include mobile-only {
-    padding: $spacing-sm;
+    // padding: $spacing-sm;
   }
 
   @include tablet-up {
-    padding: $spacing-md $spacing-lg;
+    // padding: $spacing-md $spacing-lg;
   }
 }
 

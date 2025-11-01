@@ -21,7 +21,7 @@ const TextAreaInput: React.FC<TextAreaInputProps> = ({
         className="text-area-input__textarea"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        rows={20}
+        rows={16}
       />
     </div>
   );
