@@ -1,5 +1,6 @@
 import SignIn from "@/components/SignIn";
 import React from "react";
+// instrumentation-client.js
 
 const APage = () => {
   return (
