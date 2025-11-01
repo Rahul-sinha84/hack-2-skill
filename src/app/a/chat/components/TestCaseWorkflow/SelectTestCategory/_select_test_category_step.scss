@@ -7,164 +7,74 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
 .select-test-category-step {
   width: 100%;
   max-width: 100%;
-  height: 100%; // Fill modal content height
-  overflow: hidden; // Prevent any scrolling at the top level
-
-  &__container {
-    width: 100%;
-    height: 100%;
-    overflow: hidden; // Prevent container from scrolling
-  }
-
-  &__layout {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-md;
-    height: 100%; // Constrain to modal content height
-    max-height: 100%;
-    overflow: hidden; // Prevent layout from scrolling
-
-    @include mobile-only {
-      gap: $spacing-sm;
-    }
-  }
-
-  &__summary {
-    overflow: hidden; // Summary never scrolls
-    height: 100%; // Take full height of grid cell
-    max-height: 100%;
-    padding: $spacing-md 0; // Reduced vertical spacing
-
-    @include mobile-only {
-      order: 2;
-      height: auto;
-      max-height: 350px;
-      overflow-y: auto; // Only on mobile
-    }
-  }
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  justify-content: center;
+  min-height: 100%;
 
   &__main {
-    height: 100%; // Take full height of grid cell
-    max-height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; // Main container never scrolls
-
-    @include mobile-only {
-      order: 1;
-    }
-
-    &--full-width {
-      width: 100%;
-      max-width: 100%;
-    }
-
-    .main-section-header {
-      flex-shrink: 0; // Header stays fixed
-      padding-bottom: 8px;
-      text-align: center;
-    }
-
-    .main-section-title {
-      font-size: $font-size-2xl !important;
-      font-weight: 800;
-      margin: 0;
-      background-image: $brand-gradient;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-
-      @include mobile-only {
-        font-size: $font-size-lg;
-      }
-    }
-
-    .main-section-subtitle {
-      font-size: $font-size-xs;
-      color: $color-text-light-shade;
-      margin: 0;
-      margin-top: 2px;
-    }
+    width: 100%;
 
     .test-category-cards {
-      margin-top: $spacing-md !important;
-      flex: 1; // Take remaining space
       display: grid;
-      gap: $spacing-sm;
-      overflow: hidden;
-      padding: 8px;
-      height: 0; // Force flex to work properly
-      justify-content: start; // Left align for consistency
-      align-content: start;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: $spacing-xl;
+      width: 100%;
+      padding: $spacing-md $spacing-xl;
 
       @include mobile-only {
         grid-template-columns: 1fr;
-        gap: $spacing-xs;
-        justify-content: stretch;
-        padding: 8px;
+        gap: $spacing-md;
+        padding: $spacing-sm $spacing-md;
       }
 
       @include tablet-up {
-        // Stable responsive grid regardless of item count
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        max-width: none;
-        margin: 0;
+        gap: $spacing-xl;
+        padding: $spacing-md $spacing-xl;
       }
 
       @include desktop-up {
-        // Stable responsive grid regardless of item count
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        max-width: none;
-        margin: 0;
+        gap: $spacing-2xl;
+        padding: $spacing-lg $spacing-2xl;
       }
-
-      // Compact version for smaller cards
-      &--compact {
-        .test-category-card {
-          // Heights are already set in the main card styles
-          // No need to override here as we've optimized the base card
-        }
-      }
-
-      // Remove card-count specific layouts for consistency
     }
   }
 
   &__footer {
     flex-shrink: 0;
-    padding: $spacing-sm 0 0;
-    margin-top: $spacing-sm;
+    padding: $spacing-xl $spacing-xl $spacing-md;
+    margin-top: $spacing-md;
     display: flex;
     justify-content: center;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 
     @include mobile-only {
-      padding: $spacing-xs 0 0;
-      margin-top: $spacing-xs;
+      padding: $spacing-md $spacing-md $spacing-sm;
+      margin-top: $spacing-sm;
     }
   }
 
   &__export-btn {
     @include button-base;
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 35%, #ec4899 100%);
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
     color: white;
-    padding: 12px 28px;
-    font-size: $font-size-sm;
+    padding: 14px 32px;
+    font-size: $font-size-base;
     font-weight: 600;
-    min-width: 180px;
+    min-width: 200px;
     border-radius: 12px;
     border: none;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 6px 24px rgba(59, 130, 246, 0.3),
-      0 3px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
 
     @include mobile-only {
-      min-width: 160px;
-      padding: 10px 24px;
-      font-size: $font-size-xs;
+      min-width: 180px;
+      padding: 12px 28px;
+      font-size: $font-size-sm;
     }
 
     // Subtle gradient overlay
@@ -177,7 +87,7 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       bottom: 0;
       background: linear-gradient(
         135deg,
-        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.15) 0%,
         transparent 50%,
         rgba(255, 255, 255, 0.05) 100%
       );
@@ -186,9 +96,8 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     }
 
     &:hover {
+      background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
       transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4),
-        0 8px 32px rgba(0, 0, 0, 0.15);
 
       &::before {
         opacity: 1;
@@ -196,13 +105,12 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     }
 
     &:active {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
       transform: translateY(-1px) scale(1.01);
-      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35),
-        0 4px 16px rgba(0, 0, 0, 0.12);
     }
 
     &:focus {
-      outline: 2px solid rgba(59, 130, 246, 0.6);
+      outline: 2px solid #8b5cf6;
       outline-offset: 2px;
     }
   }

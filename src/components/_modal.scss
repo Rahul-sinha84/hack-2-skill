@@ -172,6 +172,11 @@ $brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   }
 }
 
+// Remove padding when rendering the test case workflow
+.modal__content:has(.test-case-workflow) {
+  padding: 0 !important;
+}
+
 // Variant: disable modal content scroll for specific workflows
 // .no-scroll-modal {
 //   // tighter outer padding

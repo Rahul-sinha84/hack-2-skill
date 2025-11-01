@@ -91,6 +91,22 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
     );
   };
 
+  // Get category description
+  const getCategoryDescription = (type: string) => {
+    const descriptionMap: Record<string, string> = {
+      functional: "Validates core features and user workflows",
+      performance: "Tests speed, scalability, and resource usage",
+      security: "Ensures data protection and access controls",
+      "ui-ux": "Evaluates interface design and user experience",
+      integration: "Verifies system component interactions",
+      api: "Tests API endpoints and data exchange",
+      compliance: "Checks regulatory and policy adherence",
+      default: "Comprehensive test coverage validation",
+    };
+
+    return descriptionMap[type] || descriptionMap.default;
+  };
+
   return (
     <button
       onClick={() => onSelect({ ...data, testCases })}
@@ -116,17 +132,24 @@ const TestCategoryCards: React.FC<TestCategoryCardsProps> = ({
       {/* Stats Grid */}
       <div className="test-category-card__stats-grid">
         <div className="test-category-card__stat test-category-card__stat--approved">
-          <span className="test-category-card__stat-label">Approved</span>
           <p className="test-category-card__stat-value">{approved}</p>
+          <span className="test-category-card__stat-label">Approved</span>
         </div>
         <div className="test-category-card__stat test-category-card__stat--rejected">
-          <span className="test-category-card__stat-label">Rejected</span>
           <p className="test-category-card__stat-value">{rejected}</p>
+          <span className="test-category-card__stat-label">Rejected</span>
         </div>
         <div className="test-category-card__stat test-category-card__stat--pending">
-          <span className="test-category-card__stat-label">Pending</span>
           <p className="test-category-card__stat-value">{pending}</p>
+          <span className="test-category-card__stat-label">Pending</span>
         </div>
+      </div>
+
+      {/* Test Summary */}
+      <div className="test-category-card__summary">
+        <p className="test-category-card__summary-text">
+          {getCategoryDescription(categoryType)}
+        </p>
       </div>
 
       {/* Progress Section */}

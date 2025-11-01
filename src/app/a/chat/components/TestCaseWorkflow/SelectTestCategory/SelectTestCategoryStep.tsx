@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CommonProps, Steps } from "..";
-import { TestCategoryCards } from ".";
+import { TestCategoryCards, ModernTestCategoryCard } from ".";
 
 import "./_select_test_category_step.scss";
 import { TestCase, TestCategory } from "../../../context/ChatContext";
@@ -135,30 +135,26 @@ const SelectTestCategoryStep = ({
 
   return (
     <section className="select-test-category-step">
-      <div className="select-test-category-step__container">
-        <div className="select-test-category-step__layout">
-          {/* Cards Section - Full Width */}
-          <main className="select-test-category-step__main select-test-category-step__main--full-width">
-            <div className="test-category-cards test-category-cards--compact">
-              {data.map((category) => (
-                <TestCategoryCards
-                  key={category.id}
-                  data={category}
-                  onSelect={selectTestCategory}
-                />
-              ))}
-            </div>
-          </main>
-          <footer className="select-test-category-step__footer">
-            <button
-              className="select-test-category-step__export-btn"
-              onClick={() => setCurStep(Steps.EXPORT_TEST_CASES)}
-            >
-              Export test cases
-            </button>
-          </footer>
+      {/* Cards Section - Full Width */}
+      <main className="select-test-category-step__main">
+        <div className="test-category-cards">
+          {data.slice(0, 4).map((category) => (
+            <ModernTestCategoryCard
+              key={category.id}
+              data={category}
+              onSelect={selectTestCategory}
+            />
+          ))}
         </div>
-      </div>
+      </main>
+      <footer className="select-test-category-step__footer">
+        <button
+          className="select-test-category-step__export-btn"
+          onClick={() => setCurStep(Steps.EXPORT_TEST_CASES)}
+        >
+          Export test cases
+        </button>
+      </footer>
     </section>
   );
 };
