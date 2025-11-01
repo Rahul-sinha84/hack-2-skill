@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import posthog from "posthog-js";
 import { usePathname, useSearchParams } from "next/navigation";
 
@@ -8,10 +8,26 @@ interface PostHogProviderProps {
   children: React.ReactNode;
 }
 
-export default function PostHogProvider({ children }: PostHogProviderProps) {
+function PostHogPageViewTracker() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // Capture pageviews on route changes
+  useEffect(() => {
+    if (typeof window === "undefined" || !posthog.__loaded) return;
+
+    const url =
+      pathname +
+      (searchParams?.toString() ? `?${searchParams.toString()}` : "");
+    posthog.capture("$pageview", {
+      $current_url: url,
+    });
+  }, [pathname, searchParams]);
+
+  return null;
+}
+
+export default function PostHogProvider({ children }: PostHogProviderProps) {
   useEffect(() => {
     // Only initialize on client side
     if (typeof window === "undefined") return;
@@ -20,7 +36,10 @@ export default function PostHogProvider({ children }: PostHogProviderProps) {
     if (posthog.__loaded) return;
 
     // Check if environment variables are available
-    if (!process.env.NEXT_PUBLIC_POSTHOG_KEY || !process.env.NEXT_PUBLIC_POSTHOG_HOST) {
+    if (
+      !process.env.NEXT_PUBLIC_POSTHOG_KEY ||
+      !process.env.NEXT_PUBLIC_POSTHOG_HOST
+    ) {
       console.warn("PostHog environment variables are not set");
       return;
     }
@@ -32,16 +51,12 @@ export default function PostHogProvider({ children }: PostHogProviderProps) {
     });
   }, []);
 
-  // Capture pageviews on route changes
-  useEffect(() => {
-    if (typeof window === "undefined" || !posthog.__loaded) return;
-
-    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "");
-    posthog.capture("$pageview", {
-      $current_url: url,
-    });
-  }, [pathname, searchParams]);
-
-  return <>{children}</>;
+  return (
+    <>
+      <Suspense fallback={null}>
+        <PostHogPageViewTracker />
+      </Suspense>
+      {children}
+    </>
+  );
 }
-
