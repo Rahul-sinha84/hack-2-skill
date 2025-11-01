@@ -96,9 +96,7 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
   // Get Unique Requirements
   const getUniqueRequirements = (): number => {
     const uniqueReqs = new Set(
-      testCases
-        .map((tc) => tc.traceability?.requirement_id)
-        .filter(Boolean)
+      testCases.map((tc) => tc.traceability?.requirement_id).filter(Boolean)
     );
     return uniqueReqs.size;
   };
@@ -147,8 +145,11 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
   const rawApproved = total > 0 ? (approved / total) * 100 : 0;
   const rawRejected = total > 0 ? (rejected / total) * 100 : 0;
   const rawPending = total > 0 ? (pending / total) * 100 : 0;
-  const { a: approvedPercentage, r: rejectedPercentage, p: pendingPercentage } =
-    normalizePercentages(rawApproved, rawRejected, rawPending);
+  const {
+    a: approvedPercentage,
+    r: rejectedPercentage,
+    p: pendingPercentage,
+  } = normalizePercentages(rawApproved, rawRejected, rawPending);
 
   // Get gradient colors based on category type
   // Color Palette: #F14A00 (orange), #C62300 (red), #500073 (purple), #2A004E (dark purple)
@@ -229,14 +230,19 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
 
   return (
     <div className="ftc-wrap">
-      <button className="card" onClick={() => onSelect({ ...data, testCases })} type="button">
+      <button
+        className="card"
+        onClick={() => onSelect({ ...data, testCases })}
+        type="button"
+      >
         <div className="card-content">
           {/* Header */}
           <div className="header">
             <div className="title-wrap">
               <h2 className="title">{data.label}</h2>
               <p className="sub">
-                Requirements: <span>{uniqueRequirements}</span> &nbsp;&nbsp;&nbsp; Coverage: <span>{testCoverage}%</span>
+                Requirements: <span>{uniqueRequirements}</span>{" "}
+                &nbsp;&nbsp;&nbsp; Coverage: <span>{testCoverage}%</span>
               </p>
             </div>
           </div>
@@ -248,10 +254,26 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
               <p className="density">Total Test Cases</p>
             </div>
             <div className="right">
-              <h3 className={`big ${healthScore >= 70 ? "green" : healthScore >= 40 ? "yellow" : "red"}`}>
+              <h3
+                className={`big ${
+                  healthScore >= 70
+                    ? "green"
+                    : healthScore >= 40
+                    ? "yellow"
+                    : "red"
+                }`}
+              >
                 {healthScore}%
               </h3>
-              <p className={`comp ${healthScore >= 70 ? "green-text" : healthScore >= 40 ? "yellow-text" : "red-text"}`}>
+              <p
+                className={`comp ${
+                  healthScore >= 70
+                    ? "green-text"
+                    : healthScore >= 40
+                    ? "yellow-text"
+                    : "red-text"
+                }`}
+              >
                 Health Score
               </p>
             </div>
@@ -263,15 +285,23 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
           {/* Test Summary */}
           <div className="test-summary">
             <h4 className="summary-heading">Test Summary</h4>
-            <p className="summary-text">{getCategoryDescription(categoryType)}</p>
+            <p className="summary-text">
+              {getCategoryDescription(categoryType)}
+            </p>
           </div>
 
           {/* Progress Bar */}
           <div className="progress">
-            <div className="bar approved" style={{ width: `${approvedPercentage}%` }} />
+            <div
+              className="bar approved"
+              style={{ width: `${approvedPercentage}%` }}
+            />
             <div
               className="bar rejected"
-              style={{ left: `${approvedPercentage}%`, width: `${rejectedPercentage}%` }}
+              style={{
+                left: `${approvedPercentage}%`,
+                width: `${rejectedPercentage}%`,
+              }}
             />
             <div
               className="bar pending"
@@ -296,11 +326,22 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
 
           {/* Footer */}
           <div className="footer">
-            <button className="view-test-btn" type="button">
-              View Tests
-            </button>
+            <div className="view-test-btn">View Tests</div>
             <p className="avg">
-              Priority: <span className="priority-critical">{priorityBreakdown.critical} Critical</span>, <span className="priority-high">{priorityBreakdown.high} High</span>, <span className="priority-medium">{priorityBreakdown.medium} Med</span>, <span className="priority-low">{priorityBreakdown.low} Low</span>
+              Priority:{" "}
+              <span className="priority-critical">
+                {priorityBreakdown.critical} Critical
+              </span>
+              ,{" "}
+              <span className="priority-high">
+                {priorityBreakdown.high} High
+              </span>
+              ,{" "}
+              <span className="priority-medium">
+                {priorityBreakdown.medium} Med
+              </span>
+              ,{" "}
+              <span className="priority-low">{priorityBreakdown.low} Low</span>
             </p>
           </div>
         </div>
@@ -314,8 +355,8 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
           justify-content: center;
           color: #f5f5f5;
           -webkit-font-smoothing: antialiased;
-          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial,
-            "Apple Color Emoji", "Segoe UI Emoji";
+          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+            Inter, Arial, "Apple Color Emoji", "Segoe UI Emoji";
         }
         .card {
           position: relative;
@@ -377,7 +418,8 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
           margin-top: 1rem;
           margin-bottom: 0.5rem;
         }
-        .left, .right {
+        .left,
+        .right {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -599,4 +641,3 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
 };
 
 export default ModernTestCategoryCard;
-
