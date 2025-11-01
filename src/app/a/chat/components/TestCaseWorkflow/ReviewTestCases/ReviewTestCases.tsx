@@ -1,11 +1,19 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { CommonProps, Steps } from "..";
 import { IoIosArrowBack } from "react-icons/io";
 import { AmendTestCase, TestCasesContainer } from ".";
 
 import "./_review_test_cases.scss";
 import { TestCase, useChat } from "../../../context/ChatContext";
-import PDFViewer from "@/components/PdfModule/PdfViewer";
+
+// Dynamically import PDFViewer with SSR disabled to prevent window/document errors during build
+const PDFViewer = dynamic(
+  () => import("@/components/PdfModule/PdfViewer"),
+  { ssr: false }
+);
 
 const ReviewTestCases = ({
   data,

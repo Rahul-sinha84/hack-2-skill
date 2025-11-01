@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     // Add polyfill for Promise.withResolvers
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -25,6 +25,30 @@ const nextConfig: NextConfig = {
         "src/utils/promisePolyfill.ts"
       ),
     };
+
+    // Handle canvas and pdfjs-dist - prevent canvas from being bundled server-side
+    if (isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        canvas: false,
+      };
+    } else {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        canvas: false,
+      };
+    }
+
+    // Ignore fs module in browser builds (pdfjs-dist sometimes tries to import it)
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+      };
+    }
+
     return config;
   },
 };

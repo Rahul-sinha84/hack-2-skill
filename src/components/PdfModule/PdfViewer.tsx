@@ -70,7 +70,7 @@ export default function PDFViewer({
         setHighlights(highlights);
       })();
     }
-  }, [pdfDocument, scrollToHighlightId]);
+  }, [pdfDocument, highlightData, scrollToHighlightId]);
 
   // scrolling to the highlights once the pdf and highlights are loaded
   // TODO check and make sure to load this every time when the highlights are changing

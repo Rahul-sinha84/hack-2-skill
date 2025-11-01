@@ -463,7 +463,7 @@ const MessageBubble: React.FC<{
                     // Hide the broken image and show fallback
                     (e.target as HTMLImageElement).style.display = "none";
                     const parent = (e.target as HTMLImageElement).parentElement;
-                    if (parent) {
+                    if (parent && typeof document !== "undefined") {
                       const fallback = document.createElement("span");
                       fallback.className = "avatar-initials";
                       fallback.textContent =

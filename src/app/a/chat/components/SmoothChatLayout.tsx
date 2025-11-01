@@ -53,20 +53,24 @@ const SmoothChatLayout: React.FC = () => {
 
   const scrollToBottom = () => {
     // Scroll the window/document instead of a container
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   };
 
   // Force scroll to bottom with multiple delays to catch rendering
   const forceScrollToBottom = () => {
     const scrollToEnd = () => {
       // Scroll the window/document to the bottom
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: "auto", // Use auto for instant scroll in delayed calls
-      });
+      if (typeof window !== "undefined" && typeof document !== "undefined") {
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "auto", // Use auto for instant scroll in delayed calls
+        });
+      }
     };
 
     // Multiple delayed scrolls to catch different rendering phases
@@ -529,7 +533,7 @@ const SmoothChatLayout: React.FC = () => {
                       (e.target as HTMLImageElement).style.display = "none";
                       const parent = (e.target as HTMLImageElement)
                         .parentElement;
-                      if (parent) {
+                      if (parent && typeof document !== "undefined") {
                         const span = document.createElement("span");
                         span.textContent = (
                           session?.user?.name?.charAt(0) || "U"
