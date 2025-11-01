@@ -81,23 +81,35 @@
       flex-direction: row;
     }
 
-    &__left {
+    &__pdf-container {
       flex: 1;
-      min-width: 0; // Allow flex item to shrink
-
-      @include mobile-only {
-        order: 2;
-      }
+      height: 600px; // Fixed height
+      width: 100%; // Can be 100% or fixed
+      overflow: auto; // Enable scrolling
+      position: relative;
     }
 
-    &__right {
+    &__test-case-container {
       flex: 1;
-      min-width: 0; // Allow flex item to shrink
-
-      @include mobile-only {
-        order: 1;
-      }
     }
+
+    // &__left {
+    //   flex: 1;
+    //   min-width: 0; // Allow flex item to shrink
+
+    //   @include mobile-only {
+    //     order: 2;
+    //   }
+    // }
+
+    // &__right {
+    //   flex: 1;
+    //   min-width: 0; // Allow flex item to shrink
+
+    //   @include mobile-only {
+    //     order: 1;
+    //   }
+    // }
   }
 
   &__footer {

@@ -199,12 +199,11 @@
 
 .chat__layout__main {
   flex: 1;
-  overflow-y: auto;
-  padding-bottom: 120px; // Space for fixed input
-
-  @include tablet-up {
-    padding-bottom: 140px;
-  }
+  position: relative;
+  display: flex;
+  justify-content: center; // Center the content
+  overflow: visible; // No scroll on inner container
+  width: 100%;
 }
 
 .chat__layout__footer {
@@ -214,28 +213,8 @@
 .chat__layout__chats {
   width: 100%;
   max-width: 100%;
-  margin: 0 auto;
-  padding: 0 $spacing-md;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  height: 100%;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba($color-text, 0.2);
-    border-radius: 3px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: rgba($color-text, 0.3);
-  }
+  padding: 0 $spacing-md 120px $spacing-md; // Added bottom padding for fixed input
+  overflow: visible; // Never trap scroll
 
   @include tablet-up {
     max-width: 768px;

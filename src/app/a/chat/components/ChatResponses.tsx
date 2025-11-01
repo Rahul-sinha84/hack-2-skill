@@ -443,10 +443,6 @@ const MessageBubble: React.FC<{
           className={`avatar user-avatar ${showLoadingRing ? "loading" : ""}`}
         >
           {(() => {
-            console.log("Rendering user avatar, user data:", response.user);
-            console.log("Has image?", !!response.user?.image);
-            console.log("Image URL:", response.user?.image);
-
             if (response.user?.image) {
               return (
                 <img
@@ -472,7 +468,7 @@ const MessageBubble: React.FC<{
                     }
                   }}
                   onLoad={() => {
-                    console.log(
+                    console.debug(
                       "✅ Image loaded successfully:",
                       response.user?.image
                     );
@@ -480,7 +476,7 @@ const MessageBubble: React.FC<{
                 />
               );
             } else {
-              console.log(
+              console.debug(
                 "No image available, showing initials for:",
                 response.user?.name
               );

@@ -102,11 +102,19 @@ export interface TestCase {
   };
 }
 
+export interface StoredFileData {
+  file: File;
+  documentText?: string;
+  fileName: string;
+  uploadedAt: Date;
+}
+
 export interface ChatContextType {
   chats: Array<Chat>;
   chatResponses: Array<ChatResponse>;
   testCategories: Array<TestCategory>;
   testCases: Array<TestCase>;
+  currentFile: StoredFileData | null;
   getChatResponsesByChatId: (chatId: string) => Array<ChatResponse>;
   getTestCategoriesByChatResponseId: (
     chatResponseId: string
@@ -140,6 +148,7 @@ export interface ChatContextType {
     content: string
   ) => void;
   markTestCasesAsExported: (testCaseIds: string[]) => void;
+  setCurrentFile: (fileData: StoredFileData | null) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -153,6 +162,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const [chatResponses, setChatResponses] = useState<Array<ChatResponse>>([]);
   const [testCategories, setTestCategories] = useState<Array<TestCategory>>([]);
   const [testCases, setTestCases] = useState<Array<TestCase>>([]);
+  const [currentFile, setCurrentFile] = useState<StoredFileData | null>(null);
 
   const getChatResponsesByChatId = (chatId: string): Array<ChatResponse> =>
     chatResponses.filter((val) => val.chatId === chatId);
@@ -441,6 +451,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     chatResponses,
     testCategories,
     testCases,
+    currentFile,
     getChatResponsesByChatId,
     getTestCategoriesByChatResponseId,
     getTestCasesByTestCategoryId,
@@ -453,6 +464,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     updateTestCaseStatus,
     updateTestCaseDetails,
     markTestCasesAsExported,
+    setCurrentFile,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

@@ -4,7 +4,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { AmendTestCase, TestCasesContainer } from ".";
 
 import "./_review_test_cases.scss";
-import { TestCase } from "../../../context/ChatContext";
+import { TestCase, useChat } from "../../../context/ChatContext";
+import PDFViewer from "@/components/PdfModule/PdfViewer";
 
 const ReviewTestCases = ({
   data,
@@ -13,6 +14,8 @@ const ReviewTestCases = ({
   selectedTestCategory,
   setSelectedTestCategory,
 }: CommonProps) => {
+  const { currentFile } = useChat();
+
   const [selectedTestCase, setSelectedTestCase] = useState<TestCase | null>(
     null
   );
@@ -35,18 +38,25 @@ const ReviewTestCases = ({
           </h3>
         </header>
         <main className="review-test-cases__main">
-          <div className="review-test-cases__main__left">
+          <div className="review-test-cases__main__pdf-container">
+            {currentFile?.file ? (
+              <PDFViewer pdfUrl={URL.createObjectURL(currentFile.file)} />
+            ) : null}
+          </div>
+          <div className="review-test-cases__main__test-case-container">
+            <TestCasesContainer
+              testCategoryId={selectedTestCategory!.id}
+              onSelect={selectTestCase}
+            />
+          </div>
+          {/* <div className="review-test-cases__main__left">
             <AmendTestCase
               data={selectedTestCase}
               testCategory={selectedTestCategory!}
             />
           </div>
           <div className="review-test-cases__main__right">
-            <TestCasesContainer
-              testCategoryId={selectedTestCategory!.id}
-              onSelect={selectTestCase}
-            />
-          </div>
+          </div> */}
         </main>
         <footer className="review-test-cases__footer"></footer>
       </div>

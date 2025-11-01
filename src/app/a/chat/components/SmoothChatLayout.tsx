@@ -34,6 +34,7 @@ const SmoothChatLayout: React.FC = () => {
     getChatResponsesByChatId,
     getTestCategoriesByChatResponseId,
     getTestCasesByTestCategoryId,
+    setCurrentFile,
   } = useChat();
 
   // Extract chatId from pathname
@@ -67,7 +68,7 @@ const SmoothChatLayout: React.FC = () => {
         behavior: "auto", // Use auto for instant scroll in delayed calls
       });
     };
-    
+
     // Multiple delayed scrolls to catch different rendering phases
     setTimeout(scrollToEnd, 0);
     setTimeout(scrollToEnd, 100);
@@ -88,7 +89,7 @@ const SmoothChatLayout: React.FC = () => {
       // Only use mock tests if explicitly disabled via NEXT_PUBLIC_LIVE=false
       // This allows testing the real API in development
       const useMockTests = process.env.NEXT_PUBLIC_LIVE === "false";
-      
+
       if (useMockTests) {
         const testCaseResponse = await fetch("/api/auth/get-mock-test-cases", {
           method: "GET",
@@ -102,13 +103,27 @@ const SmoothChatLayout: React.FC = () => {
 
         // Extract enhanced metadata from mock response
         const mockEnhancedMetadata = {
-          coverageScore: testCaseData.metadata?.enhancedData?.coverage_analysis?.coverage_score || 0,
-          complianceStandards: testCaseData.metadata?.enhancedData?.compliance_dashboard?.standards_coverage || [],
-          totalPages: testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline?.total_pages || 0,
-          requirementsCount: testCaseData.metadata?.enhancedData?.test_suite?.statistics?.requirements_covered || 0,
-          pagesWithCompliance: testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline?.summary?.pages_with_compliance || 0,
-          pagesWithPII: testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline?.summary?.pages_with_pii || 0,
-          pdfOutline: testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline || null,
+          coverageScore:
+            testCaseData.metadata?.enhancedData?.coverage_analysis
+              ?.coverage_score || 0,
+          complianceStandards:
+            testCaseData.metadata?.enhancedData?.compliance_dashboard
+              ?.standards_coverage || [],
+          totalPages:
+            testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline
+              ?.total_pages || 0,
+          requirementsCount:
+            testCaseData.metadata?.enhancedData?.test_suite?.statistics
+              ?.requirements_covered || 0,
+          pagesWithCompliance:
+            testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline
+              ?.summary?.pages_with_compliance || 0,
+          pagesWithPII:
+            testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline
+              ?.summary?.pages_with_pii || 0,
+          pdfOutline:
+            testCaseData.metadata?.enhancedData?.test_suite?.pdf_outline ||
+            null,
         };
 
         completeProcessingMessage(
@@ -123,6 +138,13 @@ const SmoothChatLayout: React.FC = () => {
           scrollToBottom();
           forceScrollToBottom();
         }, 100);
+        // Store the file data in context for PDF rendering (mock mode)
+        setCurrentFile({
+          file,
+          documentText: testCaseData.data.documentText,
+          fileName: file.name,
+          uploadedAt: new Date(),
+        });
 
         return {
           documentText: testCaseData.data.documentText,
@@ -152,20 +174,14 @@ const SmoothChatLayout: React.FC = () => {
       ];
 
       let currentStage = 0;
-      
+
       // Initial stage
-      updateProcessingMessage(
-        processingMessageId,
-        stages[currentStage]
-      );
+      updateProcessingMessage(processingMessageId, stages[currentStage]);
 
       // Update stage every 5 seconds while API is processing
       const stageInterval = setInterval(() => {
         currentStage = (currentStage + 1) % stages.length;
-        updateProcessingMessage(
-          processingMessageId,
-          stages[currentStage]
-        );
+        updateProcessingMessage(processingMessageId, stages[currentStage]);
       }, 5000); // Change stage every 5 seconds
 
       // Make the API call (this will take 30+ seconds)
@@ -180,36 +196,52 @@ const SmoothChatLayout: React.FC = () => {
       if (!testCaseResponse.ok) {
         const errorText = await testCaseResponse.text();
         console.error("API Error:", errorText);
-        throw new Error(`Failed to generate test cases: ${testCaseResponse.status} ${testCaseResponse.statusText}`);
+        throw new Error(
+          `Failed to generate test cases: ${testCaseResponse.status} ${testCaseResponse.statusText}`
+        );
       }
 
       const responseData = await testCaseResponse.json();
-      
+
       if (!responseData.success) {
-        throw new Error(responseData.error || 'Failed to generate test cases');
+        throw new Error(responseData.error || "Failed to generate test cases");
       }
 
-      const apiResponse: VertexAgentResponse = responseData.metadata.enhancedData;
+      const apiResponse: VertexAgentResponse =
+        responseData.metadata.enhancedData;
       const transformedData = responseData.data;
-      
+
       // Debug: Check the new response structure
       console.log("🔍 Debugging response from Vertex Agent API:");
       console.log("Response structure:", apiResponse);
-      console.log(`Total tests: ${apiResponse.test_suite.statistics.total_tests}`);
-      console.log(`Categories: ${apiResponse.test_suite.test_categories?.length || 0}`);
-      console.log(`Knowledge graph nodes: ${apiResponse.knowledge_graph.metadata.total_nodes || 0}`);
-      console.log(`Coverage score: ${apiResponse.coverage_analysis?.coverage_score || 0}`);
-      
+      console.log(
+        `Total tests: ${apiResponse.test_suite.statistics.total_tests}`
+      );
+      console.log(
+        `Categories: ${apiResponse.test_suite.test_categories?.length || 0}`
+      );
+      console.log(
+        `Knowledge graph nodes: ${
+          apiResponse.knowledge_graph.metadata.total_nodes || 0
+        }`
+      );
+      console.log(
+        `Coverage score: ${apiResponse.coverage_analysis?.coverage_score || 0}`
+      );
+
       const generationEnd =
         typeof performance !== "undefined" ? performance.now() : Date.now();
       const generationSeconds = (generationEnd - generationStart) / 1000;
 
       // Step 6: Show real metrics from the response
       const totalPages = apiResponse.test_suite.pdf_outline?.total_pages || 0;
-      const pagesWithReqs = apiResponse.test_suite.pdf_outline?.summary?.pages_with_requirements || 0;
-      const pagesWithPII = apiResponse.test_suite.pdf_outline?.summary?.pages_with_pii || 0;
+      const pagesWithReqs =
+        apiResponse.test_suite.pdf_outline?.summary?.pages_with_requirements ||
+        0;
+      const pagesWithPII =
+        apiResponse.test_suite.pdf_outline?.summary?.pages_with_pii || 0;
       const totalTests = apiResponse.test_suite.statistics.total_tests;
-      
+
       updateProcessingMessage(
         processingMessageId,
         `Analyzed ${totalPages} pages | Found ${pagesWithReqs} requirements | Detected ${pagesWithPII} PII instances | Generated ${totalTests} test cases`
@@ -218,31 +250,43 @@ const SmoothChatLayout: React.FC = () => {
 
       // Step 7: Complete processing
       // Use the documentSummary from the transformed data (which includes real PDF analysis)
-      const latencyInfo = `Generated in ${generationSeconds.toFixed(1)} seconds.`;
+      const latencyInfo = `Generated in ${generationSeconds.toFixed(
+        1
+      )} seconds.`;
       const finalContent = `${transformedData.documentSummary}\n${latencyInfo}`;
-      
+
       // Extract enhanced metadata for dashboard
       const enhancedMetadata = {
         coverageScore: apiResponse.coverage_analysis?.coverage_score || 0,
-        complianceStandards: apiResponse.compliance_dashboard?.standards_coverage?.map((standard) => ({
-          standard_name: standard.standard_name,
-          coverage: standard.coverage,
-          status: standard.status,
-        })) || [],
+        complianceStandards:
+          apiResponse.compliance_dashboard?.standards_coverage?.map(
+            (standard) => ({
+              standard_name: standard.standard_name,
+              coverage: standard.coverage,
+              status: standard.status,
+            })
+          ) || [],
         totalPages: apiResponse.test_suite.pdf_outline?.total_pages || 0,
-        requirementsCount: apiResponse.test_suite.statistics?.requirements_covered || 0,
-        pagesWithCompliance: apiResponse.test_suite.pdf_outline?.summary?.pages_with_compliance || 0,
-        pagesWithPII: apiResponse.test_suite.pdf_outline?.summary?.pages_with_pii || 0,
-        pdfOutline: apiResponse.test_suite.pdf_outline ? {
-          pages: apiResponse.test_suite.pdf_outline.pages?.map((page) => ({
-            page_number: page.page_number,
-            has_requirements: page.has_requirements,
-            has_compliance: page.has_compliance,
-            has_pii: page.has_pii,
-          })) || [],
-        } : undefined,
+        requirementsCount:
+          apiResponse.test_suite.statistics?.requirements_covered || 0,
+        pagesWithCompliance:
+          apiResponse.test_suite.pdf_outline?.summary?.pages_with_compliance ||
+          0,
+        pagesWithPII:
+          apiResponse.test_suite.pdf_outline?.summary?.pages_with_pii || 0,
+        pdfOutline: apiResponse.test_suite.pdf_outline
+          ? {
+              pages:
+                apiResponse.test_suite.pdf_outline.pages?.map((page) => ({
+                  page_number: page.page_number,
+                  has_requirements: page.has_requirements,
+                  has_compliance: page.has_compliance,
+                  has_pii: page.has_pii,
+                })) || [],
+            }
+          : undefined,
       };
-      
+
       completeProcessingMessage(
         processingMessageId,
         finalContent,
@@ -255,6 +299,13 @@ const SmoothChatLayout: React.FC = () => {
         scrollToBottom();
         forceScrollToBottom();
       }, 100);
+      // Store the file data in context for PDF rendering
+      setCurrentFile({
+        file,
+        documentText: transformedData.documentText,
+        fileName: file.name,
+        uploadedAt: new Date(),
+      });
 
       return {
         documentText: `Enhanced document processing completed`,
@@ -264,7 +315,7 @@ const SmoothChatLayout: React.FC = () => {
       };
     } catch (error) {
       console.error("Error processing file:", error);
-      
+
       // Check if it's a connection error to the external API
       if (error instanceof Error && error.message.includes("Failed to fetch")) {
         completeProcessingMessage(
@@ -283,8 +334,11 @@ const SmoothChatLayout: React.FC = () => {
     }
   };
 
-
-  const handleMessageSubmit = async (message: string, file?: File, gdprMode?: boolean) => {
+  const handleMessageSubmit = async (
+    message: string,
+    file?: File,
+    gdprMode?: boolean
+  ) => {
     try {
       const currentChatId = chatId || generateUniqueId("chat_");
 
