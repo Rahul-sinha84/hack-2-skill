@@ -95,13 +95,33 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         color: #ffffff; // Change text to white for contrast
         border-radius: $border-radius-xl;
-        padding: 0; // Remove padding to allow layout to control it
+        padding: $spacing-md;
+        padding-bottom: $spacing-xs; // Reduced bottom padding
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-        overflow: hidden; // Ensure layout respects border radius
+        overflow: visible; // Changed to visible to prevent border clipping
+        position: relative; // For absolute positioning of privacy icon
 
         @media (max-width: 768px) {
           width: 100%; // Full width on mobile
           max-width: 100%; // Override any max-width
+        }
+      }
+
+      .privacy-icon {
+        position: absolute;
+        top: $spacing-sm;
+        right: $spacing-sm;
+        z-index: 10;
+        opacity: 0.7;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        img {
+          display: block;
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
       }
 
@@ -270,6 +290,7 @@
         align-items: center;
         gap: $spacing-sm;
         margin-top: $spacing-xs;
+        margin-bottom: 0; // Reduce bottom margin
         flex-wrap: wrap;
 
         @media (max-width: 768px) {
@@ -302,6 +323,7 @@
         align-items: center;
         padding: $spacing-xs $spacing-sm; // fix: use defined spacing var
         margin-top: 0;
+        margin-bottom: 0; // Remove bottom margin
         opacity: 0.9;
 
         .response-action {
@@ -447,8 +469,8 @@
         }
 
         &__total-value {
-          font-size: 26px; // Reduced from 28px for better fit
-          font-weight: 700;
+          font-size: 36px; // Reduced from 28px for better fit
+          font-weight: 600;
           fill: #ffffff; // White for contrast
         }
 
@@ -607,9 +629,9 @@
         background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
         color: #ffffff;
         border-radius: $border-radius-full;
-        padding: $spacing-md $spacing-xl;
+        padding: $spacing-md $spacing-md;
         font-size: $font-size-base;
-        font-weight: 600;
+        font-weight: 400;
         border: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 0 10px 28px rgba(91, 33, 182, 0.3);
         transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
@@ -679,15 +701,18 @@
 
 .assistant-layout {
   display: grid;
-  grid-template-columns: 380px 1fr; // Fixed width for description, flex for chart
-  gap: $spacing-xl;
+  grid-template-columns: 1fr 1fr; // Equal width for both boxes
+  gap: $spacing-md;
   padding: $spacing-md;
-  align-items: start;
+  padding-bottom: $spacing-xs; // Reduced bottom padding
+  padding-right: $spacing-md; // Reduced right padding
+  align-items: stretch; // Make both boxes equal height
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr; // Single column on mobile
-    gap: $spacing-lg; // More gap on mobile for separation
-    padding: $spacing-sm; // Less padding on mobile
+    gap: $spacing-md; // More gap on mobile for separation
+    padding: $spacing-md; // Consistent padding on mobile
+    padding-bottom: $spacing-xs; // Reduced bottom padding
   }
 
   &__header {
@@ -702,12 +727,15 @@
     display: flex;
     flex-direction: column;
     width: 100%; // Use full column width
-    max-width: 380px; // Match column width
-    padding-right: $spacing-lg;
+    padding: $spacing-md;
+    padding-bottom: $spacing-xs; // Reduced bottom padding
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-lg;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
     @media (max-width: 768px) {
       max-width: 100%; // Full width on mobile
-      padding-right: 0; // Remove right padding on mobile
     }
 
     .description-title {
@@ -720,14 +748,15 @@
       flex-grow: 1;
       line-height: 1.6;
       max-width: 100%;
-      margin-bottom: $spacing-md;
+      margin-bottom: $spacing-xs; // Reduced bottom margin
       overflow-wrap: break-word; // Break long words
       word-wrap: break-word;
       hyphens: auto; // Add hyphenation for better mobile text wrapping
     }
 
     .test-cases-action {
-      margin-top: $spacing-lg;
+      margin-top: $spacing-md;
+      margin-bottom: 0; // Remove bottom margin
     }
   }
 
@@ -737,6 +766,12 @@
     align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
+    padding: $spacing-md;
+    padding-bottom: $spacing-xs; // Reduced bottom padding to match left
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: $border-radius-lg;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
     @media (max-width: 768px) {
       margin-top: $spacing-md; // Add spacing from description section
@@ -752,7 +787,7 @@
       margin-top: 0;
 
       @media (max-width: 768px) {
-        padding: 0 $spacing-xs; // Small padding on mobile for better spacing
+        padding: 0; // Remove extra padding since parent has it
       }
 
       &:hover {
