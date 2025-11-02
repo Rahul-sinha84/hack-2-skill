@@ -11,6 +11,9 @@ import {
   SingleLineInput,
   TextAreaInput,
 } from "@/app/a/chat/[id]/components/TextCaseInput";
+import { RiRobot2Fill } from "react-icons/ri";
+import Tooltip from "@/components/Tooltip";
+import { showToastInfo } from "@/components/ReactToastify/ReactToastify";
 
 interface AmendTestCaseProps {
   data: TestCase;
@@ -54,6 +57,21 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
 
   return (
     <section className="amend-test-case">
+      <svg width="0" height="0" style={{ position: "absolute" }}>
+        <defs>
+          <linearGradient
+            id="gradient-robot-icon"
+            x1="0%"
+            y1="0%"
+            x2="0%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor="#ff00ff" />
+            <stop offset="50%" stopColor="#ff1493" />
+            <stop offset="100%" stopColor="#8a2be2" />
+          </linearGradient>
+        </defs>
+      </svg>
       <div className="amend-test-case__container">
         <header className="amend-test-case__header">
           {isExported ? (
@@ -84,6 +102,42 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
           )}
         </main>
         <footer className="amend-test-case__footer">
+          <div className="amend-test-case__footer__container">
+            {data.traceability?.compliance_references &&
+              data.traceability.compliance_references.length > 0 && (
+                <div className="amend-test-case__compliance-tags">
+                  <h4 className="amend-test-case__compliance-title">
+                    Compliance standards
+                  </h4>
+                  <div className="amend-test-case__compliance-tags-container">
+                    {data.traceability.compliance_references.map(
+                      (ref, index) => (
+                        <span
+                          key={index}
+                          className="amend-test-case__compliance-tag"
+                        >
+                          {ref}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+            <div className="ai-refinement-btn">
+              <Tooltip text="AI Refinement">
+                <button
+                  onClick={() => {
+                    showToastInfo("Feature coming soon!");
+                  }}
+                  className="ai-refinement"
+                >
+                  <i className="icon">
+                    <RiRobot2Fill size={20} />
+                  </i>
+                </button>
+              </Tooltip>
+            </div>
+          </div>
           {isExported ? (
             <div className="amend-test-case__exported-footer">
               <span className="exported-message">
@@ -92,23 +146,25 @@ const AmendTestCase = ({ data, testCategory }: AmendTestCaseProps) => {
             </div>
           ) : (
             <div className="btn-container">
-              <button
-                className="reject-btn"
-                onClick={() =>
-                  updateTestCaseStatus(data.id, TestCaseStatus.REJECTED)
-                }
-              >
-                Reject
-              </button>
-              <button
-                className="approve-btn"
-                onClick={() => {
-                  updateTestCaseDetails(data.id, title, content);
-                  updateTestCaseStatus(data.id, TestCaseStatus.APPROVED);
-                }}
-              >
-                Approve
-              </button>
+              <div className="action-btns">
+                <button
+                  className="reject-btn"
+                  onClick={() =>
+                    updateTestCaseStatus(data.id, TestCaseStatus.REJECTED)
+                  }
+                >
+                  Reject
+                </button>
+                <button
+                  className="approve-btn"
+                  onClick={() => {
+                    updateTestCaseDetails(data.id, title, content);
+                    updateTestCaseStatus(data.id, TestCaseStatus.APPROVED);
+                  }}
+                >
+                  Approve
+                </button>
+              </div>
               {/* <button className="upload-btn" onClick={uploadTestCase}>
                   Upload
                 </button> */}

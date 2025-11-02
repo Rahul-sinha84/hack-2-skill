@@ -40,6 +40,10 @@ const TestCasesContainer = ({
         <header className="test-cases-container__header"></header>
         <main className="test-cases-container__main">
           <ul className="test-cases-card-container">
+            <div className="test-cases-card-container__header">
+              <h4 className="test-case-title">Test Case Name</h4>
+              <h4 className="test-case-confidence-score">Confidence Score</h4>
+            </div>
             {testCases.map((testcase) => {
               const isExported = testcase.status === TestCaseStatus.EXPORTED;
               return (

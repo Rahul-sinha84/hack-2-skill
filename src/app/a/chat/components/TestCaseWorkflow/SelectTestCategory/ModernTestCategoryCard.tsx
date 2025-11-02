@@ -239,11 +239,11 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
           {/* Header */}
           <div className="header">
             <div className="title-wrap">
-              <h2 className="title">{data.label}</h2>
+              {/* <h2 className="title">{data.label}</h2>
               <p className="sub">
                 Requirements: <span>{uniqueRequirements}</span>{" "}
                 &nbsp;&nbsp;&nbsp; Coverage: <span>{testCoverage}%</span>
-              </p>
+              </p> */}
             </div>
           </div>
 
@@ -327,7 +327,7 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
           {/* Footer */}
           <div className="footer">
             <div className="view-test-btn">View Tests</div>
-            <p className="avg">
+            {/* <p className="avg">
               Priority:{" "}
               <span className="priority-critical">
                 {priorityBreakdown.critical} Critical
@@ -342,7 +342,7 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
               </span>
               ,{" "}
               <span className="priority-low">{priorityBreakdown.low} Low</span>
-            </p>
+            </p> */}
           </div>
         </div>
       </button>
