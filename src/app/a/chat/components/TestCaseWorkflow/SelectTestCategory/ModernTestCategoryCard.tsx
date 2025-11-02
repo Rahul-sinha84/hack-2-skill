@@ -240,8 +240,8 @@ const ModernTestCategoryCard: React.FC<ModernTestCategoryCardProps> = ({
           {/* Header */}
           <div className="header">
             <div className="title-wrap">
-              {/* <h2 className="title">{data.label}</h2>
-              <p className="sub">
+              <h2 className="title">{data.label}</h2>
+              {/* <p className="sub">
                 Requirements: <span>{uniqueRequirements}</span>{" "}
                 &nbsp;&nbsp;&nbsp; Coverage: <span>{testCoverage}%</span>
               </p> */}
