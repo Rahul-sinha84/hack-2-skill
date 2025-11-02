@@ -502,15 +502,19 @@ const SmoothChatLayout: React.FC = () => {
   useEffect(() => {
     // Scroll when chat responses change
     setTimeout(() => {
-      scrollToBottom();
-      forceScrollToBottom();
+      if (curChatResponses.length > 0) {
+        scrollToBottom();
+        forceScrollToBottom();
+      }
     }, 100);
   }, [curChatResponses]);
 
   // Also scroll when chat ID changes (new conversation)
   useEffect(() => {
-    scrollToBottom();
-    forceScrollToBottom();
+    if (chatId) {
+      scrollToBottom();
+      forceScrollToBottom();
+    }
   }, [chatId]);
 
   return (

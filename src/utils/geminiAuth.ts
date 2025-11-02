@@ -1,5 +1,10 @@
 import { GoogleAuth } from 'google-auth-library';
 
+// This module is server-only and should never be imported in client components
+if (typeof window !== 'undefined') {
+  throw new Error('geminiAuth is a server-only module and cannot be imported in client components');
+}
+
 /**
  * Manages authentication for the Gemini/Vertex AI API.
  * This singleton caches the access token to avoid re-authenticating on every request,

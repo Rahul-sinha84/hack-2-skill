@@ -36,6 +36,10 @@ const nextConfig: NextConfig = {
       config.resolve.alias = {
         ...config.resolve.alias,
         canvas: false,
+        // Prevent server-only Google Cloud packages from being bundled in client
+        // These packages use Node.js-specific features and cannot run in the browser
+        "@google-cloud/documentai": false,
+        "google-auth-library": false,
       };
     }
 

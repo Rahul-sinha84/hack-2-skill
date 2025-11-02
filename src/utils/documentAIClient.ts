@@ -1,5 +1,10 @@
 import { DocumentProcessorServiceClient } from "@google-cloud/documentai";
 
+// This module is server-only and should never be imported in client components
+if (typeof window !== 'undefined') {
+  throw new Error('documentAIClient is a server-only module and cannot be imported in client components');
+}
+
 // ================== OPTIMIZED CLIENT INSTANTIATION ==================
 // Singleton pattern to reuse the same client instance across requests
 // This eliminates the overhead of creating new clients for each request
