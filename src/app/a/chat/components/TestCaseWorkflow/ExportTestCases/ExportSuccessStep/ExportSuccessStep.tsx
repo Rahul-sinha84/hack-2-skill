@@ -67,7 +67,7 @@ const ExportSuccessStep: React.FC<CommonProps> = ({
               <ul className="error-list">
                 {exportResults.errors.map((error, index) => (
                   <li key={index} className="error-item">
-                    {error}
+                    {typeof error === "string" ? error : JSON.stringify(error)}
                   </li>
                 ))}
               </ul>
