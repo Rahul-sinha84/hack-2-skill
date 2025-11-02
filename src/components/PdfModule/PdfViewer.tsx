@@ -36,9 +36,29 @@ export default function PDFViewer({
   const { currentFile } = useChat();
 
   const highlighterUtilsRef = useRef<PdfHighlighterUtils>(null);
+  const highlightsReadyRef = useRef(false);
+  const prevHighlightDataRef = useRef<Array<HighlightData> | undefined>(
+    highlightData
+  );
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const utilsReadyRef = useRef(false);
+  const highlightsRef = useRef<any[]>([]);
+  const scrollToHighlightIdRef = useRef<string | undefined>(
+    scrollToHighlightId
+  );
 
   const [highlights, setHighlights] = useState<any[]>([]);
   const [pdfDocument, setPdfDocument] = useState<PDFDocumentProxy | null>(null);
+  const [scrollTrigger, setScrollTrigger] = useState(0); // State to trigger scrolls
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    highlightsRef.current = highlights;
+  }, [highlights]);
+
+  useEffect(() => {
+    scrollToHighlightIdRef.current = scrollToHighlightId;
+  }, [scrollToHighlightId]);
 
   // convert the pdf file in PDFDocumentProxy
   useEffect(() => {
@@ -62,38 +82,176 @@ export default function PDFViewer({
   // Convert highlight data to library format
   useEffect(() => {
     if (pdfDocument) {
+      // Check if highlightData actually changed (handle undefined/null cases)
+      const currentDataStr = highlightData
+        ? JSON.stringify(highlightData)
+        : "null";
+      const prevDataStr = prevHighlightDataRef.current
+        ? JSON.stringify(prevHighlightDataRef.current)
+        : "null";
+
+      const dataChanged = currentDataStr !== prevDataStr;
+
+      if (dataChanged) {
+        highlightsReadyRef.current = false;
+        prevHighlightDataRef.current = highlightData;
+        // Clear highlights immediately when data changes
+        setHighlights([]);
+      }
+
       (async () => {
-        const highlights = await Promise.all(
-          highlightData.map((data) => convertToHighlight(data, pdfDocument))
-        );
-        console.log("highlights from useEffect ", { highlights });
-        setHighlights(highlights);
+        try {
+          // If no highlight data, clear highlights
+          if (!highlightData || highlightData.length === 0) {
+            setHighlights([]);
+            highlightsReadyRef.current = true;
+            return;
+          }
+
+          const highlights = await Promise.all(
+            highlightData.map((data) => convertToHighlight(data, pdfDocument))
+          );
+          console.log("highlights from useEffect ", { highlights });
+          setHighlights(highlights);
+
+          // Mark highlights as ready after a brief delay to ensure rendering
+          setTimeout(() => {
+            highlightsReadyRef.current = true;
+            // Trigger scroll by updating state
+            if (utilsReadyRef.current && highlighterUtilsRef.current) {
+              setScrollTrigger((prev) => prev + 1);
+            }
+          }, 150); // Slightly longer delay to ensure rendering
+        } catch (error) {
+          console.error("Error converting highlights:", error);
+          setHighlights([]);
+          highlightsReadyRef.current = true;
+        }
       })();
     }
-  }, [pdfDocument, highlightData, scrollToHighlightId]);
+  }, [pdfDocument, highlightData]);
 
-  // scrolling to the highlights once the pdf and highlights are loaded
-  // TODO check and make sure to load this every time when the highlights are changing
-  useEffect(() => {
-    console.log("useEffect Ran ", highlighterUtilsRef, highlights.length);
-    if (!highlighterUtilsRef.current || highlights.length === 0) return;
+  // Scroll function with retry logic - uses refs to always get latest values
+  const performScroll = (attempt: number = 1, maxAttempts: number = 4) => {
+    try {
+      if (!highlighterUtilsRef.current) return;
 
-    // Small delay to ensure DOM is ready
-    const timer = setTimeout(() => {
-      if (scrollToHighlightId) {
+      const currentHighlights = highlightsRef.current;
+      const currentScrollId = scrollToHighlightIdRef.current;
+
+      if (currentScrollId) {
         // Scroll to specific highlight by ID
-        const highlight = highlights.find((h) => h.id === scrollToHighlightId);
+        const highlight = currentHighlights.find(
+          (h) => h.id === currentScrollId
+        );
         if (highlight) {
-          highlighterUtilsRef.current?.scrollToHighlight(highlight);
-        }
-      } else {
-        // Scroll to first highlight by default
-        highlighterUtilsRef.current?.scrollToHighlight(highlights[0]);
-      }
-    }, 300); // 300ms delay for smooth scrolling
+          console.log(
+            "Scrolling to highlight:",
+            highlight.id,
+            "attempt:",
+            attempt
+          );
+          highlighterUtilsRef.current.scrollToHighlight(highlight);
 
-    return () => clearTimeout(timer);
-  }, [highlights, scrollToHighlightId, highlighterUtilsRef.current]);
+          // Retry with increasing delays to handle pages that need to be rendered
+          if (attempt < maxAttempts) {
+            const delays = [600, 1200, 1800, 2500]; // Progressive delays
+            scrollTimeoutRef.current = setTimeout(() => {
+              performScroll(attempt + 1, maxAttempts);
+            }, delays[attempt - 1]);
+          }
+        } else {
+          console.warn(
+            "Highlight not found:",
+            currentScrollId,
+            "available:",
+            currentHighlights.map((h) => h.id)
+          );
+        }
+      } else if (currentHighlights.length > 0) {
+        // Scroll to first highlight by default
+        console.log("Scrolling to first highlight, attempt:", attempt);
+        highlighterUtilsRef.current.scrollToHighlight(currentHighlights[0]);
+
+        // Retry with increasing delays
+        if (attempt < maxAttempts) {
+          const delays = [600, 1200, 1800, 2500];
+          scrollTimeoutRef.current = setTimeout(() => {
+            performScroll(attempt + 1, maxAttempts);
+          }, delays[attempt - 1]);
+        }
+      }
+    } catch (error) {
+      console.error("Error scrolling to highlight:", error);
+      // Retry on error
+      if (attempt < maxAttempts) {
+        const delays = [600, 1200, 1800, 2500];
+        scrollTimeoutRef.current = setTimeout(() => {
+          performScroll(attempt + 1, maxAttempts);
+        }, delays[attempt - 1]);
+      }
+    }
+  };
+
+  // Scroll to highlight when highlights are ready and utils are available
+  useEffect(() => {
+    // Clear any pending scroll timeout
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+      scrollTimeoutRef.current = null;
+    }
+
+    // Wait for highlights to be ready and utils to be available
+    if (
+      !highlighterUtilsRef.current ||
+      highlights.length === 0 ||
+      !highlightsReadyRef.current ||
+      !utilsReadyRef.current
+    ) {
+      return;
+    }
+
+    console.log("Scroll effect triggered:", {
+      highlightsCount: highlights.length,
+      scrollToHighlightId,
+      highlightData: highlightData?.length,
+    });
+
+    // Use double requestAnimationFrame to ensure DOM is ready
+    // Then start scrolling with a longer initial delay to allow pages to render
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        scrollTimeoutRef.current = setTimeout(() => {
+          performScroll();
+        }, 400); // Increased initial delay for page rendering
+      });
+    });
+
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = null;
+      }
+    };
+  }, [highlights, scrollToHighlightId, scrollTrigger]);
+
+  // Additional effect to trigger scroll when highlightData changes
+  useEffect(() => {
+    if (
+      highlightData &&
+      highlightData.length > 0 &&
+      utilsReadyRef.current &&
+      highlighterUtilsRef.current &&
+      highlightsReadyRef.current
+    ) {
+      // Small delay to ensure highlights are rendered
+      const timer = setTimeout(() => {
+        setScrollTrigger((prev) => prev + 1);
+      }, 200);
+
+      return () => clearTimeout(timer);
+    }
+  }, [highlightData]);
 
   return (
     // <div style={{ height: "10rem", width: "100%" }}>
@@ -104,7 +262,22 @@ export default function PDFViewer({
           highlights={highlights}
           utilsRef={(utils) => {
             console.log("utilsRef Ran ", { utils });
+            const wasNull = highlighterUtilsRef.current === null;
             highlighterUtilsRef.current = utils;
+
+            if (utils) {
+              utilsReadyRef.current = true;
+
+              // If utils were just set and highlights are ready, trigger scroll
+              if (
+                wasNull &&
+                highlights.length > 0 &&
+                highlightsReadyRef.current
+              ) {
+                // Trigger scroll via state update
+                setScrollTrigger((prev) => prev + 1);
+              }
+            }
           }}
           // enableAreaSelection={(event) => event.altKey}
         >

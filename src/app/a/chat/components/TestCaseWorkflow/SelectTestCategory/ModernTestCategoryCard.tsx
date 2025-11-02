@@ -8,6 +8,7 @@ import {
   TestCaseStatus,
   useChat,
 } from "../../../context/ChatContext";
+import Tooltip from "@/components/Tooltip";
 
 interface ModernTestCategoryCardProps {
   data: TestCategory & { testCases: Array<TestCase> };
