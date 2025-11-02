@@ -1,5 +1,6 @@
 import "@/utils/promisePolyfill"; // Import polyfill first
 import Providers from "@/components/Provider";
+import GlobalErrorBoundary from "@/components/GlobalErrorBoundary";
 import type { Metadata } from "next";
 import "@/app/styles/_app.scss";
 import { ToastContainer } from "react-toastify";
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <GlobalErrorBoundary>
+          <Providers>{children}</Providers>
+        </GlobalErrorBoundary>
         <ToastContainer
           position="top-right"
           autoClose={5000}

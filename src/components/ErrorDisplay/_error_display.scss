@@ -1,0 +1,167 @@
+@use "../../app/styles/variables" as *;
+@use "../../app/styles/mixins" as *;
+
+// Brand gradient for accents
+$brand-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+
+.error-display {
+  @include center-grid;
+  min-height: 100vh;
+  padding: $spacing-lg;
+  background-color: $color-primary;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle background gradient similar to login page
+  background: radial-gradient(
+      1200px 700px at 120% 110%,
+      rgba(99, 102, 241, 0.08),
+      transparent 60%
+    ),
+    linear-gradient(180deg, lighten($color-primary, 2%), $color-primary);
+
+  &__container {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+    z-index: 1;
+  }
+
+  &__icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto $spacing-xl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $border-radius-full;
+    background: rgba(248, 113, 113, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: $color-red;
+    
+    svg {
+      width: 48px;
+      height: 48px;
+    }
+
+    @include mobile-only {
+      width: 64px;
+      height: 64px;
+      margin-bottom: $spacing-lg;
+
+      svg {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+
+  &__title {
+    font-size: $font-size-3xl;
+    font-weight: 700;
+    color: $color-text;
+    margin-bottom: $spacing-md;
+    background-image: $brand-gradient;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    @include mobile-only {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  &__subtext {
+    font-size: $font-size-lg;
+    color: $color-text-light-shade;
+    margin-bottom: $spacing-2xl;
+    line-height: 1.6;
+
+    @include mobile-only {
+      font-size: $font-size-base;
+      margin-bottom: $spacing-xl;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    @include mobile-only {
+      flex-direction: column;
+    }
+  }
+
+  &__button {
+    @include button-base;
+    min-width: 140px;
+    padding: $spacing-md $spacing-xl;
+    font-weight: 600;
+    font-size: $font-size-base;
+    letter-spacing: 0.2px;
+    border-radius: $border-radius-full;
+    transition: all 0.2s ease;
+
+    @include mobile-only {
+      width: 100%;
+    }
+
+    &--primary {
+      background-image: $brand-gradient;
+      color: $color-white;
+      border: none;
+      box-shadow: 0 8px 18px rgba(91, 33, 182, 0.25);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(91, 33, 182, 0.35);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(91, 33, 182, 0.3);
+      }
+    }
+
+    &--secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: $color-text;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+
+      &:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-secondary;
+      outline-offset: 2px;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
