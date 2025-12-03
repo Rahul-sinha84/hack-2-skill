@@ -186,7 +186,7 @@ GOOGLE_APPLICATION_CREDENTIALS=/absolute/path/to/key.json
 # 2) Raw JSON (paste the full service account JSON)
 # GOOGLE_APPLICATION_CREDENTIALS_JSON={"type":"service_account",...}
 # 3) Base64-encoded JSON (useful for CI)
-# GOOGLE_APPLICATION_CREDENTIALS_BASE64=eyJ0eXBlIjoic2VydmljZV9hY2NvdW50Ii4uLg==
+# GOOGLE_APPLICATION_CREDENTIALS_BASE64=
 GOOGLE_CLOUD_PROJECT_ID=your_gcp_project_id
 
 # Document AI
@@ -205,7 +205,7 @@ JIRA_REDIRECT_URI=http://localhost:3000/api/jira/callback
 JIRA_CLIENT_URL=https://your-domain.atlassian.net
 
 # Vertex Agent API
-VERTEX_AGENT_API_URL=https://vertex-agent-api-lhvgyyfwuq-uc.a.run.app
+VERTEX_AGENT_API_URL=https://vertex**********.run.app
 
 # Development
 NEXT_PUBLIC_LIVE=false
